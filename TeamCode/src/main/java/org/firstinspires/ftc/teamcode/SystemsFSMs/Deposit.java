@@ -162,17 +162,17 @@ public class Deposit {
 
     private void findState() {
 
-        if (arm.getStatus() == Arm.Status.TransferPos && PosChecker.atLinearPos(slides.getPosition(), DepositConstants.slideTransferPos, DepositConstants.slidePositionTolerance) && slides.getTargetCM() == DepositConstants.slideTransferPos) {
+        if (arm.getStatus() == Arm.State.TransferPos && PosChecker.atLinearPos(slides.getPosition(), DepositConstants.slideTransferPos, DepositConstants.slidePositionTolerance) && slides.getTargetCM() == DepositConstants.slideTransferPos) {
             currentState = TargetState.transfer;
-        } else if (arm.getStatus() == Arm.Status.TransferPos && PosChecker.atLinearPos(slides.getPosition(), DepositConstants.slidePreTransferPos, DepositConstants.slidePositionTolerance) && slides.getTargetCM() == DepositConstants.slidePreTransferPos) {
+        } else if (arm.getStatus() == Arm.State.TransferPos && PosChecker.atLinearPos(slides.getPosition(), DepositConstants.slidePreTransferPos, DepositConstants.slidePositionTolerance) && slides.getTargetCM() == DepositConstants.slidePreTransferPos) {
             currentState = TargetState.preTransfer;
-        } else if (arm.getStatus() == Arm.Status.SpecIntakePos && PosChecker.atLinearPos(slides.getPosition(), DepositConstants.slideSpecIntakePos, DepositConstants.slidePositionTolerance) && slides.getTargetCM() == DepositConstants.slideSpecIntakePos) {
+        } else if (arm.getStatus() == Arm.State.SpecIntakePos && PosChecker.atLinearPos(slides.getPosition(), DepositConstants.slideSpecIntakePos, DepositConstants.slidePositionTolerance) && slides.getTargetCM() == DepositConstants.slideSpecIntakePos) {
             currentState = TargetState.specIntake;
-        } else if (arm.getStatus() == Arm.Status.SpecDepositPos && PosChecker.atLinearPos(slides.getPosition(), DepositConstants.slideSpecDepositReadyPos, DepositConstants.slidePositionTolerance) && slides.getTargetCM() == DepositConstants.slideSpecDepositReadyPos) {
+        } else if (arm.getStatus() == Arm.State.SpecDepositPos && PosChecker.atLinearPos(slides.getPosition(), DepositConstants.slideSpecDepositReadyPos, DepositConstants.slidePositionTolerance) && slides.getTargetCM() == DepositConstants.slideSpecDepositReadyPos) {
             currentState = TargetState.specDepositReady;
-        } else if (arm.getStatus() == Arm.Status.SpecDepositPos && PosChecker.atLinearPos(slides.getPosition(), DepositConstants.slideSpecClippedPos, DepositConstants.slidePositionTolerance) && slides.getTargetCM() == DepositConstants.slideSpecClippedPos) {
+        } else if (arm.getStatus() == Arm.State.SpecDepositPos && PosChecker.atLinearPos(slides.getPosition(), DepositConstants.slideSpecClippedPos, DepositConstants.slidePositionTolerance) && slides.getTargetCM() == DepositConstants.slideSpecClippedPos) {
             currentState = TargetState.specDepositClipped;
-        } else if (arm.getStatus() == Arm.Status.SampleDepositPos && PosChecker.atLinearPos(slides.getPosition(), DepositConstants.slideSampleDepositPos, DepositConstants.slidePositionTolerance) && slides.getTargetCM() == DepositConstants.slideSampleDepositPos) {
+        } else if (arm.getStatus() == Arm.State.SampleDepositPos && PosChecker.atLinearPos(slides.getPosition(), DepositConstants.slideSampleDepositPos, DepositConstants.slidePositionTolerance) && slides.getTargetCM() == DepositConstants.slideSampleDepositPos) {
             currentState = TargetState.sampleDeposit;
         } else {
             currentState =TargetState.intermediate;
@@ -196,7 +196,7 @@ public class Deposit {
         return slides.getPosition();
     }
 
-    public Arm.Status getArmStatus() {
+    public Arm.State getArmStatus() {
         return arm.getStatus();
     }
 

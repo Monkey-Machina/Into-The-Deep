@@ -5,109 +5,65 @@ import org.firstinspires.ftc.teamcode.Hardware.Hardware;
 import org.firstinspires.ftc.teamcode.Hardware.Util.AnalogServo;
 import org.firstinspires.ftc.teamcode.Hardware.Util.Logger;
 import org.firstinspires.ftc.teamcode.Hardware.Util.PosChecker;
+import org.firstinspires.ftc.teamcode.SystemsFSMs.Deposit;
 
 public class Arm {
 
-    private Logger logger;
+    public enum State {
+        TransferPos(DepositConstants.armRightTransferPos, DepositConstants.armRightEncTransferPos),
+        SpecIntakePos(DepositConstants.armRightSpecIntakePos, DepositConstants.armRightEncSpecIntakePos),
+        SpecDepositPos(DepositConstants.armRightSpecDepositPos, DepositConstants.armRightEncSpecDepositPos),
+        SampleDepositPos(DepositConstants.slideSampleDepositPos, DepositConstants.armRightEncSampleDepositPos),
+        Intermediate(0,0);
 
-    private AnalogServo rightServo;
-    private AnalogServo leftServo;
+        public final double servoPos, encPos;
 
-    public enum Status {
-        TransferPos,
-        SpecIntakePos,
-        SpecDepositPos,
-        SampleDepositPos,
-        Intermediate;
+        State(double servoPos, double encPos) {
+            this.servoPos = servoPos;
+            this.encPos = encPos;
+        }
     }
 
-    private double rightServoTargetPosition;
-    private double leftServoTargetPosition;
+    private final Logger logger;
 
-    private double rightEncPosition;
-    private double leftEncPosition;
+    private final AnalogServo servo;
 
-    private boolean safeSlideDown;
+    public State curretState;
+    private State targetState;
 
-    private Status status;
+    private double encPos;
 
     public Arm(Hardware hardware, Logger logger) {
         this.logger = logger;
-
-        rightServo = new AnalogServo(hardware.armRight, hardware.armRightEnc);
-        leftServo = new AnalogServo(hardware.armLeft, hardware.armLeftEnc);
+        servo = new AnalogServo(hardware.armServo, hardware.armEnc);
     }
 
     public void update() {
-        rightEncPosition = rightServo.getPos();
-        leftEncPosition = leftServo.getPos();
-
+        encPos = servo.getPos();
         findState();
+    }
 
-        updateSlideSafe();
+    public void setTargetState(State targetState) {
+        this.targetState = targetState;
     }
 
     public void command() {
-        rightServo.setPos(rightServoTargetPosition);
-        leftServo.setPos(leftServoTargetPosition);
+        servo.setPos(targetState.servoPos);
     }
 
     public void log() {
-        logger.logData("<b>" + "Arm" + "</b>", "", Logger.LogLevels.production);
+        logger.logHeader("Arm");
 
-        logger.logData("Status", status, Logger.LogLevels.debug);
-        logger.logData("Slides Retract Safe", safeSlideDown, Logger.LogLevels.debug);
+        logger.logData("Current State", curretState, Logger.LogLevels.debug);
+        logger.logData("Target State", targetState, Logger.LogLevels.debug);
 
-        logger.logData("Right Target Pos", rightServoTargetPosition, Logger.LogLevels.developer);
-        logger.logData("Left Target Pos", leftServoTargetPosition, Logger.LogLevels.developer);
-        logger.logData("Right Encoder Pos", rightEncPosition, Logger.LogLevels.developer);
-        logger.logData("Left Encoder Pos", leftEncPosition, Logger.LogLevels.developer);
-    }
-
-    public Status getStatus() {
-        return status;
-    }
-
-    public void setPosition(double position) {
-        rightServoTargetPosition = position;
-        leftServoTargetPosition = 1 - position;
-    }
-
-    public double getRightSetPosition() {
-        return rightServoTargetPosition;
-    }
-
-    public boolean getSlideSafeDown() {
-        return safeSlideDown;
+        logger.logData("Target Position", targetState.servoPos, Logger.LogLevels.developer);
+        logger.logData("Encoder Position", encPos, Logger.LogLevels.developer);
     }
 
     private void findState() {
-
-        if (PosChecker.atAngularPos(rightEncPosition, DepositConstants.armRightEncTransferPos, DepositConstants.armRightPositionTolerance) && rightServoTargetPosition == DepositConstants.armRightTransferPos) {
-            status = Status.TransferPos;
-        } else if (PosChecker.atAngularPos(rightEncPosition, DepositConstants.armRightEncSpecIntakePos, DepositConstants.armRightPositionTolerance) && rightServoTargetPosition == DepositConstants.armRightSpecIntakePos) {
-            status = Status.SpecIntakePos;
-        } else if (PosChecker.atAngularPos(rightEncPosition, DepositConstants.armRightEncSpecDepositPos, DepositConstants.armRightPositionTolerance) && rightServoTargetPosition == DepositConstants.armRightSpecDepositPos) {
-            status = Status.SpecDepositPos;
-        } else if (PosChecker.atAngularPos(rightEncPosition, DepositConstants.armRightEncSampleDepositPos, DepositConstants.armRightPositionTolerance) && rightServoTargetPosition == DepositConstants.armRightSampleDepositPos) {
-            status = Status.SampleDepositPos;
-        } else {
-            status = Status.Intermediate;
-        }
+        curretState = PosChecker.atAngularPos(encPos, targetState.encPos, DepositConstants.armRightPositionTolerance) ? targetState : State.Intermediate;
 
     }
 
-    public void updateSlideSafe() {
-
-        if (rightEncPosition >= DepositConstants.armRightEncSlideDownSafePos || (status == Status.TransferPos && rightServoTargetPosition == DepositConstants.armRightTransferPos)) {
-            safeSlideDown = true;
-        } else {
-            safeSlideDown = false;
-        }
-
-    }
-
-    public double getRightServoEncPos() {
-        return rightEncPosition;
-    }
 }

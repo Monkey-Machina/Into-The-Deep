@@ -21,7 +21,7 @@ public class Claw {
     private double encoderPos = 0.00;
 
     public Claw(Hardware hardware, Logger logger) {
-        servo = new AnalogServo(hardware.claw, hardware.clawEnc);
+        servo = new AnalogServo(hardware.clawServo, hardware.clawEnc);
         this.logger = logger;
     }
 

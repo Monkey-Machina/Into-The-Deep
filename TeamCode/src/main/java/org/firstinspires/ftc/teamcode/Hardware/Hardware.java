@@ -35,12 +35,12 @@ public class Hardware   {
     public DcMotorEx depositSlideRight;
     public DcMotorEx depositSlideLeft;
 
-    public Servo armRight;
-    public Servo armLeft;
-    public Servo claw;
+    public Servo armServo;
+    public Servo wristServo;
+    public Servo clawServo;
 
-    public AnalogInput armRightEnc;
-    public AnalogInput armLeftEnc;
+    public AnalogInput armEnc;
+    public AnalogInput wristEnc;
     public AnalogInput clawEnc;
 
     // Intake
@@ -113,12 +113,12 @@ public class Hardware   {
             depositSlideLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         }
 
-        armRight = hardwareMap.get(Servo.class, "CH-Servo-0");
-        armLeft = hardwareMap.get(Servo.class, "EH-Servo-0");
-        claw = hardwareMap.get(Servo.class, "CH-Servo-2");
+        armServo = hardwareMap.get(Servo.class, "CH-Servo-0");
+        wristServo = hardwareMap.get(Servo.class, "EH-Servo-0");
+        clawServo = hardwareMap.get(Servo.class, "CH-Servo-2");
 
-        armRightEnc = hardwareMap.get(AnalogInput.class, "CH-Analog-0");
-        armLeftEnc = hardwareMap.get(AnalogInput.class, "CH-Analog-1");
+        armEnc = hardwareMap.get(AnalogInput.class, "CH-Analog-0");
+        wristEnc = hardwareMap.get(AnalogInput.class, "CH-Analog-1");
         clawEnc = hardwareMap.get(AnalogInput.class, "CH-Analog-2");
 
         // Intake
