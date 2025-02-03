@@ -1,10 +1,7 @@
 package org.firstinspires.ftc.teamcode.Hardware;
 
 import com.qualcomm.hardware.lynx.LynxModule;
-import com.qualcomm.hardware.rev.RevColorSensorV3;
 import com.qualcomm.robotcore.hardware.AnalogInput;
-import com.qualcomm.robotcore.hardware.CRServo;
-import com.qualcomm.robotcore.hardware.ColorRangeSensor;
 import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 import com.qualcomm.robotcore.hardware.DcMotorSimple;
@@ -12,8 +9,8 @@ import com.qualcomm.robotcore.hardware.DigitalChannel;
 import com.qualcomm.robotcore.hardware.HardwareMap;
 import com.qualcomm.robotcore.hardware.Servo;
 
-import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
-import org.firstinspires.ftc.teamcode.Hardware.Util.Logger;
+import org.firstinspires.ftc.teamcode.Hardware.Drivers.GoBildaPinpointDriver;
+import org.firstinspires.ftc.teamcode.Hardware.Drivers.GobildaBlindToucherV69;
 
 import java.util.List;
 
@@ -69,7 +66,7 @@ public class Hardware   {
         return instance;
     }
 
-    public void init(final HardwareMap map) {
+    public void init(final HardwareMap map, boolean reset) {
         hardwareMap = map;
 
         // Drivetrain
@@ -91,7 +88,7 @@ public class Hardware   {
         pinPoint.setOffsets(-71,-109.18776);
         pinPoint.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
         pinPoint.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.REVERSED);
-        pinPoint.resetPosAndIMU();
+        if (reset) { pinPoint.resetPosAndIMU(); }
 
         hubs = hardwareMap.getAll(LynxModule.class);
         for (LynxModule hub: hubs) {
@@ -102,15 +99,19 @@ public class Hardware   {
         // Deposit
         depositSlideRight = hardwareMap.get(DcMotorEx.class, "CH-Motor-0");
         depositSlideRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        depositSlideRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        depositSlideRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         depositSlideRight.setDirection(DcMotorSimple.Direction.REVERSE);
+        if (reset) {
+            depositSlideRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            depositSlideRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        }
 
         depositSlideLeft = hardwareMap.get(DcMotorEx.class, "CH-Motor-1");
         depositSlideLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        depositSlideLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        depositSlideLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
         depositSlideLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+        if (reset) {
+            depositSlideLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            depositSlideLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        }
 
         armRight = hardwareMap.get(Servo.class, "CH-Servo-0");
         armLeft = hardwareMap.get(Servo.class, "EH-Servo-0");
@@ -124,8 +125,10 @@ public class Hardware   {
         intakeSlideMotor = hardwareMap.get(DcMotorEx.class, "CH-Motor-2");
         intakeSlideMotor.setDirection(DcMotorSimple.Direction.REVERSE);
         intakeSlideMotor.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
-        intakeSlideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
-        intakeSlideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        if (reset) {
+            intakeSlideMotor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
+            intakeSlideMotor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
+        }
 
         intakeRoller = hardwareMap.get(DcMotorEx.class, "CH-Motor-3");
         intakeRoller.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
@@ -137,6 +140,10 @@ public class Hardware   {
 
         intakeCS = hardwareMap.get(GobildaBlindToucherV69.class, "CH-I2C-1-0");
         intakeLS = hardwareMap.get(DigitalChannel.class, "CH-Digital-0");
+    }
+
+    public void init(final HardwareMap map) {
+        init(map, true);
     }
 
     public void clearCache() {

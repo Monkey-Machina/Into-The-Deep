@@ -59,7 +59,7 @@ public class ArmOpMode extends OpMode {
 
         arm.command();
 
-        logger.log("Offset", offset, Logger.LogLevels.debug);
+        logger.logData("Offset", offset, Logger.LogLevels.debug);
 
         arm.log();
         logger.print();

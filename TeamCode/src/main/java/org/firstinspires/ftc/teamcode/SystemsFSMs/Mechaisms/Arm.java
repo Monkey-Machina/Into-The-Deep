@@ -53,15 +53,15 @@ public class Arm {
     }
 
     public void log() {
-        logger.log("<b>" + "Arm" + "</b>", "", Logger.LogLevels.production);
+        logger.logData("<b>" + "Arm" + "</b>", "", Logger.LogLevels.production);
 
-        logger.log("Status", status, Logger.LogLevels.debug);
-        logger.log("Slides Retract Safe", safeSlideDown, Logger.LogLevels.debug);
+        logger.logData("Status", status, Logger.LogLevels.debug);
+        logger.logData("Slides Retract Safe", safeSlideDown, Logger.LogLevels.debug);
 
-        logger.log("Right Target Pos", rightServoTargetPosition, Logger.LogLevels.developer);
-        logger.log("Left Target Pos", leftServoTargetPosition, Logger.LogLevels.developer);
-        logger.log("Right Encoder Pos", rightEncPosition, Logger.LogLevels.developer);
-        logger.log("Left Encoder Pos", leftEncPosition, Logger.LogLevels.developer);
+        logger.logData("Right Target Pos", rightServoTargetPosition, Logger.LogLevels.developer);
+        logger.logData("Left Target Pos", leftServoTargetPosition, Logger.LogLevels.developer);
+        logger.logData("Right Encoder Pos", rightEncPosition, Logger.LogLevels.developer);
+        logger.logData("Left Encoder Pos", leftEncPosition, Logger.LogLevels.developer);
     }
 
     public Status getStatus() {

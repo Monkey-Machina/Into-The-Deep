@@ -53,8 +53,8 @@ public class BucketOpMode extends OpMode {
 
         bucket.command();
 
-        logger.log("Op-Mode", "", Logger.LogLevels.production);
-        logger.log("Offset", offset, Logger.LogLevels.production);
+        logger.logData("Op-Mode", "", Logger.LogLevels.production);
+        logger.logData("Offset", offset, Logger.LogLevels.production);
         bucket.log();
 
         logger.print();

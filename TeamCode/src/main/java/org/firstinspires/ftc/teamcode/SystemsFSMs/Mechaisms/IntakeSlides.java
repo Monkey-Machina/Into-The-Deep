@@ -94,18 +94,18 @@ public class IntakeSlides {
     }
 
     public void log() {
-        logger.log("<b>" + "Intake Slides" + "</b>", "", Logger.LogLevels.production);
+        logger.logData("<b>" + "Intake Slides" + "</b>", "", Logger.LogLevels.production);
 
-        logger.log("Current CM", currentCM, Logger.LogLevels.debug);
-        logger.log("Target CM", targetCM, Logger.LogLevels.debug);
+        logger.logData("Current CM", currentCM, Logger.LogLevels.debug);
+        logger.logData("Target CM", targetCM, Logger.LogLevels.debug);
 
-        logger.log("Ranged Target CM", rangedTarget, Logger.LogLevels.developer);
-        logger.log("Power", power, Logger.LogLevels.developer);
-        logger.log("Intake Slide Velocity", velocity, Logger.LogLevels.developer);
-        logger.log("Current", current, Logger.LogLevels.developer);
-        logger.log("p", p, Logger.LogLevels.developer);
-        logger.log("i", i, Logger.LogLevels.developer);
-        logger.log("d", d, Logger.LogLevels.developer);
+        logger.logData("Ranged Target CM", rangedTarget, Logger.LogLevels.developer);
+        logger.logData("Power", power, Logger.LogLevels.developer);
+        logger.logData("Intake Slide Velocity", velocity, Logger.LogLevels.developer);
+        logger.logData("Current", current, Logger.LogLevels.developer);
+        logger.logData("p", p, Logger.LogLevels.developer);
+        logger.logData("i", i, Logger.LogLevels.developer);
+        logger.logData("d", d, Logger.LogLevels.developer);
     }
 
     public void setTargetCM(double target) {

@@ -4,7 +4,7 @@ import com.qualcomm.robotcore.hardware.DigitalChannel;
 
 import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Hardware.Constants.IntakeConstants;
-import org.firstinspires.ftc.teamcode.Hardware.GobildaBlindToucherV69;
+import org.firstinspires.ftc.teamcode.Hardware.Drivers.GobildaBlindToucherV69;
 import org.firstinspires.ftc.teamcode.Hardware.Hardware;
 import org.firstinspires.ftc.teamcode.Hardware.Util.ColorUtils;
 import org.firstinspires.ftc.teamcode.Hardware.Util.Logger;
@@ -64,27 +64,27 @@ public class SampleDetector {
     }
 
     public void log() {
-        logger.log("<b>" + "Sample Detector" + "</b>", "", Logger.LogLevels.production);
+        logger.logData("<b>" + "Sample Detector" + "</b>", "", Logger.LogLevels.production);
 
-        logger.log("Status", status, Logger.LogLevels.debug);
-        logger.log("AO5 Distance", distanceAVG5(), Logger.LogLevels.debug);
-        logger.log("Color", color, Logger.LogLevels.debug);
-        logger.log("Distance", distance, Logger.LogLevels.developer);
-        logger.log("Distance Buffer", Arrays.toString(distanceBuffer), Logger.LogLevels.developer);
-        logger.log("Switch Pressed", switchPressed, Logger.LogLevels.developer);
+        logger.logData("Status", status, Logger.LogLevels.debug);
+        logger.logData("AO5 Distance", distanceAVG5(), Logger.LogLevels.debug);
+        logger.logData("Color", color, Logger.LogLevels.debug);
+        logger.logData("Distance", distance, Logger.LogLevels.developer);
+        logger.logData("Distance Buffer", Arrays.toString(distanceBuffer), Logger.LogLevels.developer);
+        logger.logData("Switch Pressed", switchPressed, Logger.LogLevels.developer);
 
 
-        logger.log("r", r, Logger.LogLevels.developer);
-        logger.log("g", g, Logger.LogLevels.developer);
-        logger.log("b", b, Logger.LogLevels.developer);
-        logger.log("a", a, Logger.LogLevels.developer);
+        logger.logData("r", r, Logger.LogLevels.developer);
+        logger.logData("g", g, Logger.LogLevels.developer);
+        logger.logData("b", b, Logger.LogLevels.developer);
+        logger.logData("a", a, Logger.LogLevels.developer);
 
-        logger.log("h", h, Logger.LogLevels.developer);
-        logger.log("s", s, Logger.LogLevels.developer);
-        logger.log("v", v, Logger.LogLevels.developer);
-        logger.log("Hue Buffer", Arrays.toString(hueBuffer), Logger.LogLevels.debug);
+        logger.logData("h", h, Logger.LogLevels.developer);
+        logger.logData("s", s, Logger.LogLevels.developer);
+        logger.logData("v", v, Logger.LogLevels.developer);
+        logger.logData("Hue Buffer", Arrays.toString(hueBuffer), Logger.LogLevels.debug);
 
-        logger.log("Raw h", hRaw, Logger.LogLevels.developer);
+        logger.logData("Raw h", hRaw, Logger.LogLevels.developer);
 
     }
 

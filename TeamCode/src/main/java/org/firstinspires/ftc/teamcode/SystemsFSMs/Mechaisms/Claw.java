@@ -4,8 +4,6 @@ import org.firstinspires.ftc.teamcode.Hardware.Constants.DepositConstants;
 import org.firstinspires.ftc.teamcode.Hardware.Hardware;
 import org.firstinspires.ftc.teamcode.Hardware.Util.AnalogServo;
 import org.firstinspires.ftc.teamcode.Hardware.Util.Logger;
-import org.firstinspires.ftc.teamcode.Hardware.Util.PosChecker;
-import org.firstinspires.ftc.teamcode.SystemsFSMs.Deposit;
 
 public class Claw {
     private AnalogServo servo;
@@ -37,12 +35,12 @@ public class Claw {
     }
 
     public void log() {
-        logger.log("<b>" + "Claw" + "</b>", "", Logger.LogLevels.production);
+        logger.logData("<b>" + "Claw" + "</b>", "", Logger.LogLevels.production);
 
-        logger.log("Status", status, Logger.LogLevels.debug);
+        logger.logData("Status", status, Logger.LogLevels.debug);
 
-        logger.log("Target Position", targetPosition, Logger.LogLevels.developer);
-        logger.log("Encoder Position", encoderPos, Logger.LogLevels.developer);
+        logger.logData("Target Position", targetPosition, Logger.LogLevels.developer);
+        logger.logData("Encoder Position", encoderPos, Logger.LogLevels.developer);
     }
 
     public void setTargetPosition(double position) {

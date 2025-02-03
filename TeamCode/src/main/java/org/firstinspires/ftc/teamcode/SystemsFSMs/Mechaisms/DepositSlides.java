@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.SystemsFSMs.Mechaisms;
 
 import com.arcrobotics.ftclib.controller.PIDController;
-import com.qualcomm.robotcore.hardware.DcMotor;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.robotcore.external.navigation.AngleUnit;
@@ -75,24 +74,24 @@ public class DepositSlides {
     }
 
     public void log() {
-        logger.log("<b>" + "Deposit Slides" + "</b>", "", Logger.LogLevels.production);
+        logger.logData("<b>" + "Deposit Slides" + "</b>", "", Logger.LogLevels.production);
 
-        logger.log("Depo Current CM", currentCM, Logger.LogLevels.debug);
-        logger.log("Depo Target CM", targetCM, Logger.LogLevels.debug);
+        logger.logData("Depo Current CM", currentCM, Logger.LogLevels.debug);
+        logger.logData("Depo Target CM", targetCM, Logger.LogLevels.debug);
 
-        logger.log("LeftCurrentCM", leftTicks * ticksToCm, Logger.LogLevels.debug);
+        logger.logData("LeftCurrentCM", leftTicks * ticksToCm, Logger.LogLevels.debug);
 
-        logger.log("Depo Ranged Target CM", rangedTarget, Logger.LogLevels.developer);
-        logger.log("Depo Power", power, Logger.LogLevels.developer);
-        logger.log("Encoder Reset", encoderReset, Logger.LogLevels.developer);
-        logger.log("Velocity (Degrees)", velocity, Logger.LogLevels.developer);
-        logger.log("Right Current", rightCurrent, Logger.LogLevels.developer);
-        logger.log("Left Current", leftCurrent, Logger.LogLevels.developer);
-        logger.log("Total Current", totalCurrent, Logger.LogLevels.developer);
-        logger.log("p", p, Logger.LogLevels.developer);
-        logger.log("i", i, Logger.LogLevels.developer);
-        logger.log("d", d, Logger.LogLevels.developer);
-        logger.log("f", f, Logger.LogLevels.developer);
+        logger.logData("Depo Ranged Target CM", rangedTarget, Logger.LogLevels.developer);
+        logger.logData("Depo Power", power, Logger.LogLevels.developer);
+        logger.logData("Encoder Reset", encoderReset, Logger.LogLevels.developer);
+        logger.logData("Velocity (Degrees)", velocity, Logger.LogLevels.developer);
+        logger.logData("Right Current", rightCurrent, Logger.LogLevels.developer);
+        logger.logData("Left Current", leftCurrent, Logger.LogLevels.developer);
+        logger.logData("Total Current", totalCurrent, Logger.LogLevels.developer);
+        logger.logData("p", p, Logger.LogLevels.developer);
+        logger.logData("i", i, Logger.LogLevels.developer);
+        logger.logData("d", d, Logger.LogLevels.developer);
+        logger.logData("f", f, Logger.LogLevels.developer);
     }
 
     public void setTargetCM(double target) {

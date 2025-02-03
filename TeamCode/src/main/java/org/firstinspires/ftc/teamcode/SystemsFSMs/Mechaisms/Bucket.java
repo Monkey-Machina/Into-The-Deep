@@ -55,14 +55,14 @@ public class Bucket {
     }
 
     public void log() {
-        logger.log("<b>" + "Bucket" + "</b>", "", Logger.LogLevels.production);
-        logger.log("Status", status, Logger.LogLevels.debug);
+        logger.logData("<b>" + "Bucket" + "</b>", "", Logger.LogLevels.production);
+        logger.logData("Status", status, Logger.LogLevels.debug);
 
-        logger.log("Bucket Servo Target Pos", bucketTargetPos, Logger.LogLevels.developer);
-        logger.log("Bucket Servo Pos", bucketServoEncPosition, Logger.LogLevels.developer);
-        logger.log("Gate Servo Target Pos", gateTargetPos, Logger.LogLevels.developer);
-        logger.log("Roller Power", rollerPower, Logger.LogLevels.developer);
-        logger.log("Roller Current", current, Logger.LogLevels.developer);
+        logger.logData("Bucket Servo Target Pos", bucketTargetPos, Logger.LogLevels.developer);
+        logger.logData("Bucket Servo Pos", bucketServoEncPosition, Logger.LogLevels.developer);
+        logger.logData("Gate Servo Target Pos", gateTargetPos, Logger.LogLevels.developer);
+        logger.logData("Roller Power", rollerPower, Logger.LogLevels.developer);
+        logger.logData("Roller Current", current, Logger.LogLevels.developer);
     }
 
     public void setBucketPosition(double position) {

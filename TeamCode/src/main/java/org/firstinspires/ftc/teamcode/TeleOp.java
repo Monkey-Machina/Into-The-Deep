@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.SystemsFSMs.Robot;
 
 import java.util.ArrayList;
 
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "Tele-Op V1.0.0")
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "Tele-Op V1.0.0", group = "Competition")
 public class TeleOp extends OpMode {
     private Hardware hardware = new Hardware();
     private Logger logger;
@@ -158,42 +158,42 @@ public class TeleOp extends OpMode {
 
         if (blueAlliance) {
 
-            logger.log("<b>" + "Blue Alliance" + "</b>", "", Logger.LogLevels.production);
+            logger.logData("<b>" + "Blue Alliance" + "</b>", "", Logger.LogLevels.production);
 
             if (fastestStrategy) {
-                logger.log("<b>" + "Fastest Strategy" + "</b>", "", Logger.LogLevels.production);
+                logger.logData("<b>" + "Fastest Strategy" + "</b>", "", Logger.LogLevels.production);
                 colors.add(SampleDetector.SampleColor.blue);
                 colors.add(SampleDetector.SampleColor.yellow);
             }
 
             if (specStrategy) {
-                logger.log("<b>" + "Spec Strategy" + "</b>", "", Logger.LogLevels.production);
+                logger.logData("<b>" + "Spec Strategy" + "</b>", "", Logger.LogLevels.production);
                 colors.add(SampleDetector.SampleColor.blue);
             }
 
             if (sampleStrategy) {
-                logger.log("<b>" + "Sample Strategy" + "</b>", "", Logger.LogLevels.production);
+                logger.logData("<b>" + "Sample Strategy" + "</b>", "", Logger.LogLevels.production);
                 colors.add(SampleDetector.SampleColor.yellow);
             }
         }
 
         if (redAlliance) {
 
-            logger.log("<b>" + "Red Alliance" + "</b>", "", Logger.LogLevels.production);
+            logger.logData("<b>" + "Red Alliance" + "</b>", "", Logger.LogLevels.production);
 
             if (fastestStrategy) {
-                logger.log("<b>" + "Fastest Strategy" + "</b>", "", Logger.LogLevels.production);
+                logger.logData("<b>" + "Fastest Strategy" + "</b>", "", Logger.LogLevels.production);
                 colors.add(SampleDetector.SampleColor.red);
                 colors.add(SampleDetector.SampleColor.yellow);
             }
 
             if (specStrategy) {
-                logger.log("<b>" + "Spec Strategy" + "</b>", "", Logger.LogLevels.production);
+                logger.logData("<b>" + "Spec Strategy" + "</b>", "", Logger.LogLevels.production);
                 colors.add(SampleDetector.SampleColor.red);
             }
 
             if (sampleStrategy) {
-                logger.log("<b>" + "Sample Strategy" + "</b>", "", Logger.LogLevels.production);
+                logger.logData("<b>" + "Sample Strategy" + "</b>", "", Logger.LogLevels.production);
                 colors.add(SampleDetector.SampleColor.yellow);
             }
 

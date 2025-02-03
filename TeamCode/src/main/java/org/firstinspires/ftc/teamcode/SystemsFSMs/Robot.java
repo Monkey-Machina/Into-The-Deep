@@ -6,7 +6,6 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import org.firstinspires.ftc.teamcode.Hardware.Constants.DepositConstants;
 import org.firstinspires.ftc.teamcode.Hardware.Hardware;
 import org.firstinspires.ftc.teamcode.Hardware.Util.Logger;
-import org.firstinspires.ftc.teamcode.SystemsFSMs.Mechaisms.Arm;
 import org.firstinspires.ftc.teamcode.SystemsFSMs.Mechaisms.Claw;
 import org.firstinspires.ftc.teamcode.SystemsFSMs.Mechaisms.SampleDetector;
 
@@ -130,13 +129,13 @@ public class Robot {
     }
 
     public void log() {
-        logger.log("<b>" + "--Robot--" + "</b>", "", Logger.LogLevels.production);
+        logger.logData("<b>" + "--Robot--" + "</b>", "", Logger.LogLevels.production);
 
-        logger.log("Current State", currentState, Logger.LogLevels.production);
-        logger.log("Deposit Desired State", depositDesiredState, Logger.LogLevels.production);
-        logger.log("Intake Desired State", intakeDesiredState, Logger.LogLevels.production);
+        logger.logData("Current State", currentState, Logger.LogLevels.production);
+        logger.logData("Deposit Desired State", depositDesiredState, Logger.LogLevels.production);
+        logger.logData("Intake Desired State", intakeDesiredState, Logger.LogLevels.production);
 
-        logger.log("Interference", interference, Logger.LogLevels.debug);
+        logger.logData("Interference", interference, Logger.LogLevels.debug);
 
         drivetrain.log();
         deposit.log();

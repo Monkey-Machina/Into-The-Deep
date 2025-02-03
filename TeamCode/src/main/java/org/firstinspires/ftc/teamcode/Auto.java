@@ -9,7 +9,7 @@ import org.firstinspires.ftc.teamcode.Hardware.Hardware;
 import org.firstinspires.ftc.teamcode.Hardware.Util.Logger;
 import org.firstinspires.ftc.teamcode.SystemsFSMs.Mechaisms.Arm;
 
-@Autonomous(name = "Auto V0.0.1")
+@Autonomous(name = "Auto V0.0.1", group = "Competition")
 public class Auto  extends OpMode {
 
     private Hardware hardware = new Hardware();

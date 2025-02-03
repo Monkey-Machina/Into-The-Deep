@@ -134,10 +134,10 @@ public class Deposit {
     }
 
     public void log() {
-        logger.log("<b>" + "-Deposit-" + "</b>", "", Logger.LogLevels.production);
+        logger.logData("<b>" + "-Deposit-" + "</b>", "", Logger.LogLevels.production);
 
-        logger.log("Target State", targetState, Logger.LogLevels.production);
-        logger.log("Current State", currentState, Logger.LogLevels.production);
+        logger.logData("Target State", targetState, Logger.LogLevels.production);
+        logger.logData("Current State", currentState, Logger.LogLevels.production);
 
         claw.log();
         arm.log();

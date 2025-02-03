@@ -7,7 +7,6 @@ import com.arcrobotics.ftclib.util.Timing;
 import org.firstinspires.ftc.teamcode.Hardware.Constants.IntakeConstants;
 import org.firstinspires.ftc.teamcode.Hardware.Hardware;
 import org.firstinspires.ftc.teamcode.Hardware.Util.Logger;
-import org.firstinspires.ftc.teamcode.Hardware.Util.PosChecker;
 import org.firstinspires.ftc.teamcode.SystemsFSMs.Mechaisms.Bucket;
 import org.firstinspires.ftc.teamcode.SystemsFSMs.Mechaisms.IntakeSlides;
 import org.firstinspires.ftc.teamcode.SystemsFSMs.Mechaisms.SampleDetector;
@@ -164,18 +163,18 @@ public class Intake {
     }
 
     public void log(){
-        logger.log("<b>" + "-Intake-" + "</b>", "", Logger.LogLevels.production);
+        logger.logData("<b>" + "-Intake-" + "</b>", "", Logger.LogLevels.production);
 
-        logger.log("Target System State", targetSystemState, Logger.LogLevels.production);
-        logger.log("Current State", currentSystemState, Logger.LogLevels.production);
-        logger.log("Last seen color", lastSeenColor, Logger.LogLevels.production);
+        logger.logData("Target System State", targetSystemState, Logger.LogLevels.production);
+        logger.logData("Current State", currentSystemState, Logger.LogLevels.production);
+        logger.logData("Last seen color", lastSeenColor, Logger.LogLevels.production);
 
-        logger.log("Accepetable Colors", acceptableColors.toString(), Logger.LogLevels.debug);
-        logger.log("Has Sample", hasSample, Logger.LogLevels.debug);
+        logger.logData("Accepetable Colors", acceptableColors.toString(), Logger.LogLevels.debug);
+        logger.logData("Has Sample", hasSample, Logger.LogLevels.debug);
 
-        logger.log("Feedrate", feedRate, Logger.LogLevels.developer);
-        logger.log("Fed Position", fedPosition, Logger.LogLevels.developer);
-        logger.log("Recorded Time", recordedTime, Logger.LogLevels.developer);
+        logger.logData("Feedrate", feedRate, Logger.LogLevels.developer);
+        logger.logData("Fed Position", fedPosition, Logger.LogLevels.developer);
+        logger.logData("Recorded Time", recordedTime, Logger.LogLevels.developer);
 
         bucket.log();
         detector.log();
