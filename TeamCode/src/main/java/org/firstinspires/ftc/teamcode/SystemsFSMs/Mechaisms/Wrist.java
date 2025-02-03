@@ -5,15 +5,14 @@ import org.firstinspires.ftc.teamcode.Hardware.Hardware;
 import org.firstinspires.ftc.teamcode.Hardware.Util.AnalogServo;
 import org.firstinspires.ftc.teamcode.Hardware.Util.Logger;
 import org.firstinspires.ftc.teamcode.Hardware.Util.PosChecker;
-import org.firstinspires.ftc.teamcode.SystemsFSMs.Deposit;
 
-public class Arm {
+public class Wrist {
 
     public enum State {
-        TransferPos(DepositConstants.armTransferPos, DepositConstants.armEncTransferPos),
-        SpecIntakePos(DepositConstants.armSpecIntakePos, DepositConstants.armEncSpecIntakePos),
-        SpecDepositPos(DepositConstants.armSpecDepositPos, DepositConstants.armEncSpecDepositPos),
-        SampleDepositPos(DepositConstants.armSampleDepositPos, DepositConstants.armEncSampleDepositPos),
+        TransferPos(DepositConstants.wristTransferPos, DepositConstants.wristEncTransferPos),
+        SpecIntakePos(DepositConstants.wristSpecIntakePos, DepositConstants.wristEncSpecIntakePos),
+        SpecDepositPos(DepositConstants.wristSpecDepositPos, DepositConstants.wristEncSpecDepositPos),
+        SampleDepositPos(DepositConstants.wristSampleDepositPos, DepositConstants.wristEncSampleDepositPos),
         Intermediate(0,0);
 
         public final double servoPos, encPos;
@@ -33,9 +32,9 @@ public class Arm {
 
     public double encPos;
 
-    public Arm(Hardware hardware, Logger logger) {
+    public Wrist(Hardware hardware, Logger logger) {
         this.logger = logger;
-        servo = new AnalogServo(hardware.armServo, hardware.armEnc);
+        servo = new AnalogServo(hardware.wristServo, hardware.wristEnc);
     }
 
     public void update() {
@@ -52,7 +51,7 @@ public class Arm {
     }
 
     public void log() {
-        logger.logHeader("Arm");
+        logger.logHeader("Wrist");
 
         logger.logData("Current State", currentState, Logger.LogLevels.debug);
         logger.logData("Target State", targetState, Logger.LogLevels.debug);
@@ -62,8 +61,7 @@ public class Arm {
     }
 
     private void findState() {
-        currentState = PosChecker.atAngularPos(encPos, targetState.encPos, DepositConstants.armPositionTolerance) ? targetState : State.Intermediate;
+        currentState = PosChecker.atAngularPos(encPos, targetState.encPos, DepositConstants.wristPositionTolerance) ? targetState : State.Intermediate;
 
     }
-
 }

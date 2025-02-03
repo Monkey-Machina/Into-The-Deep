@@ -14,19 +14,33 @@ public class DepositConstants {
 
     // Arm Positions
     public static final double
-            armRightTransferPos = 0.932,
-            armRightSpecIntakePos = 0.04,
-            armRightSpecDepositPos = 0.89,
-            armRightSampleDepositPos = 0.32;
+            armTransferPos = 0.932,
+            armSpecIntakePos = 0.04,
+            armSpecDepositPos = 0.89,
+            armSampleDepositPos = 0.32;
 
     // Arm Enc Positions
     public static final double
-            armRightEncTransferPos = 42.00,
-            armRightEncSpecIntakePos = 330.50,
-            armRightEncSpecDepositPos = 53.60,
-            armRightEncSampleDepositPos = 240.70,
-            armRightEncSlideDownSafePos = 165.00,
-            armRightPositionTolerance = 10.00;
+            armEncTransferPos = 42.00,
+            armEncSpecIntakePos = 330.50,
+            armEncSpecDepositPos = 53.60,
+            armEncSampleDepositPos = 240.70,
+            armPositionTolerance = 10.00;
+
+    // Wrist Positions
+    public static final double
+            wristTransferPos = 0.00,
+            wristSpecIntakePos = 0.00,
+            wristSpecDepositPos = 0.00,
+            wristSampleDepositPos = 0.00;
+
+    // Wrist Enc Positions
+    public static final double
+            wristEncTransferPos = 0.00,
+            wristEncSpecIntakePos = 0.00,
+            wristEncSpecDepositPos = 0.00,
+            wristEncSampleDepositPos = 0.00,
+            wristPositionTolerance = 0.00;
 
     // Deposit Slide PID Constants
     public static final double
@@ -50,7 +64,5 @@ public class DepositConstants {
             slideSampleDepositPos = 72,
             slideMaxExtension = 72,
             slidePositionTolerance = 1.00;
-
-
 
 }
