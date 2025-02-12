@@ -27,12 +27,13 @@ public class DepositConstants {
             armEncSampleDepositPos = 240.70,
             armPositionTolerance = 10.00;
 
-    // Wrist Positions
+    // Wrist Positions, wrist positions all indicated in terms of distance rotated all the way backwards (IE: claw arm side of claw against deposit arm)
     public static final double
             wristTransferPos = 0.00,
             wristSpecIntakePos = 0.00,
             wristSpecDepositPos = 0.00,
-            wristSampleDepositPos = 0.00;
+            wristSampleDepositPos = 0.00,
+            wristPositionRange = 0.00;
 
     // Wrist Enc Positions
     public static final double
