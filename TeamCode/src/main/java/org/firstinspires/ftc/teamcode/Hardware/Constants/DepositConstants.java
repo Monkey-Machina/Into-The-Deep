@@ -2,7 +2,7 @@ package org.firstinspires.ftc.teamcode.Hardware.Constants;
 
 public class DepositConstants {
 
-    // Claw Positions
+    // Claw Positions (degrees)
     public static final double
             clawClosedPos = 0.035,
             clawOpenPos = 0.46,
@@ -10,7 +10,7 @@ public class DepositConstants {
             clawEncUpperBound = 0.00,
             clawEncPosTolerance = 4.00;
 
-    // Arm Positions
+    // Arm Positions (degrees)
     public static final double
             armTransferPos = 0.932,
             armSpecIntakePos = 0.04,
@@ -21,7 +21,7 @@ public class DepositConstants {
             armEncUpperBound = 0.00;
 
 
-    // Wrist Positions
+    // Wrist Positions (degrees)
     public static final double
             wristTransferPos = 0.00,
             wristSpecIntakePos = 0.00,
@@ -34,25 +34,22 @@ public class DepositConstants {
 
     // Deposit Slide PID Constants
     public static final double
-            sp = 0.02,
-            si = 0.05,
-            sd = 0.00035,
-            sf = 0.13;
-    //Zeros for testing
-//            sp = 0.0,
-//            si = 0.0,
-//            sd = 0.0,
-//            sf = 0.0;
+            sp = 0.0,
+            si = 0.0,
+            sd = 0.0,
+            sf = 0.0;
+//            sp = 0.02,
+//            si = 0.05,
+//            sd = 0.00035,
+//            sf = 0.13;
 
-    // Deposit Slides Positions in cm
+    // Deposit Slides Positions (CM)
     public static final double
             slideTransferPos = 4.00,
-            slidePreTransferPos = 20.00,
             slideSpecIntakePos = 0.00,
-            slideSpecDepositReadyPos = 44.90,
-            slideSpecClippedPos = 63.00,
-            slideSampleDepositPos = 72,
-            slideMaxExtension = 72,
+            slideSpecDepositPos = 63.00,
+            slideSampleDepositPos = 82,
+            slideMaxExtension = 84,
             slidePositionTolerance = 1.00;
 
 }

@@ -39,7 +39,7 @@ public class TeleOp extends OpMode {
 
         robot  = new Robot(hardware, controller, logger);
 
-        robot.setDepositDesiredState(Deposit.TargetState.transfer);
+        robot.setDepositDesiredState(Deposit.State.transfer);
         robot.setIntakeDesiredState(Intake.SystemState.Stowed);
     }
 
@@ -68,7 +68,7 @@ public class TeleOp extends OpMode {
         // Send deposit to transfer position |A|
         if (controller.wasJustPressed(GamepadKeys.Button.A)) {
 
-            robot.setDepositDesiredState(Deposit.TargetState.transfer);
+            robot.setDepositDesiredState(Deposit.State.transfer);
             robot.releaseClaw();
         }
 

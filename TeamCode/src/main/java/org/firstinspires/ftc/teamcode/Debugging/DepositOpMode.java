@@ -31,7 +31,7 @@ public class DepositOpMode extends OpMode {
         drivetrain = new Drivetrain(hardware, controller, logger, false);
         telemetry = new MultipleTelemetry(telemetry, FtcDashboard.getInstance().getTelemetry());
 
-        deposit.setTargetState(Deposit.TargetState.transfer);
+        deposit.setTargetState(Deposit.State.transfer);
     }
 
     @Override
@@ -45,20 +45,20 @@ public class DepositOpMode extends OpMode {
 
         if (controller.wasJustPressed(GamepadKeys.Button.A)){
 
-            deposit.setTargetState(Deposit.TargetState.transfer);
+            deposit.setTargetState(Deposit.State.transfer);
 
         } else if (controller.wasJustPressed(GamepadKeys.Button.B)) {
-            deposit.setTargetState(Deposit.TargetState.specIntake);
+            deposit.setTargetState(Deposit.State.specIntake);
 
         } else if (controller.wasJustPressed(GamepadKeys.Button.Y)) {
-            deposit.setTargetState(Deposit.TargetState.sampleDeposit);
+            deposit.setTargetState(Deposit.State.sampleDeposit);
         } else if (controller.wasJustPressed(GamepadKeys.Button.X)) {
 
 
-            if (deposit.getTargetState() != Deposit.TargetState.specDepositReady) {
-                deposit.setTargetState(Deposit.TargetState.specDepositReady);
-            } else if (deposit.getTargetState() == Deposit.TargetState.specDepositReady) {
-                deposit.setTargetState(Deposit.TargetState.specDepositClipped);
+            if (deposit.getTargetState() != Deposit.State.specDepositReady) {
+                deposit.setTargetState(Deposit.State.specDepositReady);
+            } else if (deposit.getTargetState() == Deposit.State.specDepositReady) {
+                deposit.setTargetState(Deposit.State.specDepositClipped);
             }
 
         }

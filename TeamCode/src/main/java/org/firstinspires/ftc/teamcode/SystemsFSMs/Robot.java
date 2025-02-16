@@ -26,7 +26,7 @@ public class Robot {
     }
 
     private States currentState;
-    private Deposit.TargetState depositDesiredState;
+    private Deposit.State depositDesiredState;
     private Intake.SystemState intakeDesiredState;
 
     private boolean interference;
@@ -43,7 +43,7 @@ public class Robot {
         deposit = new Deposit(hardware, controller, logger);
         intake = new Intake(hardware, controller, logger);
 
-        deposit.setTargetState(Deposit.TargetState.transfer);
+        deposit.setTargetState(Deposit.State.transfer);
         intake.setTargetState(Intake.SystemState.Stowed);
 
         findState();
@@ -83,12 +83,12 @@ public class Robot {
                     deposit.setTargetState(depositDesiredState);
                 } else {
 
-                    if (depositDesiredState == Deposit.TargetState.specIntake) {
-                        deposit.setTargetState(Deposit.TargetState.preSpecIntake);
-                    } else if (depositDesiredState == Deposit.TargetState.sampleDeposit) {
-                        deposit.setTargetState(Deposit.TargetState.samplePreDeposit);
+                    if (depositDesiredState == Deposit.State.specIntake) {
+                        deposit.setTargetState(Deposit.State.preSpecIntake);
+                    } else if (depositDesiredState == Deposit.State.sampleDeposit) {
+                        deposit.setTargetState(Deposit.State.samplePreDeposit);
                     } else {
-                        deposit.setTargetState(Deposit.TargetState.preTransfer);
+                        deposit.setTargetState(Deposit.State.preTransfer);
                     }
 
 
@@ -99,7 +99,7 @@ public class Robot {
                 break;
 
             case transferReady:
-                deposit.setTargetState(Deposit.TargetState.transfer);
+                deposit.setTargetState(Deposit.State.transfer);
                 intake.setTargetState(Intake.SystemState.Stowed);
 
 
@@ -142,7 +142,7 @@ public class Robot {
         intake.log();
     }
 
-    public void setDepositDesiredState(Deposit.TargetState state) {
+    public void setDepositDesiredState(Deposit.State state) {
         depositDesiredState = state;
     }
 
@@ -158,16 +158,16 @@ public class Robot {
 
         // If sample is yellow
         if (intake.getLastSeenColor() == SampleDetector.SampleColor.yellow) {
-            setDepositDesiredState(Deposit.TargetState.sampleDeposit);
+            setDepositDesiredState(Deposit.State.sampleDeposit);
         }
 
         // If sample is alliance colored
         if ((intake.getLastSeenColor() == SampleDetector.SampleColor.blue) || (intake.getLastSeenColor() == SampleDetector.SampleColor.red)) {
 
-            if (deposit.getTargetState() != Deposit.TargetState.specIntake) {
-                setDepositDesiredState(Deposit.TargetState.specIntake);
+            if (deposit.getTargetState() != Deposit.State.specIntake) {
+                setDepositDesiredState(Deposit.State.specIntake);
             } else {
-                setDepositDesiredState(Deposit.TargetState.specDepositReady);
+                setDepositDesiredState(Deposit.State.specDepositReady);
             }
 
         }
@@ -176,10 +176,10 @@ public class Robot {
 
     public void clipSpec() {
 
-        if (deposit.getTargetState() == Deposit.TargetState.specDepositReady) {
-            setDepositDesiredState(Deposit.TargetState.specDepositClipped);
-        } else if (deposit.getTargetState() == Deposit.TargetState.specDepositClipped) {
-            setDepositDesiredState(Deposit.TargetState.specDepositReady);
+        if (deposit.getTargetState() == Deposit.State.specDepositReady) {
+            setDepositDesiredState(Deposit.State.specDepositClipped);
+        } else if (deposit.getTargetState() == Deposit.State.specDepositClipped) {
+            setDepositDesiredState(Deposit.State.specDepositReady);
         }
 
     }
@@ -203,7 +203,7 @@ public class Robot {
     private void findState() {
 
         // If either the Intake or Deposit isnt at their transfer ready positions then the state is cycling
-        if (intake.getCurrentSystemState() != Intake.SystemState.Stowed || deposit.getCurrentState() != Deposit.TargetState.transfer || !intake.hasSample) {
+        if (intake.getCurrentSystemState() != Intake.SystemState.Stowed || deposit.getCurrentState() != Deposit.State.transfer || !intake.hasSample) {
             currentState = States.cycling;
 
         } else { // If all of previous conditions are met, then we can assume we are ready to transfer
@@ -236,7 +236,7 @@ public class Robot {
                 interference = false;
             }
 
-            if (depositDesiredState  == Deposit.TargetState.specIntake && deposit.getSlideCurrentCM() <= DepositConstants.slidePreTransferPos - DepositConstants.slidePositionTolerance && (deposit.arm.getRightServoEncPos() <= DepositConstants.armRightEncSlideDownSafePos - DepositConstants.armRightPositionTolerance) && deposit.arm.getRightSetPosition() > DepositConstants.armRightSampleDepositPos) {
+            if (depositDesiredState  == Deposit.State.specIntake && deposit.getSlideCurrentCM() <= DepositConstants.slidePreTransferPos - DepositConstants.slidePositionTolerance && (deposit.arm.getRightServoEncPos() <= DepositConstants.armRightEncSlideDownSafePos - DepositConstants.armRightPositionTolerance) && deposit.arm.getRightSetPosition() > DepositConstants.armRightSampleDepositPos) {
                 interference  = true;
             }
 

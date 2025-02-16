@@ -9,30 +9,30 @@ import org.firstinspires.ftc.teamcode.Hardware.Util.Logger;
 import org.firstinspires.ftc.teamcode.Hardware.Util.PosChecker;
 import org.firstinspires.ftc.teamcode.SystemsFSMs.DepositLowLevel.Arm;
 import org.firstinspires.ftc.teamcode.SystemsFSMs.DepositLowLevel.Claw;
-import org.firstinspires.ftc.teamcode.SystemsFSMs.Mechaisms.DepositSlides;
+import org.firstinspires.ftc.teamcode.SystemsFSMs.DepositLowLevel.DepositSlides;
+import org.firstinspires.ftc.teamcode.SystemsFSMs.DepositLowLevel.Wrist;
 
 public class Deposit {
+
+    private Arm arm;
+    private Wrist wrist;
     private Claw claw;
-    // TODO: This being public is a jank fix for going to spec deposit position so that I can easily look at its position in the robot FSM
-    public Arm arm;
+
     private DepositSlides slides;
+
     private Logger logger;
     private GamepadEx controller;
 
-    public enum TargetState {
+    public enum State {
         transfer,
-        preTransfer,
         specIntake,
-        specDepositReady,
-        specDepositClipped,
+        specDeposit,
         sampleDeposit,
-        samplePreDeposit,
-        preSpecIntake,
         intermediate;
     }
 
-    private TargetState targetState;
-    private TargetState currentState;
+    private State targetState;
+    private State currentState;
 
     private boolean transfer = false;
 
@@ -144,15 +144,15 @@ public class Deposit {
         slides.log();
     }
 
-    public void setTargetState(TargetState state) {
+    public void setTargetState(State state) {
         targetState = state;
     }
 
-    public TargetState getCurrentState() {
+    public State getCurrentState() {
         return currentState;
     }
 
-    public TargetState getTargetState() {
+    public State getTargetState() {
         return targetState;
     }
 
@@ -163,19 +163,19 @@ public class Deposit {
     private void findState() {
 
         if (arm.getStatus() == Arm.State.TransferPos && PosChecker.atLinearPos(slides.getPosition(), DepositConstants.slideTransferPos, DepositConstants.slidePositionTolerance) && slides.getTargetCM() == DepositConstants.slideTransferPos) {
-            currentState = TargetState.transfer;
+            currentState = State.transfer;
         } else if (arm.getStatus() == Arm.State.TransferPos && PosChecker.atLinearPos(slides.getPosition(), DepositConstants.slidePreTransferPos, DepositConstants.slidePositionTolerance) && slides.getTargetCM() == DepositConstants.slidePreTransferPos) {
-            currentState = TargetState.preTransfer;
+            currentState = State.preTransfer;
         } else if (arm.getStatus() == Arm.State.SpecIntakePos && PosChecker.atLinearPos(slides.getPosition(), DepositConstants.slideSpecIntakePos, DepositConstants.slidePositionTolerance) && slides.getTargetCM() == DepositConstants.slideSpecIntakePos) {
-            currentState = TargetState.specIntake;
+            currentState = State.specIntake;
         } else if (arm.getStatus() == Arm.State.SpecDepositPos && PosChecker.atLinearPos(slides.getPosition(), DepositConstants.slideSpecDepositReadyPos, DepositConstants.slidePositionTolerance) && slides.getTargetCM() == DepositConstants.slideSpecDepositReadyPos) {
-            currentState = TargetState.specDepositReady;
+            currentState = State.specDepositReady;
         } else if (arm.getStatus() == Arm.State.SpecDepositPos && PosChecker.atLinearPos(slides.getPosition(), DepositConstants.slideSpecClippedPos, DepositConstants.slidePositionTolerance) && slides.getTargetCM() == DepositConstants.slideSpecClippedPos) {
-            currentState = TargetState.specDepositClipped;
+            currentState = State.specDepositClipped;
         } else if (arm.getStatus() == Arm.State.SampleDepositPos && PosChecker.atLinearPos(slides.getPosition(), DepositConstants.slideSampleDepositPos, DepositConstants.slidePositionTolerance) && slides.getTargetCM() == DepositConstants.slideSampleDepositPos) {
-            currentState = TargetState.sampleDeposit;
+            currentState = State.sampleDeposit;
         } else {
-            currentState =TargetState.intermediate;
+            currentState = State.intermediate;
         }
 
     }
