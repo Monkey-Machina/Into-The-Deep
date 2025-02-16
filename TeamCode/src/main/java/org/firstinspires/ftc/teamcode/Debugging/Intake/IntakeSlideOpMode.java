@@ -31,7 +31,7 @@ public class IntakeSlideOpMode extends OpMode {
         hardware.init(hardwareMap);
         controller = new GamepadEx(gamepad1);
         logger = new Logger(telemetry, controller);
-        slides = new IntakeSlides(hardware, logger);
+        slides = new IntakeSlides(hardware, logger, false);
     }
 
     @Override
