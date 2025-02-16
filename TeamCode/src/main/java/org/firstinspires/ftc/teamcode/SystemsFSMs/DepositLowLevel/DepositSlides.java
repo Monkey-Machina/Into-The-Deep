@@ -17,7 +17,7 @@ public class DepositSlides {
         SpecIntakePos(DepositConstants.slideSpecIntakePos),
         SpecDepositPos(DepositConstants.slideSpecDepositPos),
         SampleDepositPos(DepositConstants.slideSampleDepositPos),
-        Intermediate(0.00);
+        Intermediate(0.0);
 
         public final double slidePos;
 

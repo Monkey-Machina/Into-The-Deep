@@ -9,8 +9,8 @@ import org.firstinspires.ftc.teamcode.Hardware.Util.PosChecker;
 public class Claw {
 
     public enum State {
-        OpenPos(DepositConstants.clawOpenPos),
-        ClosedPos(DepositConstants.clawClosedPos),
+        Open(DepositConstants.clawOpenPos),
+        Closed(DepositConstants.clawClosedPos),
         Intermediate(0);
 
         public final double position;
@@ -25,7 +25,7 @@ public class Claw {
     private AnalogServo servo;
 
     public State currentState;
-    private State targetState;
+    public State targetState;
 
     private double encPos = 0.00;
 
