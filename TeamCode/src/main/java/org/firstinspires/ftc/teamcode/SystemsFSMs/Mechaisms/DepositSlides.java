@@ -10,10 +10,13 @@ import org.firstinspires.ftc.teamcode.Hardware.Hardware;
 import org.firstinspires.ftc.teamcode.Hardware.Util.Logger;
 
 public class DepositSlides {
+
     private DcMotorEx rightMotor;
     private DcMotorEx leftMotor;
     private Logger logger;
 
+
+    //TODO: Adjust physical constants for new ticks to CM calculation
     private double spoolDiam = 3.0; // Spool Diameter in cm
     private double extensionLimit = DepositConstants.slideMaxExtension; // Extension Limit in cm
 
@@ -53,7 +56,7 @@ public class DepositSlides {
     public void update() {
         currentTicks = leftMotor.getCurrentPosition();
         currentCM = -currentTicks * ticksToCm;
-        velocity = rightMotor.getVelocity(AngleUnit.DEGREES);
+        velocity = -leftMotor.getVelocity(AngleUnit.DEGREES);
 
         leftTicks = leftMotor.getCurrentPosition();
 
