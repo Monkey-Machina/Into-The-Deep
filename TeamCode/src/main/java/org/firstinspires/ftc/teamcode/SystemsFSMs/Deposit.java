@@ -7,8 +7,8 @@ import org.firstinspires.ftc.teamcode.Hardware.Constants.DepositConstants;
 import org.firstinspires.ftc.teamcode.Hardware.Hardware;
 import org.firstinspires.ftc.teamcode.Hardware.Util.Logger;
 import org.firstinspires.ftc.teamcode.Hardware.Util.PosChecker;
-import org.firstinspires.ftc.teamcode.SystemsFSMs.Mechaisms.Arm;
-import org.firstinspires.ftc.teamcode.SystemsFSMs.Mechaisms.Claw;
+import org.firstinspires.ftc.teamcode.SystemsFSMs.DepositLowLevel.Arm;
+import org.firstinspires.ftc.teamcode.SystemsFSMs.DepositLowLevel.Claw;
 import org.firstinspires.ftc.teamcode.SystemsFSMs.Mechaisms.DepositSlides;
 
 public class Deposit {

@@ -74,7 +74,7 @@ public class DepositSlides {
     }
 
     public void log() {
-        logger.logData("<b>" + "Deposit Slides" + "</b>", "", Logger.LogLevels.production);
+        logger.logHeader("Deposit Slides");
 
         logger.logData("Depo Current CM", currentCM, Logger.LogLevels.debug);
         logger.logData("Depo Target CM", targetCM, Logger.LogLevels.debug);

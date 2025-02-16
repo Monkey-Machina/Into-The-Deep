@@ -7,7 +7,7 @@ import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import org.firstinspires.ftc.teamcode.Hardware.Constants.DepositConstants;
 import org.firstinspires.ftc.teamcode.Hardware.Hardware;
 import org.firstinspires.ftc.teamcode.Hardware.Util.Logger;
-import org.firstinspires.ftc.teamcode.SystemsFSMs.Mechaisms.Arm;
+import org.firstinspires.ftc.teamcode.SystemsFSMs.DepositLowLevel.Arm;
 
 @Autonomous(name = "Auto V0.0.1", group = "Competition")
 public class Auto  extends OpMode {

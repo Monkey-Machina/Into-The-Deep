@@ -107,7 +107,4 @@ public class ColorUtils {
             return SampleDetector.SampleColor.unknown;
         }
     }
-
-
-
 }

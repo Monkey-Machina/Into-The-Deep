@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.SystemsFSMs.Mechaisms;
+package org.firstinspires.ftc.teamcode.SystemsFSMs.DepositLowLevel;
 
 import org.firstinspires.ftc.teamcode.Hardware.Constants.DepositConstants;
 import org.firstinspires.ftc.teamcode.Hardware.Hardware;
@@ -9,17 +9,16 @@ import org.firstinspires.ftc.teamcode.Hardware.Util.PosChecker;
 public class Wrist {
 
     public enum State {
-        TransferPos(DepositConstants.wristTransferPos, DepositConstants.wristEncTransferPos),
-        SpecIntakePos(DepositConstants.wristSpecIntakePos, DepositConstants.wristEncSpecIntakePos),
-        SpecDepositPos(DepositConstants.wristSpecDepositPos, DepositConstants.wristEncSpecDepositPos),
-        SampleDepositPos(DepositConstants.wristSampleDepositPos, DepositConstants.wristEncSampleDepositPos),
-        Intermediate(0,0);
+        TransferPos(DepositConstants.wristTransferPos),
+        SpecIntakePos(DepositConstants.wristSpecIntakePos),
+        SpecDepositPos(DepositConstants.wristSpecDepositPos),
+        SampleDepositPos(DepositConstants.wristSampleDepositPos),
+        Intermediate(0);
 
-        public final double servoPos, encPos;
+        public final double servoPos;
 
-        State(double servoPos, double encPos) {
+        State(double servoPos) {
             this.servoPos = servoPos;
-            this.encPos = encPos;
         }
     }
 
@@ -30,11 +29,13 @@ public class Wrist {
     public State currentState;
     private State targetState;
 
-    public double encPos;
+    public double encPos = 0.00;
+
+    public double offset = 0.00;
 
     public Wrist(Hardware hardware, Logger logger) {
         this.logger = logger;
-        servo = new AnalogServo(hardware.wristServo, hardware.wristEnc);
+        servo = new AnalogServo(hardware.wristServo, hardware.wristEnc, DepositConstants.wristEncLowerBound, DepositConstants.wristEncUpperBound);
     }
 
     public void update() {
@@ -47,7 +48,7 @@ public class Wrist {
     }
 
     public void command() {
-        servo.setPos(targetState.servoPos);
+        servo.setPos(targetState.servoPos + offset);
     }
 
     public void log() {
@@ -56,12 +57,17 @@ public class Wrist {
         logger.logData("Current State", currentState, Logger.LogLevels.debug);
         logger.logData("Target State", targetState, Logger.LogLevels.debug);
 
-        logger.logData("Target Position", targetState.servoPos, Logger.LogLevels.developer);
+        logger.logData("Target Position", targetState.servoPos + offset, Logger.LogLevels.developer);
         logger.logData("Encoder Position", encPos, Logger.LogLevels.developer);
+        logger.logData("Offset", offset, Logger.LogLevels.developer);
+    }
+
+    public void changeOffset(double deltaOffset) {
+        offset += deltaOffset;
     }
 
     private void findState() {
-        currentState = PosChecker.atAngularPos(encPos, targetState.encPos, DepositConstants.wristPositionTolerance) ? targetState : State.Intermediate;
+        currentState = PosChecker.atAngularPos(encPos, targetState.servoPos + offset, DepositConstants.wristPositionTolerance) ? targetState : State.Intermediate;
 
     }
 }

@@ -1,26 +1,24 @@
-package org.firstinspires.ftc.teamcode.SystemsFSMs.Mechaisms;
+package org.firstinspires.ftc.teamcode.SystemsFSMs.DepositLowLevel;
 
 import org.firstinspires.ftc.teamcode.Hardware.Constants.DepositConstants;
 import org.firstinspires.ftc.teamcode.Hardware.Hardware;
 import org.firstinspires.ftc.teamcode.Hardware.Util.AnalogServo;
 import org.firstinspires.ftc.teamcode.Hardware.Util.Logger;
 import org.firstinspires.ftc.teamcode.Hardware.Util.PosChecker;
-import org.firstinspires.ftc.teamcode.SystemsFSMs.Deposit;
 
 public class Arm {
 
     public enum State {
-        TransferPos(DepositConstants.armTransferPos, DepositConstants.armEncTransferPos),
-        SpecIntakePos(DepositConstants.armSpecIntakePos, DepositConstants.armEncSpecIntakePos),
-        SpecDepositPos(DepositConstants.armSpecDepositPos, DepositConstants.armEncSpecDepositPos),
-        SampleDepositPos(DepositConstants.armSampleDepositPos, DepositConstants.armEncSampleDepositPos),
-        Intermediate(0,0);
+        TransferPos(DepositConstants.armTransferPos),
+        SpecIntakePos(DepositConstants.armSpecIntakePos),
+        SpecDepositPos(DepositConstants.armSpecDepositPos),
+        SampleDepositPos(DepositConstants.armSampleDepositPos),
+        Intermediate(0);
 
-        public final double servoPos, encPos;
+        public final double position;
 
-        State(double servoPos, double encPos) {
-            this.servoPos = servoPos;
-            this.encPos = encPos;
+        State(double servoPos) {
+            this.position = servoPos;
         }
     }
 
@@ -31,11 +29,13 @@ public class Arm {
     public State currentState;
     private State targetState;
 
-    public double encPos;
+    public double encPos = 0.00;
+
+    private double offset = 0.00;
 
     public Arm(Hardware hardware, Logger logger) {
         this.logger = logger;
-        servo = new AnalogServo(hardware.armServo, hardware.armEnc);
+        servo = new AnalogServo(hardware.armServo, hardware.armEnc, DepositConstants.armEncLowerBound, DepositConstants.armEncUpperBound);
     }
 
     public void update() {
@@ -48,7 +48,7 @@ public class Arm {
     }
 
     public void command() {
-        servo.setPos(targetState.servoPos);
+        servo.setPos(targetState.position + offset);
     }
 
     public void log() {
@@ -57,13 +57,17 @@ public class Arm {
         logger.logData("Current State", currentState, Logger.LogLevels.debug);
         logger.logData("Target State", targetState, Logger.LogLevels.debug);
 
-        logger.logData("Target Position", targetState.servoPos, Logger.LogLevels.developer);
+        logger.logData("Target Position", targetState.position + offset, Logger.LogLevels.developer);
         logger.logData("Encoder Position", encPos, Logger.LogLevels.developer);
+        logger.logData("Offset", offset, Logger.LogLevels.developer);
+    }
+
+    public void changeOffset(double deltaOffset) {
+        offset += deltaOffset;
     }
 
     private void findState() {
-        currentState = PosChecker.atAngularPos(encPos, targetState.encPos, DepositConstants.armPositionTolerance) ? targetState : State.Intermediate;
+        currentState = PosChecker.atAngularPos(encPos, targetState.position + offset, DepositConstants.armPositionTolerance) ? targetState : State.Intermediate;
 
     }
-
 }
