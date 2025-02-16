@@ -19,7 +19,6 @@ public class Deposit {
     private DepositSlides slides;
 
     private Logger logger;
-    private GamepadEx controller;
 
     public enum State {
 
@@ -43,9 +42,8 @@ public class Deposit {
     private State targetState;
     private State currentState;
 
-    public Deposit(Hardware hardware, GamepadEx controller, Logger logger){
+    public Deposit(Hardware hardware, Logger logger){
         this.logger = logger;
-        this.controller = controller;
 
         arm = new Arm(hardware, logger);
         wrist = new Wrist(hardware, logger);
@@ -75,12 +73,11 @@ public class Deposit {
         slides.command();
     }
 
-    //TODO: Refactor
     public void log() {
         logger.logHeader("--DEPOSIT--");
 
-        logger.logData("Target State", targetState, Logger.LogLevels.production);
         logger.logData("Current State", currentState, Logger.LogLevels.production);
+        logger.logData("Target State", targetState, Logger.LogLevels.production);
 
         claw.log();
         arm.log();
