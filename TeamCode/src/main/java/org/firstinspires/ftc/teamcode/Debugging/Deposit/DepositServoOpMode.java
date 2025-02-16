@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Debugging.LowLevel.Deposit;
+package org.firstinspires.ftc.teamcode.Debugging.Deposit;
 
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;

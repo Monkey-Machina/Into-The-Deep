@@ -11,13 +11,14 @@ import org.firstinspires.ftc.teamcode.Hardware.Hardware;
 import org.firstinspires.ftc.teamcode.Hardware.Util.Logger;
 
 public class IntakeSlides {
+
     private DcMotorEx motor;
     private Logger logger;
 
-    private double spoolDiam = 3.0; // Spool Diameter in cm
+    private double spoolDiam = 4.0; // Spool Diameter in cm
     private double extensionLimit = IntakeConstants.maxExtensionPosition; // Extension Limit in cm
 
-    private final double ticksToCm = ( ( 24.0 / 17.0 ) * Math.PI * spoolDiam) / (145.1); // Multiply ticks by this number to get distance in cm
+    private final double ticksToCm = (( 9 / 60.0 ) * Math.PI * spoolDiam) / (28); // Multiply ticks by this number to get distance in cm
     private final double cmToTicks = 1 / ticksToCm; // Multiply cm by this number to get distance in encoder ticks
 
     private double currentTicks = 0;
@@ -28,6 +29,7 @@ public class IntakeSlides {
     private double current = 0;
     private double velocity = 0;
 
+    private boolean encoderResetEnabled;
     private boolean encoderReset = false;
 
     private double
@@ -37,9 +39,11 @@ public class IntakeSlides {
 
     private PIDController controller = new PIDController(p, i, d);
 
-    public IntakeSlides(Hardware hardware, Logger logger) {
+    public IntakeSlides(Hardware hardware, Logger logger, boolean encoderResetEnabled) {
         motor = hardware.intakeSlideMotor;
         this.logger = logger;
+
+        this.encoderResetEnabled = encoderResetEnabled;
     }
 
     public void update() {
@@ -58,8 +62,7 @@ public class IntakeSlides {
         power = controller.calculate(currentCM * cmToTicks, rangedTarget * cmToTicks);
 
         // Re-Zero slides whenever target pos is zero
-        if (targetCM == 0) {
-
+        if (targetCM == 0 && encoderResetEnabled) {
             if (!encoderReset) {
                 power = IntakeConstants.intakeSlideZeroPower;
 
@@ -75,26 +78,13 @@ public class IntakeSlides {
                 power = Math.min(power, IntakeConstants.intakeSlideZeroStallPower);
             }
 
-        }
-
-//        // If not at zero and target is zero, apply at least the slide zeroing power
-//        if (targetCM == 0 && currentCM >= 0.00) {
-//            power = Math.min(IntakeConstants.intakeSlideZeroPower, power);
-//        } else if (targetCM == 0) {
-//            power = IntakeConstants.intakeSlideZeroStallPower;
-//        }
-
-
-        if (targetCM != 0) {
-            encoderReset = false;
-        }
-
+        } else { encoderReset = false; }
 
         motor.setPower(power);
     }
 
     public void log() {
-        logger.logData("<b>" + "Intake Slides" + "</b>", "", Logger.LogLevels.production);
+        logger.logHeader("Intake Slides");
 
         logger.logData("Current CM", currentCM, Logger.LogLevels.debug);
         logger.logData("Target CM", targetCM, Logger.LogLevels.debug);

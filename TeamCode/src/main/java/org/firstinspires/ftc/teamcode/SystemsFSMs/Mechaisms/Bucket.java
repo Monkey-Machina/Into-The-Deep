@@ -1,3 +1,6 @@
+//TODO: Refactor
+
+/*
 package org.firstinspires.ftc.teamcode.SystemsFSMs.Mechaisms;
 
 import com.qualcomm.robotcore.hardware.DcMotorEx;
@@ -6,6 +9,8 @@ import com.qualcomm.robotcore.hardware.Servo;
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.Hardware.Constants.IntakeConstants;
 import org.firstinspires.ftc.teamcode.Hardware.Hardware;
+
+
 import org.firstinspires.ftc.teamcode.Hardware.Util.AnalogServo;
 import org.firstinspires.ftc.teamcode.Hardware.Util.Logger;
 import org.firstinspires.ftc.teamcode.Hardware.Util.PosChecker;
@@ -95,3 +100,4 @@ public class Bucket {
         }
     }
 }
+*/
