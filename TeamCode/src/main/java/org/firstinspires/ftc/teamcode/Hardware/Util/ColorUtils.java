@@ -1,6 +1,6 @@
 package org.firstinspires.ftc.teamcode.Hardware.Util;
 
-import org.firstinspires.ftc.teamcode.SystemsFSMs.Mechaisms.SampleDetector;
+//import org.firstinspires.ftc.teamcode.SystemsFSMs.Mechaisms.SampleDetector;
 
 public class ColorUtils {
 
@@ -84,27 +84,27 @@ public class ColorUtils {
         return (value * normalMax) / valueMax;
     }
 
-    public static SampleDetector.SampleColor ClassifyColor(double[] color) {
-        // Takes an HSV Color [0,255], [0,100], [0,100]
-
-        double[] yellowHSV = {64, 95, 95};
-        double[] blueHSV = {224, 96, 96};
-        double[] redHSV = {17, 91, 92};
-
-        double yellowDist = HSVDistance(color, yellowHSV);
-        double blueDist = HSVDistance(color, blueHSV);
-        double redDist = HSVDistance(color, redHSV);
-
-        double minDist = Math.min(yellowDist, Math.min(blueDist, redDist));
-
-        if ( minDist == yellowDist ) {
-            return SampleDetector.SampleColor.yellow;
-        } else if (minDist == blueDist) {
-            return SampleDetector.SampleColor.blue;
-        } else if (minDist == redDist) {
-            return SampleDetector.SampleColor.red;
-        } else {
-            return SampleDetector.SampleColor.unknown;
-        }
-    }
+//    public static SampleDetector.SampleColor ClassifyColor(double[] color) {
+//        // Takes an HSV Color [0,255], [0,100], [0,100]
+//
+//        double[] yellowHSV = {64, 95, 95};
+//        double[] blueHSV = {224, 96, 96};
+//        double[] redHSV = {17, 91, 92};
+//
+//        double yellowDist = HSVDistance(color, yellowHSV);
+//        double blueDist = HSVDistance(color, blueHSV);
+//        double redDist = HSVDistance(color, redHSV);
+//
+//        double minDist = Math.min(yellowDist, Math.min(blueDist, redDist));
+//
+//        if ( minDist == yellowDist ) {
+//            return SampleDetector.SampleColor.yellow;
+//        } else if (minDist == blueDist) {
+//            return SampleDetector.SampleColor.blue;
+//        } else if (minDist == redDist) {
+//            return SampleDetector.SampleColor.red;
+//        } else {
+//            return SampleDetector.SampleColor.unknown;
+//        }
+//    }
 }

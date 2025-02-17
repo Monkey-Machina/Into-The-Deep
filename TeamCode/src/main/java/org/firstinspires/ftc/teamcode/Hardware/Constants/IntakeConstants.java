@@ -4,16 +4,16 @@ public class IntakeConstants {
 
     // Intake Slide PID Constants
     public static final double
-            sp = 0.015,
+            sp = 0.025,
             si = 0.00,
-            sd = 0.00;
+            sd = 0.0007;
 
     // Intake Slide Positions in CM
     public static final double
             stowedPosition = 0.00,
             readyPosition = 30.00,
             minIntakePosition = 10.00,
-            maxExtensionPosition = 63.50,
+            maxExtensionPosition = 70.0,
             intakeSlidePositionTolerance = 1.8;
 
     // Max Intake Slide Manual Feed Rate in cm/s

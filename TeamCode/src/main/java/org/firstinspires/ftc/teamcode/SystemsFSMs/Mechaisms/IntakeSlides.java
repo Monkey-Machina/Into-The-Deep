@@ -80,7 +80,7 @@ public class IntakeSlides {
 
         } else { encoderReset = false; }
 
-        motor.setPower(power);
+        motor.setPower(-power);
     }
 
     public void log() {
