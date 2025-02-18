@@ -28,19 +28,18 @@ public class IntakeConstants {
     // Bucket Servo Positions
     public static final double
             bucketUpPosition = 0.425,
-            bucketDownPosition = 0.635;
-
-    // Bucket Encoder Positions & Tolerance
-    public static final double
-            bucketEncUpPosition = 206.50,
-            bucketEncDownPosition = 139.50,
-            bucketEncDownPartialPosition = (bucketEncUpPosition + bucketEncDownPosition) / 2.0,
+            bucketDownPosition = 0.635,
+            bucketEncLowerBound = 0.00,
+            bucketEncUpperBound = 0.00,
             bucketEncPositionTolerance = 5.00;
 
     // Gate Positions
     public static final double
             gateOpenPosition = 0.465,
-            gateBlockedPosition = 0.17;
+            gateClosedPosition = 0.17,
+            gateEncLowerBound = 0.00,
+            gateEncUpperBound = 0.00,
+            gateEncPositionTolerance = 0.00;
 
     // Intake Motor Powers
     public static final double

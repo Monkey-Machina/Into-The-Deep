@@ -48,9 +48,10 @@ public class Hardware   {
     public DcMotorEx intakeRoller;
 
     public Servo intakePivot;
-    public Servo intakeDoor;
+    public Servo intakeGate;
 
     public AnalogInput intakePivotEnc;
+    public AnalogInput intakeGateEnc;
 
     public GobildaBlindToucherV69 intakeCS;
 
@@ -134,9 +135,10 @@ public class Hardware   {
         intakeRoller.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
 
         intakePivot = hardwareMap.get(Servo.class, "CH-Servo-3");
-        intakeDoor = hardwareMap.get(Servo.class, "CH-Servo-4");
+        intakeGate = hardwareMap.get(Servo.class, "CH-Servo-4");
 
         intakePivotEnc = hardwareMap.get(AnalogInput.class, "CH-Analog-3");
+        intakeGateEnc = hardwareMap.get(AnalogInput.class, "CH-Analog-4");
 
         intakeCS = hardwareMap.get(GobildaBlindToucherV69.class, "CH-I2C-1-0");
         intakeLS = hardwareMap.get(DigitalChannel.class, "CH-Digital-0");
