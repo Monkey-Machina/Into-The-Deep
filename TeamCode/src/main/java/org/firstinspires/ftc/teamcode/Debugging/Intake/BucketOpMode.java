@@ -1,5 +1,3 @@
-//TODO: Refactor
-
 package org.firstinspires.ftc.teamcode.Debugging.Intake;
 
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
