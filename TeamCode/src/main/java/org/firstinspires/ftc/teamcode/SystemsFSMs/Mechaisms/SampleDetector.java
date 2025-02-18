@@ -170,10 +170,10 @@ public class SampleDetector {
         b = colorSensor.blue();
         a = colorSensor.alpha();
 
-        double r1 = ColorUtils.Clamp(r,0 ,IntakeConstants.maxR);
-        double g1 = ColorUtils.Clamp(g,0 ,IntakeConstants.maxG);
-        double b1 = ColorUtils.Clamp(b,0 ,IntakeConstants.maxB);
-        double a1 = ColorUtils.Clamp(a,0 ,IntakeConstants.maxA);
+        double r1 = ColorUtils.Clamp(r,0 ,IntakeConstants.maxR - 1);
+        double g1 = ColorUtils.Clamp(g,0 ,IntakeConstants.maxG - 1);
+        double b1 = ColorUtils.Clamp(b,0 ,IntakeConstants.maxB - 1);
+        double a1 = ColorUtils.Clamp(a,0 ,IntakeConstants.maxA - 1);
 
         r1 = ColorUtils.Normalize(r1, 255, IntakeConstants.maxR);
         g1 = ColorUtils.Normalize(g1, 255, IntakeConstants.maxG);
