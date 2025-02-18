@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.SystemsFSMs.Mechaisms.SampleDetector;
 @TeleOp
 public class SampleDetectorOpMode extends OpMode {
 
-    private Hardware hardware = new Hardware();
+    private final Hardware hardware = new Hardware();
     private GamepadEx controller;
     private Logger logger;
 
