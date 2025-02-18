@@ -68,7 +68,7 @@ public class SampleDetector {
     public void log() {
         logger.logHeader("Sample Detector");
 
-        logger.logData("Status", state, Logger.LogLevels.debug);
+        logger.logData("State", state, Logger.LogLevels.debug);
         logger.logData("AO5 Distance", distanceAVG5(), Logger.LogLevels.debug);
         logger.logData("Color", color, Logger.LogLevels.debug);
         logger.logData("Distance", distance, Logger.LogLevels.developer);
