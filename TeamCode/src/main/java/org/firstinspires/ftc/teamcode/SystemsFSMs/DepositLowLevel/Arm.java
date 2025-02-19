@@ -60,6 +60,7 @@ public class Arm {
         logger.logData("Target Position", targetState.position + offset, Logger.LogLevels.developer);
         logger.logData("Encoder Position", encPos, Logger.LogLevels.developer);
         logger.logData("Offset", offset, Logger.LogLevels.developer);
+        logger.logData("Raw Set Position", servo.getCommandedPos(), Logger.LogLevels.developer);
     }
 
     public void changeOffset(double deltaOffset) {

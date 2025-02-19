@@ -35,12 +35,12 @@ public class AnalogServo {
         return voltsToDegrees(encoder.getVoltage());
     }
 
-    private double getCommandedPos() {
+    public double getCommandedPos() {
         return servo.getPosition();
     }
 
     private double voltsToDegrees(double volts) {
-        return (volts/3.3) * 360;
+        return 360 - ((volts/3.3) * 360);
     }
 
 

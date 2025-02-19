@@ -36,6 +36,10 @@ public class DepositServoOpMode extends OpMode {
         wrist = new Wrist(hardware, logger);
         claw = new Claw(hardware, logger);
 
+        arm.setTargetState(Arm.State.TransferPos);
+        wrist.setTargetState(Wrist.State.TransferPos);
+        claw.setTargetState(Claw.State.Open);
+
     }
 
     @Override
@@ -53,8 +57,8 @@ public class DepositServoOpMode extends OpMode {
         servoIndex = controller.wasJustPressed(GamepadKeys.Button.DPAD_LEFT) ? (servoIndex - 1) : servoIndex;
         servoIndex = servoIndex < 0 ? 3 + servoIndex : servoIndex;
 
-        offset = controller.wasJustPressed(GamepadKeys.Button.DPAD_UP) ? offset + 0.01 : offset;
-        offset = controller.wasJustPressed(GamepadKeys.Button.DPAD_DOWN) ? offset - 0.01 : offset;
+        offset = controller.wasJustPressed(GamepadKeys.Button.DPAD_UP) ? offset + 5 : offset;
+        offset = controller.wasJustPressed(GamepadKeys.Button.DPAD_DOWN) ? offset - 5 : offset;
 
         if (servoIndex == 0) {
             arm.changeOffset(offset);

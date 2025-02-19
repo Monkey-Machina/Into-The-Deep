@@ -62,11 +62,6 @@ public class Deposit {
     }
 
     public void command() {
-
-        arm.setTargetState(targetState.armState);
-        wrist.setTargetState(targetState.wristState);
-        slides.setTargetState(targetState.slideState);
-
         arm.command();
         wrist.command();
         claw.command();
@@ -86,6 +81,10 @@ public class Deposit {
 
     public void setTargetState(State state) {
         targetState = state;
+
+        arm.setTargetState(targetState.armState);
+        wrist.setTargetState(targetState.wristState);
+        slides.setTargetState(targetState.slideState);
     }
 
     public void setClaw(Claw.State targetState) {

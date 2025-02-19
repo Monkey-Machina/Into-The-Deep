@@ -71,19 +71,19 @@ public class Hardware   {
         hardwareMap = map;
 
         // Drivetrain
-        LF = hardwareMap.get(DcMotorEx.class, "EH-Motor-0");
+        RF = hardwareMap.get(DcMotorEx.class, "EH-Motor-3");
+        RF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        LF = hardwareMap.get(DcMotorEx.class, "EH-Motor-2");
         LF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         LF.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        RF = hardwareMap.get(DcMotorEx.class, "EH-Motor-1");
-        RF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        RB = hardwareMap.get(DcMotorEx.class, "EH-Motor-2");
-        RB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-
-        LB = hardwareMap.get(DcMotorEx.class, "EH-Motor-3");
+        LB = hardwareMap.get(DcMotorEx.class, "EH-Motor-1");
         LB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
         LB.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        RB = hardwareMap.get(DcMotorEx.class, "EH-Motor-0");
+        RB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
         pinPoint = hardwareMap.get(GoBildaPinpointDriver.class, "CH-I2C-0-1");
         pinPoint.setOffsets(-71,-109.18776);
@@ -115,8 +115,8 @@ public class Hardware   {
         }
 
         armServo = hardwareMap.get(Servo.class, "CH-Servo-0");
-        wristServo = hardwareMap.get(Servo.class, "EH-Servo-0");
-        clawServo = hardwareMap.get(Servo.class, "CH-Servo-2");
+        wristServo = hardwareMap.get(Servo.class, "CH-Servo-2");
+        clawServo = hardwareMap.get(Servo.class, "CH-Servo-4");
 
         armEnc = hardwareMap.get(AnalogInput.class, "CH-Analog-0");
         wristEnc = hardwareMap.get(AnalogInput.class, "CH-Analog-1");
@@ -138,7 +138,7 @@ public class Hardware   {
         intakeGate = hardwareMap.get(Servo.class, "CH-Servo-4");
 
         intakePivotEnc = hardwareMap.get(AnalogInput.class, "CH-Analog-3");
-        intakeGateEnc = hardwareMap.get(AnalogInput.class, "CH-Analog-4");
+        intakeGateEnc = hardwareMap.get(AnalogInput.class, "CH-Analog-3");
 
         intakeCS = hardwareMap.get(GobildaBlindToucherV69.class, "CH-I2C-1-0");
         intakeLS = hardwareMap.get(DigitalChannel.class, "CH-Digital-0");

@@ -9,6 +9,7 @@ import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 import org.firstinspires.ftc.teamcode.Hardware.Hardware;
 import org.firstinspires.ftc.teamcode.Hardware.Util.Logger;
 import org.firstinspires.ftc.teamcode.SystemsFSMs.Deposit;
+import org.firstinspires.ftc.teamcode.SystemsFSMs.DepositLowLevel.Claw;
 import org.firstinspires.ftc.teamcode.SystemsFSMs.Drivetrain;
 @Config
 @TeleOp
@@ -28,8 +29,8 @@ public class DepositOpMode extends OpMode {
         deposit = new Deposit(hardware, logger);
 
         drivetrain = new Drivetrain(hardware, controller, logger, false);
-
         deposit.setTargetState(Deposit.State.transfer);
+        deposit.setClaw(Claw.State.Open);
     }
 
     @Override
