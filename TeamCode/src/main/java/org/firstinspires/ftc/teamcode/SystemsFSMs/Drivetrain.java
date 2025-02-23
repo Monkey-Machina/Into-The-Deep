@@ -55,12 +55,12 @@ public class Drivetrain {
             pinPoint.update(GoBildaPinpointDriver.readData.ONLY_UPDATE_HEADING);
         }
 
-        heading = pinPoint.getHeading();
+        heading = -pinPoint.getHeading();
         position = pinPoint.getPosition();
 
-        sticks[0] = -gamepad.getRightX();
+        sticks[0] = gamepad.getRightX();
         sticks[1] = gamepad.getRightY();
-        sticks[2] = -gamepad.getLeftX();
+        sticks[2] = gamepad.getLeftX();
         sticks[3] = gamepad.getLeftY();
     }
 

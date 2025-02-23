@@ -13,9 +13,10 @@ public class DepositConstants {
     // Arm Positions (degrees)
     public static final double
             armTransferPos = 277.0,
-            armSpecIntakePos = 232.0,
-            armSpecDepositPos = 122.0,
+            armSpecIntakePos = 224.0,
+            armSpecDepositPos = 105.0,
             armSampleDepositPos = 187.0,
+            armSamplePreDeposit = 0.0,
             armEncLowerBound = 20.4 ,
             armEncUpperBound = 342.4364,
             armPositionTolerance = 5.00;
@@ -24,9 +25,10 @@ public class DepositConstants {
     // Wrist Positions (degrees)
     public static final double
             wristTransferPos = 107.00,
-            wristSpecIntakePos = 147.00,
-            wristSpecDepositPos = 272.00,
+            wristSpecIntakePos = 142.00,
+            wristSpecDepositPos = 277.00,
             wristSampleDepositPos = 192.00,
+            wristSamplePreDeposit = 0.0,
             wristEncLowerBound = 21.2727,
             wristEncUpperBound = 344.0727,
             wristPositionTolerance = 5.00;
@@ -46,8 +48,8 @@ public class DepositConstants {
     // Deposit Slides Positions (CM)
     public static final double
             slideTransferPos = 10.00,
-            slideSpecIntakePos = 7.00,
-            slideSpecDepositPos = 55.00,
+            slideSpecIntakePos = 9.525,
+            slideSpecDepositPos = 51.2,
             slideSampleDepositPos = 80,
             slideMaxExtension = 82,
             slidePositionTolerance = 1.00;

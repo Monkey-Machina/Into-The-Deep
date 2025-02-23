@@ -26,6 +26,7 @@ public class Deposit {
         specIntake(Arm.State.SpecIntakePos, Wrist.State.SpecIntakePos, DepositSlides.State.SpecIntakePos),
         specDeposit(Arm.State.SpecDepositPos, Wrist.State.SpecDepositPos, DepositSlides.State.SpecDepositPos),
         sampleDeposit(Arm.State.SampleDepositPos, Wrist.State.SampleDepositPos, DepositSlides.State.SampleDepositPos),
+        samplePreDeposit(Arm.State.SamplePreDepositPos, Wrist.State.SamplePreDepositPos, DepositSlides.State.TransferPos),
         intermediate(Arm.State.Intermediate, Wrist.State.Intermediate, DepositSlides.State.Intermediate);
 
         private final Arm.State armState;

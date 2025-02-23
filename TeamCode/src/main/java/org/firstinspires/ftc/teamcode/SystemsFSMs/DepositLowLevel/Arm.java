@@ -13,6 +13,7 @@ public class Arm {
         SpecIntakePos(DepositConstants.armSpecIntakePos),
         SpecDepositPos(DepositConstants.armSpecDepositPos),
         SampleDepositPos(DepositConstants.armSampleDepositPos),
+        SamplePreDepositPos(DepositConstants.armSamplePreDeposit),
         Intermediate(0);
 
         public final double position;

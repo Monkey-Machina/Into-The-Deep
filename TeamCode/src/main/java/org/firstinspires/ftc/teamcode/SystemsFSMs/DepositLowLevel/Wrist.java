@@ -13,6 +13,7 @@ public class Wrist {
         SpecIntakePos(DepositConstants.wristSpecIntakePos),
         SpecDepositPos(DepositConstants.wristSpecDepositPos),
         SampleDepositPos(DepositConstants.wristSampleDepositPos),
+        SamplePreDepositPos(DepositConstants.wristSamplePreDeposit),
         Intermediate(0);
 
         public final double servoPos;
