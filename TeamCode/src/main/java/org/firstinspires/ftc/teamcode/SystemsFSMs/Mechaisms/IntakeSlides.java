@@ -9,6 +9,7 @@ import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.Hardware.Constants.IntakeConstants;
 import org.firstinspires.ftc.teamcode.Hardware.Hardware;
 import org.firstinspires.ftc.teamcode.Hardware.Util.Logger;
+import org.firstinspires.ftc.teamcode.Hardware.Util.PosChecker;
 
 public class IntakeSlides {
 
@@ -66,8 +67,8 @@ public class IntakeSlides {
             if (!encoderReset) {
                 power = IntakeConstants.intakeSlideZeroPower;
 
-                // Once the motor stalls, reset the encoder and set encoderReset to true
-                if (current >= 5500 && velocity == 0) {
+                // Once the motor stalls (based on current and velocity check), and position is near zero, reset the encoder and set encoderReset to true
+                if (current >= 5500 && velocity == 0 && currentCM <= IntakeConstants.intakeSlidePositionTolerance) {
                     motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                     motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 

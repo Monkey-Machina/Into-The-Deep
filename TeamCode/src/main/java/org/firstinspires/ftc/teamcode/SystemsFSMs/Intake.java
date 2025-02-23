@@ -28,8 +28,8 @@ public class Intake {
         Intaking;
     }
 
-    private State targetState;
-    private State currentState;
+    public State targetState;
+    public State currentState;
 
     private ArrayList<SampleDetector.SampleColor> acceptableColors =  new ArrayList<>();
 
@@ -67,7 +67,6 @@ public class Intake {
         recordedTime = timer.elapsedTime();
         timer.start();
     }
-
 
     public void command(double feedIn, double feedOut) {
         feed(feedIn, feedOut);
@@ -147,9 +146,7 @@ public class Intake {
 
     }
 
-
     // Following xxxCommand methods contain functionality only for respective intake states. Do not contain certain cleanup tasks like buffer clearing
-
     private void stowedCommand() {
         bucket.setBucketTargetState(Bucket.BucketState.Up);
         if (bucket.bucketCurrentState == Bucket.BucketState.Up) {
@@ -227,7 +224,6 @@ public class Intake {
             bucket.setGateTargetState(Bucket.GateState.Closed);
         }
     }
-
 
 }
 
