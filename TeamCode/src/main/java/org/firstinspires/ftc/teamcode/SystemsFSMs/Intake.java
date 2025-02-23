@@ -1,234 +1,233 @@
-//TODO: Refactor
+package org.firstinspires.ftc.teamcode.SystemsFSMs;
 
-//package org.firstinspires.ftc.teamcode.SystemsFSMs;
-//
-//import com.arcrobotics.ftclib.gamepad.GamepadEx;
-//import com.arcrobotics.ftclib.gamepad.GamepadKeys;
-//import com.arcrobotics.ftclib.util.Timing;
-//
-//import org.firstinspires.ftc.teamcode.Hardware.Constants.IntakeConstants;
-//import org.firstinspires.ftc.teamcode.Hardware.Hardware;
-//import org.firstinspires.ftc.teamcode.Hardware.Util.Logger;
-//import org.firstinspires.ftc.teamcode.SystemsFSMs.Mechaisms.Bucket;
-//import org.firstinspires.ftc.teamcode.SystemsFSMs.Mechaisms.IntakeSlides;
-//import org.firstinspires.ftc.teamcode.SystemsFSMs.Mechaisms.SampleDetector;
-//
-//import java.util.ArrayList;
-//import java.util.concurrent.TimeUnit;
-//
-//public class Intake {
-//    private Logger logger;
-//
-//    private IntakeSlides slides;
-//    private Bucket bucket;
-//    private SampleDetector detector;
-//    private GamepadEx controller;
-//
-//    public enum SystemState {
-//        Stowed,
-//        Deployed,
-//        Intaking;
-//    }
-//
-//    private ArrayList<SampleDetector.SampleColor> acceptableColors =  new ArrayList<>();
-//
-//    private SystemState targetSystemState;
-//    private SystemState currentSystemState;
-//
-//    private double feedRate = 0.00;
-//    private double fedPosition = 0.00;
-//    private double maxFedPosition = IntakeConstants.maxExtensionPosition - IntakeConstants.readyPosition;
-//    private double minFedPosition = IntakeConstants.minIntakePosition - IntakeConstants.readyPosition;
-//
-//    public boolean hasSample = false;
-//
-//    private SampleDetector.SampleColor lastSeenColor;
-//
-//    private Timing.Timer timer = new Timing.Timer(999999, TimeUnit.MILLISECONDS);
-//    private double recordedTime = 0.00;
-//
-//    public Intake(Hardware hardware, GamepadEx controller, Logger logger) {
-//        this.controller = controller;
-//        this.logger = logger;
-//        slides = new IntakeSlides(hardware, this.logger);
-//        bucket = new Bucket(hardware, this.logger);
-//        detector = new SampleDetector(hardware, this.logger);
-//    }
-//
-//    public void update() {
-//        bucket.update();
-//        slides.update();
-//
-//        findsState();
-//
-//        // Only if intaking then update the detector
-//        if (currentSystemState == SystemState.Intaking) {
-//            detector.update();
-//        }
-//
-//        recordedTime = timer.elapsedTime();
-//        timer.start();
-//    }
-//
-//
-//    public void command() {
-//
-//        switch (targetSystemState)  {
-//            case Stowed:
-//                fedPosition = 0.00;
-//
-//                bucket.setBucketPosition(IntakeConstants.bucketUpPosition);
-//                if (bucket.getStatus() == Bucket.Status.up) {
-//                    slides.setTargetCM(IntakeConstants.stowedPosition);
-//                }
-//
-//                if (hasSample) {
-//                    bucket.setRollerPower(IntakeConstants.stallingPower);
-//                    bucket.setGatePosition(IntakeConstants.gateBlockedPosition);
-//                } else {
-//                    bucket.setRollerPower(0.00);
-//                    bucket.setGatePosition(IntakeConstants.gateOpenPosition);
-//                }
-//
-//                break;
-//
-//            case Deployed:
-//
-//                feed();
-//                hasSample = false;
-//                detector.clearDistanceBuffer();
-//                bucket.setBucketPosition(IntakeConstants.bucketUpPosition);
-//                bucket.setGatePosition(IntakeConstants.gateBlockedPosition);
-//                slides.setTargetCM(IntakeConstants.readyPosition + fedPosition);
-//
-//                // Intake Reversing
-//                if (controller.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) >= 0.1) {
-//                    bucket.setRollerPower(-0.6);
-//                } else {
-//                    bucket.setRollerPower(0);
-//                }
-//
-//                break;
-//
-//            case Intaking:
-//
-//                feed();
-//                if (slides.getPosition() >= IntakeConstants.minIntakePosition) {
-//                    bucket.setBucketPosition(IntakeConstants.bucketDownPosition);
-//                }
-//                if (bucket.getStatus() == Bucket.Status.down) {
-//                    // Intake Reversing
-//                    if (controller.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER) >= 0.1) {
-//                        bucket.setRollerPower(-0.6);
-//                    } else {
-//                        bucket.setRollerPower(IntakeConstants.intakingPower);
-//                    }
-//
-//                } else {
-//                    bucket.setRollerPower(0.00);
-//                }
-//                slides.setTargetCM(IntakeConstants.readyPosition + fedPosition);
-//
-//                if (detector.getStatus() == SampleDetector.Status.sampleDetected) {
-//
-//                    boolean acceptedSample = false;
-//
-//                    for (SampleDetector.SampleColor color : acceptableColors) {
-//                        if (color == detector.getSampleColor()) {
-//                            acceptedSample = true;
-//                            break;
-//                        }
-//                    }
-//
-//                    if (acceptedSample) {
-//                        targetSystemState = SystemState.Stowed;
-//                        lastSeenColor = detector.getSampleColor();
-//                        hasSample = true;
-//                    } else if (detector.getSampleColor() == SampleDetector.SampleColor.unknown) {
-//                        bucket.setGatePosition(IntakeConstants.gateBlockedPosition);
-//                    } else {
-//                        bucket.setGatePosition(IntakeConstants.gateOpenPosition);
-//                    }
-//
-//
-//                } else {
-//                    bucket.setGatePosition(IntakeConstants.gateBlockedPosition);
-//                }
-//
-//                break;
-//
-//
-//        }
-//
-//        bucket.command();
-//        slides.command();
-//    }
-//
-//    public void log(){
-//        logger.logData("<b>" + "-Intake-" + "</b>", "", Logger.LogLevels.production);
-//
-//        logger.logData("Target System State", targetSystemState, Logger.LogLevels.production);
-//        logger.logData("Current State", currentSystemState, Logger.LogLevels.production);
-//        logger.logData("Last seen color", lastSeenColor, Logger.LogLevels.production);
-//
-//        logger.logData("Accepetable Colors", acceptableColors.toString(), Logger.LogLevels.debug);
-//        logger.logData("Has Sample", hasSample, Logger.LogLevels.debug);
-//
-//        logger.logData("Feedrate", feedRate, Logger.LogLevels.developer);
-//        logger.logData("Fed Position", fedPosition, Logger.LogLevels.developer);
-//        logger.logData("Recorded Time", recordedTime, Logger.LogLevels.developer);
-//
-//        bucket.log();
-//        detector.log();
-//        slides.log();
-//    }
-//
-//    public void setTargetState(SystemState state) {
-//        targetSystemState = state;
-//    }
-//
-//    public SystemState getTargetSystemState(){
-//        return targetSystemState;
-//    }
-//
-//    public void setAcceptableColors(ArrayList<SampleDetector.SampleColor> colors) {
-//        acceptableColors = colors;
-//    }
-//
-//    public SystemState getCurrentSystemState() {
-//        return currentSystemState;
-//    }
-//
-//    public SampleDetector.SampleColor getLastSeenColor() {
-//        return lastSeenColor;
-//    }
-//
-//    public void setLastSeenColor(SampleDetector.SampleColor color) {
-//        lastSeenColor = color;
-//    }
-//
-//    private void feed() {
-//
-//        // Only if the Y value of the joystick is above 0.3 feed
-//        if (Math.abs(controller.getRightY()) >= 0.3) {
-//            feedRate = IntakeConstants.maxFeedRate * -controller.getRightY();
-//            fedPosition += feedRate * ( recordedTime / 1000.0 );
-//            fedPosition = Math.min(Math.max(fedPosition, minFedPosition), maxFedPosition);
-//        }
-//    }
-//
-//    private void findsState() {
-//
-//        if ((slides.getPosition() <= (0.0 + IntakeConstants.intakeSlidePositionTolerance)) && targetSystemState == SystemState.Stowed && slides.getVelocity() <= 1) {
-//            currentSystemState = SystemState.Stowed;
-//        } else if (bucket.getStatus() == Bucket.Status.up) {
-//            currentSystemState = SystemState.Deployed;
+import com.arcrobotics.ftclib.gamepad.GamepadEx;
+import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.arcrobotics.ftclib.util.Timing;
+
+import org.firstinspires.ftc.teamcode.Hardware.Constants.IntakeConstants;
+import org.firstinspires.ftc.teamcode.Hardware.Hardware;
+import org.firstinspires.ftc.teamcode.Hardware.Util.Logger;
+import org.firstinspires.ftc.teamcode.Hardware.Util.PosChecker;
+import org.firstinspires.ftc.teamcode.SystemsFSMs.Mechaisms.Bucket;
+import org.firstinspires.ftc.teamcode.SystemsFSMs.Mechaisms.IntakeSlides;
+import org.firstinspires.ftc.teamcode.SystemsFSMs.Mechaisms.SampleDetector;
+
+import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
+
+public class Intake {
+    private Logger logger;
+
+    private IntakeSlides slides;
+    private Bucket bucket;
+    private SampleDetector detector;
+
+    public enum State {
+        Stowed,
+        Deployed,
+        Intaking;
+    }
+
+    private State targetState;
+    private State currentState;
+
+    private ArrayList<SampleDetector.SampleColor> acceptableColors =  new ArrayList<>();
+
+    private double feedRate = 0.00;
+    private double fedPosition = 0.00;
+    private double maxFedPosition = IntakeConstants.maxExtensionPosition - IntakeConstants.readyPosition;
+    private double minFedPosition = IntakeConstants.minIntakePosition - IntakeConstants.readyPosition;
+
+    public boolean hasSample = false;
+    public SampleDetector.SampleColor lastSeenColor;
+
+    private Timing.Timer timer = new Timing.Timer(999999, TimeUnit.MILLISECONDS);
+    private double recordedTime = 0.00;
+
+    public Intake(Hardware hardware, Logger logger, boolean enableIntakeEncoderReset) {
+
+        this.logger = logger;
+        slides = new IntakeSlides(hardware, this.logger, enableIntakeEncoderReset);
+        bucket = new Bucket(hardware, this.logger);
+        detector = new SampleDetector(hardware, this.logger);
+    }
+
+    public void update() {
+        bucket.update();
+        slides.update();
+
+        findsState();
+
+        //TODO: Move this inside the Intake Switch Case
+        // Only if intaking then update the detector
+        if (currentState == State.Intaking) {
+            detector.update();
+        }
+
+        recordedTime = timer.elapsedTime();
+        timer.start();
+    }
+
+
+    public void command(double feedIn, double feedOut) {
+        feed(feedIn, feedOut);
+        switch (targetState)  {
+            case Stowed:
+
+                fedPosition = 0.00;
+                stowedCommand();
+
+                break;
+
+            case Deployed:
+
+                deployedCommand();
+
+                break;
+
+            case Intaking:
+
+                intakeCommand();
+
+                break;
+        }
+
+        bucket.command();
+        slides.command();
+    }
+
+    public void log(){
+        logger.logHeader("Intake");
+
+        logger.logData("Current State", currentState, Logger.LogLevels.production);
+        logger.logData("Target System State", targetState, Logger.LogLevels.production);
+        logger.logData("Last seen color", lastSeenColor, Logger.LogLevels.production);
+
+        logger.logData("Acceptable Colors", acceptableColors.toString(), Logger.LogLevels.debug);
+        logger.logData("Has Sample", hasSample, Logger.LogLevels.debug);
+
+        logger.logData("Feed Rate", feedRate, Logger.LogLevels.developer);
+        logger.logData("Fed Position", fedPosition, Logger.LogLevels.developer);
+        logger.logData("Recorded Time", recordedTime, Logger.LogLevels.developer);
+
+        bucket.log();
+        detector.log();
+        slides.log();
+    }
+
+    public void setTargetState(State state) {
+        targetState = state;
+    }
+
+    public void setAcceptableColors(ArrayList<SampleDetector.SampleColor> colors) {
+        acceptableColors = colors;
+    }
+
+    public void setLastSeenColor(SampleDetector.SampleColor color) {
+        lastSeenColor = color;
+    }
+
+    private void feed(double feedOut, double feedIn) {
+
+        feedRate = IntakeConstants.maxFeedRate * (feedOut - feedIn);
+        fedPosition += feedRate * ( recordedTime / 1000.0 );
+        fedPosition = Math.min(Math.max(fedPosition, minFedPosition), maxFedPosition);
+    }
+
+    //TODO: This is messy, should refactor
+    private void findsState() {
+
+        if (PosChecker.atLinearPos(slides.getPosition(), 0.00, IntakeConstants.intakeSlidePositionTolerance) && targetState == State.Stowed && slides.getVelocity() <= 1) {
+            currentState = State.Stowed;
+        } else if (bucket.bucketCurrentState == Bucket.BucketState.Up) {
+            currentState = State.Deployed;
+        } else {
+            currentState = State.Intaking;
+        }
+
+    }
+
+
+    // Following xxxCommand methods contain functionality only for respective intake states. Do not contain certain cleanup tasks like buffer clearing
+
+    private void stowedCommand() {
+        bucket.setBucketTargetState(Bucket.BucketState.Up);
+        if (bucket.bucketCurrentState == Bucket.BucketState.Up) {
+            slides.setTargetCM(IntakeConstants.stowedPosition);
+        }
+
+        //TODO: Transfer and passthrough logic
+//        if (hasSample) {
+//            bucket.setRollerPower(IntakeConstants.stallingPower);
+//            bucket.setGatePosition(IntakeConstants.gateBlockedPosition);
 //        } else {
-//            currentSystemState = SystemState.Intaking;
+//            bucket.setRollerPower(0.00);
+//            bucket.setGatePosition(IntakeConstants.gateOpenPosition);
 //        }
-//
-//    }
-//
-//
-//}
-//
+
+    }
+
+    private void deployedCommand() {
+        hasSample = false;
+
+        detector.clearDistanceBuffer();
+        bucket.setTargetStates(Bucket.BucketState.Up, Bucket.GateState.Closed);
+        slides.setTargetCM(IntakeConstants.readyPosition + fedPosition);
+
+        // TODO: Intake Reversing
+
+    }
+
+    private void intakeCommand() {
+
+        // As long as bucket is past min bucket position to avoid chassis collision, bucket should be dow
+        if (slides.getPosition() >= IntakeConstants.minIntakePosition) {
+            bucket.setBucketTargetState(Bucket.BucketState.Down);
+        } else {
+            bucket.setBucketTargetState(Bucket.BucketState.Up);
+        }
+
+        // Assign intake power
+        if (bucket.bucketCurrentState == Bucket.BucketState.Down) {
+            //TODO: Add intake reversing
+            bucket.setRollerPower(IntakeConstants.intakingPower);
+        } else {
+            bucket.setRollerPower(0.00);
+        }
+
+        slides.setTargetCM(IntakeConstants.readyPosition + fedPosition);
+
+        if (detector.state == SampleDetector.State.sampleDetected) {
+
+            boolean acceptedSample = false;
+
+            // Check is the color detected is part of the array of acceptable sample colors, assign acceptedSample boolean accordingly
+            for (SampleDetector.SampleColor color : acceptableColors) {
+                if (color == detector.color) {
+                    acceptedSample = true;
+                    break;
+                }
+            }
+
+            // If the sample was accepted, stow the intake and mark hasSample as true
+            if (acceptedSample) {
+
+                targetState = State.Stowed;
+                lastSeenColor = detector.color;
+                hasSample = true;
+
+                // If the sample color is unknown, keep gate closed. This essentially waits for a color to be determined
+            } else if (detector.color != SampleDetector.SampleColor.unknown) {
+                bucket.setGateTargetState(Bucket.GateState.Closed);
+            } else {
+                bucket.setGateTargetState(Bucket.GateState.Open);
+            }
+
+        } else {
+            bucket.setGateTargetState(Bucket.GateState.Closed);
+        }
+    }
+
+
+}
+
