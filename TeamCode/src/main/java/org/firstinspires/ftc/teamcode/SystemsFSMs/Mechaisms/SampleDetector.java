@@ -1,3 +1,4 @@
+//TODO: Solve bug where intake stows imminently after attempting to go from depoyed
 package org.firstinspires.ftc.teamcode.SystemsFSMs.Mechaisms;
 
 import com.qualcomm.robotcore.hardware.DigitalChannel;
@@ -120,7 +121,7 @@ public class SampleDetector {
         }
     }
 
-    // Simple Average of the last 5 distance readings
+    // Simple Average of the last 5 distance readings, excludes zeros
     private double distanceAVG5() {
         double total = 0.00;
         double items = 0;
