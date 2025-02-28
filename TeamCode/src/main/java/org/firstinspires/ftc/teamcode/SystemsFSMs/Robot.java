@@ -60,16 +60,16 @@ public class Robot {
 
         findState();
     }
-    //TODO: Refactor
+
     public void update() {
         drivetrain.update();
         deposit.update();
         intake.update();
         findState();
     }
-    //TODO: Refactor
-    public void command() {
 
+    public void command() {
+        interferenceCheck();
         switch (currentState) {
             case cycling:
 
@@ -94,7 +94,7 @@ public class Robot {
 
         drivetrain.command();
         deposit.command();
-        intake.command();
+        intake.command(controller.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER), controller.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER));
 
     }
 
@@ -163,41 +163,18 @@ public class Robot {
         }
 
     }
-    //TODO: Refactor
+
     private void interferenceCheck() {
 
         // If the intake is stowed or trying to stow, apply stow interference, then apply interference
         if (intake.currentState == Intake.State.Stowed || intake.targetState == Intake.State.Stowed) {
-
-        }
-
-        // If the intake is stowed, or is trying to stow, there is stow interference
-        if (intake.getCurrentSystemState() == Intake.SystemState.Stowed || intake.getTargetSystemState() == Intake.SystemState.Stowed) {
-            stowInterference = true;
-        }
-
-        // If there is stow interference, then check if the deposit is going to or from transfer
-        // **Ignores potential for interference when going from spec intake, where you might be flipping the arm over too fast
-        // For now, if there is stow interference and the slides are either below safe height, or trying to go below the safe height, we assume there is interference, but this is obviously not true, could be fixed by interference zones**
-        if (stowInterference) {
-
-            deposit.updateSlidesafe();
-
-            if ((deposit.getSlideTargetCM() <= DepositConstants.slidePreTransferPos || deposit.getSlideCurrentCM() < DepositConstants.slidePreTransferPos - DepositConstants.slidePositionTolerance) && !(deposit.getSlidesDownSafe())) {
-
+            // If the arm is below the pre transfer spot and the slides are around the transfer height, and the arm wants to go to sample deposit pos, there is interference
+            if (deposit.slides.currentCM <= DepositConstants.slideTransferPos + DepositConstants.slidePositionTolerance && deposit.arm.encPos > DepositConstants.armSamplePreDeposit + DepositConstants.armPositionTolerance && depositDesiredState == Deposit.State.sampleDeposit) {
                 interference = true;
-
-            } else {
-                interference = false;
             }
-
-            if (depositDesiredState  == Deposit.State.specIntake && deposit.getSlideCurrentCM() <= DepositConstants.slidePreTransferPos - DepositConstants.slidePositionTolerance && (deposit.arm.getRightServoEncPos() <= DepositConstants.armRightEncSlideDownSafePos - DepositConstants.armRightPositionTolerance) && deposit.arm.getRightSetPosition() > DepositConstants.armRightSampleDepositPos) {
-                interference  = true;
-            }
-
-
 
         }
+
     }
 
     private void cycleIntakeLogic () {
@@ -224,16 +201,9 @@ public class Robot {
             deposit.setTargetState(depositDesiredState);
         } else {
 
-            //TODO: Add back in the routing for deposit if there is interference
-
-//                    if (depositDesiredState == Deposit.State.specIntake) {
-//                        deposit.setTargetState(Deposit.State.spec);
-//                    } else if (depositDesiredState == Deposit.State.sampleDeposit) {
-//                        deposit.setTargetState(Deposit.State.samplePreDeposit);
-//                    } else {
-//                        deposit.setTargetState(Deposit.State.preTransfer);
-//                    }
-
+                    if (depositDesiredState == Deposit.State.sampleDeposit) {
+                        deposit.setTargetState(Deposit.State.samplePreDeposit);
+                    }
 
         }
     }

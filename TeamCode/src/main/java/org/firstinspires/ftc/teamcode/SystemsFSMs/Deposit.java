@@ -12,11 +12,11 @@ import org.firstinspires.ftc.teamcode.SystemsFSMs.DepositLowLevel.Wrist;
 
 public class Deposit {
 
-    private Arm arm;
+    public Arm arm;
     private Wrist wrist;
     public Claw claw;
 
-    private DepositSlides slides;
+    public DepositSlides slides;
 
     private Logger logger;
 

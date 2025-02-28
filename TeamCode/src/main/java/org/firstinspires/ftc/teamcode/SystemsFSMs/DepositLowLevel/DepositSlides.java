@@ -41,7 +41,7 @@ public class DepositSlides {
     private final double cmToTicks = 1 / ticksToCm; // Multiply cm by this number to get distance in encoder ticks
 
     private double currentTicks = 0;
-    private double currentCM = 0;
+    public double currentCM = 0;
     private double rangedTarget = 0;
 
     private double power = 0;

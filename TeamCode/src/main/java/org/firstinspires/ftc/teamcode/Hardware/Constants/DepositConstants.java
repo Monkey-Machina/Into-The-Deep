@@ -16,7 +16,7 @@ public class DepositConstants {
             armSpecIntakePos = 224.0,
             armSpecDepositPos = 135.0,
             armSampleDepositPos = 187.0,
-            armSamplePreDeposit = 0.0,
+            armSamplePreDeposit = 250.0,
             armEncLowerBound = 20.4 ,
             armEncUpperBound = 342.4364,
             armPositionTolerance = 5.00;
@@ -28,7 +28,7 @@ public class DepositConstants {
             wristSpecIntakePos = 142.00,
             wristSpecDepositPos = 277.00,
             wristSampleDepositPos = 192.00,
-            wristSamplePreDeposit = 0.0,
+            wristSamplePreDeposit = 110.0,
             wristEncLowerBound = 21.2727,
             wristEncUpperBound = 344.0727,
             wristPositionTolerance = 5.00;
