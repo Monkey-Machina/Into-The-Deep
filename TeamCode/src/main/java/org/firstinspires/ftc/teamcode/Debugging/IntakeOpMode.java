@@ -15,7 +15,7 @@ import java.util.ArrayList;
 
 @TeleOp
 public class IntakeOpMode extends OpMode {
-    private Hardware hardware = new Hardware();
+    private final Hardware hardware = new Hardware();
     private Logger logger;
     private GamepadEx controller;
 

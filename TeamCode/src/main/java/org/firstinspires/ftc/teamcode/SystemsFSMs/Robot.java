@@ -19,7 +19,7 @@ import java.util.concurrent.TimeUnit;
 public class Robot {
 
     private Drivetrain drivetrain;
-    private Deposit deposit;
+    public Deposit deposit;
     private Intake intake;
 
     private GamepadEx controller;
