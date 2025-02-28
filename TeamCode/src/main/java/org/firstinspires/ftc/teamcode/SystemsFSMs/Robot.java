@@ -166,7 +166,10 @@ public class Robot {
     //TODO: Refactor
     private void interferenceCheck() {
 
-        boolean stowInterference = false;
+        // If the intake is stowed or trying to stow, apply stow interference, then apply interference
+        if (intake.currentState == Intake.State.Stowed || intake.targetState == Intake.State.Stowed) {
+
+        }
 
         // If the intake is stowed, or is trying to stow, there is stow interference
         if (intake.getCurrentSystemState() == Intake.SystemState.Stowed || intake.getTargetSystemState() == Intake.SystemState.Stowed) {
