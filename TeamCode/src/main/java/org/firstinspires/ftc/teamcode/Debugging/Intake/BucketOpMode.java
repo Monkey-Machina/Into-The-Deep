@@ -27,6 +27,7 @@ public class BucketOpMode extends OpMode {
         logger = new Logger(telemetry, controller);
 
         bucket = new Bucket(hardware, logger);
+        bucket.setTargetStates(Bucket.BucketState.Up, Bucket.GateState.Open);
     }
 
     @Override
@@ -36,15 +37,15 @@ public class BucketOpMode extends OpMode {
         bucket.update();
 
         if (controller.wasJustPressed(GamepadKeys.Button.DPAD_UP)) {
-            bucket.changeOffsets(0.01, 0.0);
+            bucket.changeOffsets(5, 0.0);
         } else if (controller.wasJustPressed(GamepadKeys.Button.DPAD_DOWN)) {
-            bucket.changeOffsets(-0.01, 0.0);
+            bucket.changeOffsets(-5, 0.0);
         }
 
         if (controller.wasJustPressed(GamepadKeys.Button.DPAD_RIGHT)) {
-            bucket.changeOffsets(0.0, 0.01);
+            bucket.changeOffsets(0.0, 5);
         } else if (controller.wasJustPressed(GamepadKeys.Button.DPAD_LEFT)) {
-            bucket.changeOffsets(0.0, -0.01);
+            bucket.changeOffsets(0.0, -5);
         }
 
         if (controller.getButton(GamepadKeys.Button.RIGHT_BUMPER)) {

@@ -19,7 +19,7 @@ public class Intake {
     private Logger logger;
 
     private IntakeSlides slides;
-    private Bucket bucket;
+    public Bucket bucket;
     private SampleDetector detector;
 
     public enum State {
@@ -27,6 +27,8 @@ public class Intake {
         Deployed,
         Intaking;
     }
+
+    public boolean passingThrough = false;
 
     public State targetState;
     public State currentState;
@@ -126,6 +128,14 @@ public class Intake {
         lastSeenColor = color;
     }
 
+    public void setPassingThrough(boolean passing) {
+        passingThrough = passing;
+    }
+
+    public void setHasSample(boolean hasSample) {
+        this.hasSample = hasSample;
+    }
+
     private void feed(double feedOut, double feedIn) {
 
         feedRate = IntakeConstants.maxFeedRate * (feedOut - feedIn);
@@ -153,14 +163,28 @@ public class Intake {
             slides.setTargetCM(IntakeConstants.stowedPosition);
         }
 
-        //TODO: Transfer and passthrough logic
-//        if (hasSample) {
-//            bucket.setRollerPower(IntakeConstants.stallingPower);
-//            bucket.setGatePosition(IntakeConstants.gateBlockedPosition);
-//        } else {
-//            bucket.setRollerPower(0.00);
-//            bucket.setGatePosition(IntakeConstants.gateOpenPosition);
-//        }
+        if (hasSample) {
+
+            if (passingThrough) {
+
+                if (bucket.gateCurrentState == Bucket.GateState.Compressed) {
+                    bucket.setRollerPower(IntakeConstants.passthroughPower);
+                    bucket.setGateTargetState(Bucket.GateState.Open);
+                } else {
+                    bucket.setGateTargetState(Bucket.GateState.Compressed);
+                }
+
+            } else {
+                bucket.setGateTargetState(Bucket.GateState.Closed);
+                bucket.setRollerPower(IntakeConstants.stallingPower);
+            }
+
+        } else {
+                
+            bucket.setRollerPower(0.00);
+            bucket.setGateTargetState(Bucket.GateState.Open);
+
+        }
 
     }
 
@@ -171,14 +195,14 @@ public class Intake {
         bucket.setTargetStates(Bucket.BucketState.Up, Bucket.GateState.Closed);
         slides.setTargetCM(IntakeConstants.readyPosition + fedPosition);
 
-        // TODO: Intake Reversing
+        bucket.setRollerPower(0.00);
 
     }
 
     private void intakeCommand() {
 
         // As long as bucket is past min bucket position to avoid chassis collision, bucket should be dow
-        if (slides.getPosition() >= IntakeConstants.minIntakePosition) {
+        if (slides.getPosition() >= (IntakeConstants.minIntakePosition - 4) ){
             bucket.setBucketTargetState(Bucket.BucketState.Down);
         } else {
             bucket.setBucketTargetState(Bucket.BucketState.Up);
@@ -215,9 +239,9 @@ public class Intake {
 
                 // If the sample color is unknown, keep gate closed. This essentially waits for a color to be determined
             } else if (detector.color != SampleDetector.SampleColor.unknown) {
-                bucket.setGateTargetState(Bucket.GateState.Closed);
-            } else {
                 bucket.setGateTargetState(Bucket.GateState.Open);
+            } else {
+                bucket.setGateTargetState(Bucket.GateState.Closed);
             }
 
         } else {

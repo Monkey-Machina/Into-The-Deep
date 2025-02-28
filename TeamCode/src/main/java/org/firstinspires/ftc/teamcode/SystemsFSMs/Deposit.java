@@ -14,7 +14,7 @@ public class Deposit {
 
     private Arm arm;
     private Wrist wrist;
-    private Claw claw;
+    public Claw claw;
 
     private DepositSlides slides;
 
@@ -40,8 +40,8 @@ public class Deposit {
         }
     }
 
-    private State targetState;
-    private State currentState;
+    public State targetState;
+    public State currentState;
 
     public Deposit(Hardware hardware, Logger logger){
         this.logger = logger;
@@ -58,6 +58,7 @@ public class Deposit {
         wrist.update();
         claw.update();
         slides.update();
+
 
         findState();
     }

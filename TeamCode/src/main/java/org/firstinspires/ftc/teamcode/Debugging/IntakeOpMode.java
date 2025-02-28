@@ -51,7 +51,7 @@ public class IntakeOpMode extends OpMode {
 
         intake.update();
 
-        if (controller.wasJustPressed(GamepadKeys.Button.A)) {
+        if (controller.wasJustPressed(GamepadKeys.Button.X)) {
             intake.setTargetState(Intake.State.Stowed);
         } else if (controller.wasJustPressed(GamepadKeys.Button.B)) {
 

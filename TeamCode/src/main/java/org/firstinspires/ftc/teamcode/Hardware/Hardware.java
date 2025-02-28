@@ -138,8 +138,8 @@ public class Hardware   {
         intakePivot = hardwareMap.get(Servo.class, "EH-Servo-0");
         intakeGate = hardwareMap.get(Servo.class, "EH-Servo-2");
 
-        intakePivotEnc = hardwareMap.get(AnalogInput.class, "EH-Analog-0");
-        intakeGateEnc = hardwareMap.get(AnalogInput.class, "EH-Analog-1");
+        intakePivotEnc = hardwareMap.get(AnalogInput.class, "EH-Analog-1");
+        intakeGateEnc = hardwareMap.get(AnalogInput.class, "EH-Analog-0");
 
         intakeCS = hardwareMap.get(GobildaBlindToucherV69.class, "CH-I2C-1-0");
         intakeLS = hardwareMap.get(DigitalChannel.class, "CH-Digital-0");

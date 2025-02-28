@@ -12,7 +12,7 @@ public class IntakeConstants {
     public static final double
             stowedPosition = 0.00,
             readyPosition = 30.00,
-            minIntakePosition = 10.00,
+            minIntakePosition = 18.00,
             maxExtensionPosition = 70.0,
             intakeSlidePositionTolerance = 1.8;
 
@@ -27,34 +27,36 @@ public class IntakeConstants {
 
     // Bucket Servo Positions
     public static final double
-            bucketUpPosition = 0.425,
-            bucketDownPosition = 0.635,
-            bucketEncLowerBound = 0.00,
-            bucketEncUpperBound = 0.00,
+            bucketUpPosition = 185.0,
+            bucketDownPosition = 240.0,
+            bucketEncLowerBound = 17.7818,
+            bucketEncUpperBound = 339.4949,
             bucketEncPositionTolerance = 5.00;
 
     // Gate Positions
     public static final double
-            gateOpenPosition = 0.465,
-            gateClosedPosition = 0.17,
-            gateEncLowerBound = 0.00,
-            gateEncUpperBound = 0.00,
-            gateEncPositionTolerance = 0.00;
+            gateOpenPosition = 147.0,
+            gateClosedPosition = 265.5,
+            gateCompressedPosition = 265.5,
+            gateEncLowerBound = 40.6909,
+            gateEncUpperBound = 317.0812,
+            gateEncPositionTolerance = 5.00;
 
     // Intake Motor Powers
     public static final double
             intakingPower = 1.00,
-            stallingPower = 0.450;
+            stallingPower = 0.450,
+            passthroughPower = 1.0;
 
     // Detection Distance in mm
     public static final double
-            detectionDistance = 25.00;
+            detectionDistance = 28.00;
 
     // SampleDetector max values
     public static final double
-            maxR = 2380.0,
-            maxG = 4500.00,
-            maxB = 3750.00,
-            maxA = 3550.00;
+            maxR = 3000.0,
+            maxG = 6000.00,
+            maxB = 4500.00,
+            maxA = 4500.00;
 
 }

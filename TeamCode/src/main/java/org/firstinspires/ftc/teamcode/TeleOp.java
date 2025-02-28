@@ -81,10 +81,7 @@
 //
 //        }
 //
-//        // Manage Spec Intake and Clipped Pos |LB|
-//        if (controller.wasJustPressed(GamepadKeys.Button.LEFT_BUMPER)) {
-//            robot.clipSpec();
-//        }
+
 //
 //        // Switching the last seen color manually
 //        if (controller.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER) >= 0.2 && !leftTriggerPressed) {

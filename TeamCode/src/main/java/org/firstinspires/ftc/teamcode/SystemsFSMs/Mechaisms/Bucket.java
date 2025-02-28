@@ -20,8 +20,8 @@ public class Bucket {
     private AnalogServo gateServo;
     private Logger logger;
 
-    private double bucketServoEncPosition;
-    private double gateServoEncPosition;
+    private double bucketServoEncPosition = 0.0;
+    private double gateServoEncPosition = 0.0;
 
 
     private double rollerPower;
@@ -42,6 +42,7 @@ public class Bucket {
     public enum GateState {
         Open(IntakeConstants.gateOpenPosition),
         Closed(IntakeConstants.gateClosedPosition),
+        Compressed(IntakeConstants.gateCompressedPosition),
         Intermediate(0.0);
 
         public final double position;
@@ -54,8 +55,8 @@ public class Bucket {
     public BucketState bucketCurrentState;
     public GateState gateCurrentState;
 
-    private BucketState bucketTargetState;
-    private GateState gateTargetState;
+    private BucketState bucketTargetState = BucketState.Up;
+    private GateState gateTargetState = GateState.Closed;
 
     public double bucketOffset = 0.0, gateOffset = 0.0;
 

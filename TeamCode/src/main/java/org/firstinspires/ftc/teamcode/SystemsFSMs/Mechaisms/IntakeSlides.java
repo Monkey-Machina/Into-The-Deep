@@ -24,7 +24,7 @@ public class IntakeSlides {
 
     private double currentTicks = 0;
     private double currentCM = 0;
-    private double targetCM = 0;
+    private double targetCM = 0.01;
     private double rangedTarget = 0;
     private double power = 0;
     private double current = 0;
@@ -76,7 +76,7 @@ public class IntakeSlides {
                 }
 
             } else {
-                power = Math.min(power, IntakeConstants.intakeSlideZeroStallPower);
+                power = Math.max(power, IntakeConstants.intakeSlideZeroStallPower);
             }
 
         } else { encoderReset = false; }
@@ -94,6 +94,7 @@ public class IntakeSlides {
         logger.logData("Power", power, Logger.LogLevels.developer);
         logger.logData("Intake Slide Velocity", velocity, Logger.LogLevels.developer);
         logger.logData("Current", current, Logger.LogLevels.developer);
+        logger.logData("Encoder Reset", encoderReset, Logger.LogLevels.developer);
         logger.logData("p", p, Logger.LogLevels.developer);
         logger.logData("i", i, Logger.LogLevels.developer);
         logger.logData("d", d, Logger.LogLevels.developer);

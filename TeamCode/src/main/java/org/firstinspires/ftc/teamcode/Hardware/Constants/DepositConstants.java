@@ -4,7 +4,7 @@ public class DepositConstants {
 
     // Claw Positions (degrees)
     public static final double
-            clawClosedPos = 180.0,
+            clawClosedPos = 165.0,
             clawOpenPos = 275.0,
             clawEncLowerBound = 42.544,
             clawEncUpperBound = 319.2,
@@ -14,7 +14,7 @@ public class DepositConstants {
     public static final double
             armTransferPos = 277.0,
             armSpecIntakePos = 224.0,
-            armSpecDepositPos = 105.0,
+            armSpecDepositPos = 135.0,
             armSampleDepositPos = 187.0,
             armSamplePreDeposit = 0.0,
             armEncLowerBound = 20.4 ,
@@ -49,7 +49,7 @@ public class DepositConstants {
     public static final double
             slideTransferPos = 10.00,
             slideSpecIntakePos = 9.525,
-            slideSpecDepositPos = 51.2,
+            slideSpecDepositPos = 42.58,
             slideSampleDepositPos = 80,
             slideMaxExtension = 82,
             slidePositionTolerance = 1.00;
