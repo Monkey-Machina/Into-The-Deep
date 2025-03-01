@@ -82,9 +82,13 @@ public class TeleOp extends OpMode {
 
         }
 
+        if (controller.wasJustPressed(GamepadKeys.Button.RIGHT_BUMPER)) {
+            robot.deposit.toggleClaw();
+        }
+
 
         // Switching the last seen color manually
-        if (controller.wasJustPressed(GamepadKeys.Button.RIGHT_BUMPER)) {
+        if (controller.wasJustPressed(GamepadKeys.Button.LEFT_BUMPER)) {
 
             robot.switchColor();
             robot.goToDeposit();

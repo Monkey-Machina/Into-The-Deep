@@ -132,10 +132,6 @@ public class Intake {
         passingThrough = passing;
     }
 
-    public void setHasSample(boolean hasSample) {
-        this.hasSample = hasSample;
-    }
-
     private void feed(double feedOut, double feedIn) {
 
         feedRate = IntakeConstants.maxFeedRate * (feedOut - feedIn);
@@ -190,6 +186,7 @@ public class Intake {
 
     private void deployedCommand() {
         hasSample = false;
+        detector.setState(SampleDetector.State.noSampleDetected);
 
         detector.clearDistanceBuffer();
         bucket.setTargetStates(Bucket.BucketState.Up, Bucket.GateState.Closed);

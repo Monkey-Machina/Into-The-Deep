@@ -94,6 +94,10 @@ public class SampleDetector {
         distanceBuffer = new double[5];
     }
 
+    public void setState(SampleDetector.State state) {
+        this.state = state;
+    }
+
     // Clears hue buffer array
     private void clearHueBuffer() {
         hueBuffer = new double[5];

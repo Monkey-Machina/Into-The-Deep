@@ -45,6 +45,7 @@ public class Robot {
     private boolean clawSetForTransfer;
 
     private Timing.Timer passthroughTimer = new Timing.Timer(100000000, TimeUnit.MILLISECONDS);
+    private boolean passthroughTimerBoolean = true;
 
     public Robot(Hardware hardware, GamepadEx controller, Logger logger, boolean intakeZeroing, boolean odometryEnabled) {
 
@@ -76,7 +77,7 @@ public class Robot {
                 cycleIntakeLogic();
                 cycleDepositLogic();
 
-                clawSetForTransfer = false;
+                passthroughTimerBoolean = true;
 
                 break;
 
@@ -154,22 +155,22 @@ public class Robot {
 
     private void findState() {
 
-        // If either the Intake or Deposit isnt at their transfer ready positions then the state is cycling
-        if (intake.currentState != Intake.State.Stowed || deposit.currentState != Deposit.State.transfer || !intake.hasSample) {
-            currentState = States.cycling;
-
-        } else { // If all of previous conditions are met, then we can assume we are ready to transfer
+        if (intake.currentState == Intake.State.Stowed && (deposit.currentState == Deposit.State.transfer || deposit.currentState == Deposit.State.specIntake) && intake.hasSample) {
             currentState = States.handoff;
+
+        } else {
+            currentState = States.cycling;
         }
 
     }
 
     private void interferenceCheck() {
+        interference = false;
 
         // If the intake is stowed or trying to stow, apply stow interference, then apply interference
         if (intake.currentState == Intake.State.Stowed || intake.targetState == Intake.State.Stowed) {
             // If the arm is below the pre transfer spot and the slides are around the transfer height, and the arm wants to go to sample deposit pos, there is interference
-            if (deposit.slides.currentCM <= DepositConstants.slideTransferPos + DepositConstants.slidePositionTolerance && deposit.arm.encPos > DepositConstants.armSamplePreDeposit + DepositConstants.armPositionTolerance && depositDesiredState == Deposit.State.sampleDeposit) {
+            if (deposit.slides.currentCM <= DepositConstants.slideTransferPos + DepositConstants.slidePositionTolerance && deposit.arm.encPos > DepositConstants.armSamplePreDeposit - DepositConstants.armPositionTolerance && depositDesiredState == Deposit.State.sampleDeposit) {
                 interference = true;
             }
 
@@ -208,8 +209,9 @@ public class Robot {
         }
     }
 
-    //TODO: Less sketchy fix for claw maybe
     private void transferLogic() {
+
+        intake.setPassingThrough(false);
 
         // TODO: This logic sets the transfer behind by a loop if the claw is already open before transfer begins
         deposit.setTargetState(Deposit.State.transfer);
@@ -219,6 +221,8 @@ public class Robot {
             deposit.setClaw(Claw.State.Closed);
             if (deposit.claw.currentState == Claw.State.Closed) {
                 intake.hasSample = false;
+                clawSetForTransfer = false;
+                controller.gamepad.rumble(1.0, 1.0, 450);
             }
         } else {
             deposit.setClaw(Claw.State.Open);
@@ -231,9 +235,17 @@ public class Robot {
 
     //TODO: this just like, doesnt work lmao
     private void passthroughLogic() {
+        if (passthroughTimerBoolean) {
+            passthroughTimer.start();
+            passthroughTimerBoolean = false;
+        }
+
         intake.setPassingThrough(true);
         if (intake.currentState == Intake.State.Stowed && intake.bucket.gateCurrentState == Bucket.GateState.Compressed) {
-            intake.setHasSample(false);
+            if (passthroughTimer.elapsedTime() > 1000) {
+                intake.hasSample = false;
+                passthroughTimerBoolean = true;
+            }
         }
 
     }

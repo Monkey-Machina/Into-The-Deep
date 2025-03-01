@@ -19,7 +19,7 @@ public class DepositConstants {
             armSamplePreDeposit = 250.0,
             armEncLowerBound = 20.4 ,
             armEncUpperBound = 342.4364,
-            armPositionTolerance = 5.00;
+            armPositionTolerance = 8.00;
 
 
     // Wrist Positions (degrees)
@@ -47,7 +47,7 @@ public class DepositConstants {
 
     // Deposit Slides Positions (CM)
     public static final double
-            slideTransferPos = 10.00,
+            slideTransferPos = 7.50,
             slideSpecIntakePos = 9.525,
             slideSpecDepositPos = 42.58,
             slideSampleDepositPos = 80,

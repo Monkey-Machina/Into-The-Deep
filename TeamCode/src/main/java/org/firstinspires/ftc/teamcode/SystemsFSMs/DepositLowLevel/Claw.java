@@ -25,7 +25,7 @@ public class Claw {
     private AnalogServo servo;
 
     public State currentState;
-    public State targetState;
+    public State targetState = State.Open;
 
     private double encPos = 0.00;
 
