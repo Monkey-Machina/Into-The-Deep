@@ -54,7 +54,7 @@ public class Robot {
 
         drivetrain = new Drivetrain(hardware, controller, logger, odometryEnabled);
         deposit = new Deposit(hardware, logger);
-        intake = new Intake(hardware, logger, intakeZeroing);
+        intake = new Intake(hardware, logger, controller, intakeZeroing);
 
         deposit.setTargetState(Deposit.State.transfer);
         intake.setTargetState(Intake.State.Stowed);

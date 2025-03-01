@@ -32,7 +32,7 @@ public class IntakeOpMode extends OpMode {
         logger = new Logger(telemetry, controller);
 
 
-        intake = new Intake(hardware, logger, true);
+        intake = new Intake(hardware, logger, controller,true);
         intake.setTargetState(Intake.State.Stowed);
 
         colors.add(SampleDetector.SampleColor.blue);

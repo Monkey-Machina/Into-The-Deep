@@ -22,6 +22,8 @@ public class Intake {
     public Bucket bucket;
     private SampleDetector detector;
 
+    private GamepadEx controller;
+
     public enum State {
         Stowed,
         Deployed,
@@ -46,12 +48,13 @@ public class Intake {
     private Timing.Timer timer = new Timing.Timer(999999, TimeUnit.MILLISECONDS);
     private double recordedTime = 0.00;
 
-    public Intake(Hardware hardware, Logger logger, boolean enableIntakeEncoderReset) {
+    public Intake(Hardware hardware, Logger logger, GamepadEx controller, boolean enableIntakeEncoderReset) {
 
         this.logger = logger;
         slides = new IntakeSlides(hardware, this.logger, enableIntakeEncoderReset);
         bucket = new Bucket(hardware, this.logger);
         detector = new SampleDetector(hardware, this.logger);
+        this.controller = controller;
     }
 
     public void update() {
@@ -233,6 +236,7 @@ public class Intake {
                 targetState = State.Stowed;
                 lastSeenColor = detector.color;
                 hasSample = true;
+                controller.gamepad.rumble(1.00, 1.00, 400);
 
                 // If the sample color is unknown, keep gate closed. This essentially waits for a color to be determined
             } else if (detector.color != SampleDetector.SampleColor.unknown) {
