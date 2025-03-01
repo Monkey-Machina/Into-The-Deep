@@ -28,7 +28,7 @@ public class IntakeConstants {
     // Bucket Servo Positions
     public static final double
             bucketUpPosition = 185.0,
-            bucketDownPosition = 241.0,
+            bucketDownPosition = 244.0,
             bucketEncLowerBound = 17.7818,
             bucketEncUpperBound = 339.4949,
             bucketEncPositionTolerance = 10.00;

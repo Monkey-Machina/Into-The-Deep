@@ -48,6 +48,8 @@ public class Intake {
     private Timing.Timer timer = new Timing.Timer(999999, TimeUnit.MILLISECONDS);
     private double recordedTime = 0.00;
 
+    public boolean passthroughEject = false;
+
     public Intake(Hardware hardware, Logger logger, GamepadEx controller, boolean enableIntakeEncoderReset) {
 
         this.logger = logger;
@@ -166,11 +168,12 @@ public class Intake {
 
             if (passingThrough) {
 
-                if (bucket.gateCurrentState == Bucket.GateState.Compressed) {
+                if (passthroughEject) {
                     bucket.setRollerPower(IntakeConstants.passthroughPower);
                     bucket.setGateTargetState(Bucket.GateState.Open);
                 } else {
                     bucket.setGateTargetState(Bucket.GateState.Compressed);
+                    bucket.setRollerPower(IntakeConstants.stallingPower);
                 }
 
             } else {
@@ -236,7 +239,7 @@ public class Intake {
                 targetState = State.Stowed;
                 lastSeenColor = detector.color;
                 hasSample = true;
-                controller.gamepad.rumble(1.00, 1.00, 400);
+                controller.gamepad.rumble(1.00, 1.00, 200);
 
                 // If the sample color is unknown, keep gate closed. This essentially waits for a color to be determined
             } else if (detector.color != SampleDetector.SampleColor.unknown) {

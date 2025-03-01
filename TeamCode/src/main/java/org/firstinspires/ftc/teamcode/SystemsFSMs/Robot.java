@@ -95,7 +95,7 @@ public class Robot {
 
         drivetrain.command();
         deposit.command();
-        intake.command(controller.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER), controller.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER));
+        intake.command(controller.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER), controller.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER));
 
     }
 
@@ -222,7 +222,7 @@ public class Robot {
             if (deposit.claw.currentState == Claw.State.Closed) {
                 intake.hasSample = false;
                 clawSetForTransfer = false;
-                controller.gamepad.rumble(1.0, 1.0, 450);
+                controller.gamepad.rumble(1.0, 1.0, 200);
             }
         } else {
             deposit.setClaw(Claw.State.Open);

@@ -48,7 +48,7 @@ public class DepositConstants {
     // Deposit Slides Positions (CM)
     public static final double
             slideTransferPos = 7.50,
-            slideSpecIntakePos = 9.525,
+            slideSpecIntakePos = 11.525,
             slideSpecDepositPos = 42.58,
             slideSampleDepositPos = 80,
             slideMaxExtension = 82,
