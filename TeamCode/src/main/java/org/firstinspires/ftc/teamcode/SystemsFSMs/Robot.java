@@ -44,7 +44,6 @@ public class Robot {
     private boolean interference;
     private boolean clawSetForTransfer;
 
-    private Timing.Timer passthroughTimer = new Timing.Timer(100000000, TimeUnit.MILLISECONDS);
     private boolean passthroughReady = false;
 
     public Robot(Hardware hardware, GamepadEx controller, Logger logger, boolean intakeZeroing, boolean odometryEnabled) {
@@ -111,7 +110,6 @@ public class Robot {
 
         logger.logData("Interference", interference, Logger.LogLevels.debug);
 
-        logger.logData("Passthough Timer", passthroughTimer.elapsedTime(), Logger.LogLevels.developer);
         logger.logData("Passthough Ready", passthroughReady, Logger.LogLevels.developer);
 
 
@@ -160,7 +158,7 @@ public class Robot {
 
     private void findState() {
 
-        if (intake.currentState == Intake.State.Stowed && (deposit.currentState == Deposit.State.transfer || deposit.currentState == Deposit.State.specIntake) && intake.hasSample) {
+        if (intake.currentState == Intake.State.Stowed && (deposit.currentState == Deposit.State.transfer || deposit.targetState == Deposit.State.specIntake) && intake.hasSample) {
             currentState = States.handoff;
 
         } else {
@@ -241,19 +239,33 @@ public class Robot {
     //TODO: this just like, doesnt work lmao
     private void passthroughLogic() {
 
-        intake.setPassingThrough(true);
-        if (intake.currentState == Intake.State.Stowed && intake.bucket.gateCurrentState == Bucket.GateState.Compressed & !passthroughReady) {
-            passthroughReady = true;
-            passthroughTimer.start();
-        }
+        if (!passthroughReady) {
+            deposit.setTargetState(Deposit.State.transfer);
+            intake.setTargetState(Intake.State.Stowed);
 
-        if (passthroughReady) {
-            intake.setPassthroughEject(true);
-            if (passthroughTimer.elapsedTime() >= 1000) {
-                intake.setPassthroughEject(false);
-                passthroughTimer.pause();
-                passthroughReady = false;
+            if (clawSetForTransfer) {
+                deposit.setClaw(Claw.State.Closed);
+                if (deposit.claw.currentState == Claw.State.Closed) {
+                    intake.passingThrough = true;
+                    passthroughReady = true;
+                }
+            } else {
+                deposit.setClaw(Claw.State.Open);
+                if (deposit.claw.currentState == Claw.State.Open) {
+                    clawSetForTransfer = true;
+                }
+
+            }
+        } else {
+            deposit.setTargetState(Deposit.State.specIntake);
+            if (deposit.currentState == Deposit.State.specIntake) {
+                deposit.setClaw(Claw.State.Open);
                 intake.hasSample = false;
+                clawSetForTransfer = false;
+                intake.passingThrough = false;
+                passthroughReady = false;
+                depositDesiredState = Deposit.State.specIntake;
+                controller.gamepad.rumble(1.0, 1.0, 200);
 
             }
         }

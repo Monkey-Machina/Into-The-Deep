@@ -48,7 +48,6 @@ public class Intake {
     private Timing.Timer timer = new Timing.Timer(999999, TimeUnit.MILLISECONDS);
     private double recordedTime = 0.00;
 
-    public boolean passthroughEject = false;
 
     public Intake(Hardware hardware, Logger logger, GamepadEx controller, boolean enableIntakeEncoderReset) {
 
@@ -115,7 +114,6 @@ public class Intake {
         logger.logData("Feed Rate", feedRate, Logger.LogLevels.developer);
         logger.logData("Fed Position", fedPosition, Logger.LogLevels.developer);
         logger.logData("Recorded Time", recordedTime, Logger.LogLevels.developer);
-        logger.logData("Passthrough Eject", passthroughEject, Logger.LogLevels.developer);
 
 
         bucket.log();
@@ -137,14 +135,6 @@ public class Intake {
 
     public void setPassingThrough(boolean passing) {
         passingThrough = passing;
-    }
-
-    public void setPassthroughEject(boolean eject) {
-        passthroughEject = eject;
-    }
-
-    public void setHasSample(boolean passing) {
-        hasSample = false;
     }
 
     private void feed(double feedOut, double feedIn) {
@@ -174,21 +164,16 @@ public class Intake {
             slides.setTargetCM(IntakeConstants.stowedPosition);
         }
 
-        if (hasSample) {
+        if (hasSample ) {
 
-            if (passingThrough) {
+            if (!passingThrough) {
 
-                if (passthroughEject) {
-                    bucket.setRollerPower(IntakeConstants.passthroughPower);
-                    bucket.setGateTargetState(Bucket.GateState.Open);
-                } else {
-                    bucket.setGateTargetState(Bucket.GateState.Compressed);
-                    bucket.setRollerPower(IntakeConstants.stallingPower);
-                }
-
-            } else {
                 bucket.setGateTargetState(Bucket.GateState.Closed);
                 bucket.setRollerPower(IntakeConstants.stallingPower);
+
+            } else {
+                bucket.setRollerPower(0.00);
+                bucket.setGateTargetState(Bucket.GateState.Open);
             }
 
         } else {
