@@ -6,6 +6,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Hardware.Constants.DepositConstants;
 import org.firstinspires.ftc.teamcode.Hardware.Hardware;
 import org.firstinspires.ftc.teamcode.Hardware.Util.Logger;
@@ -44,6 +45,8 @@ public class DepositSlideOpMode extends OpMode {
 
         slides.setPID(p,i, d, f);
 
+        callI2C();
+
         if (controller.wasJustPressed(GamepadKeys.Button.DPAD_UP)) {
             slides.setTargetState(DepositSlides.State.SampleDepositPos);
         } else if (controller.wasJustPressed(GamepadKeys.Button.DPAD_DOWN)) {
@@ -62,7 +65,8 @@ public class DepositSlideOpMode extends OpMode {
 
     private void callI2C() {
         hardware.pinPoint.update();
-        hardware.intakeCS.updateColors();
+        hardware.intakeCS.getDistance(DistanceUnit.MM);
+        hardware.pinPoint.update();
     }
 
 }

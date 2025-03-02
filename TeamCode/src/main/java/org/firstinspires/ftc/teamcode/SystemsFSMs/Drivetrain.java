@@ -58,7 +58,7 @@ public class Drivetrain {
         heading = -pinPoint.getHeading();
         position = pinPoint.getPosition();
 
-        sticks[0] = gamepad.getRightX();
+        sticks[0] = gamepad.getRightX() * 0.75;
         sticks[1] = gamepad.getRightY();
         sticks[2] = gamepad.getLeftX();
         sticks[3] = gamepad.getLeftY();

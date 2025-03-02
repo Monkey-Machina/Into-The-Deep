@@ -76,8 +76,10 @@ public class Deposit {
         logger.logData("Current State", currentState, Logger.LogLevels.production);
         logger.logData("Target State", targetState, Logger.LogLevels.production);
 
-        claw.log();
         arm.log();
+        wrist.log();
+        claw.log();
+
         slides.log();
     }
 

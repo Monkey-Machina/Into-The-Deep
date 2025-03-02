@@ -67,6 +67,9 @@ public class Claw {
 
     private void findState() {
         currentState = PosChecker.atAngularPos(encPos, targetState.position + offset, DepositConstants.clawEncPosTolerance) ? targetState : State.Intermediate;
+        if (encPos < State.Closed.position + DepositConstants.clawEncPosTolerance) {
+            currentState = State.Closed;
+        }
     }
 
 }

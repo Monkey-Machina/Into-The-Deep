@@ -114,6 +114,8 @@ public class DepositSlides {
         logger.logData("i", i, Logger.LogLevels.developer);
         logger.logData("d", d, Logger.LogLevels.developer);
         logger.logData("f", f, Logger.LogLevels.developer);
+
+        logger.logData("Period", controller.getPeriod(), Logger.LogLevels.developer);
     }
 
     public void setTargetState(State targetState) {

@@ -70,6 +70,5 @@ public class Arm {
 
     private void findState() {
         currentState = PosChecker.atAngularPos(encPos, targetState.position + offset, DepositConstants.armPositionTolerance) ? targetState : State.Intermediate;
-
     }
 }
