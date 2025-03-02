@@ -115,6 +115,8 @@ public class Intake {
         logger.logData("Feed Rate", feedRate, Logger.LogLevels.developer);
         logger.logData("Fed Position", fedPosition, Logger.LogLevels.developer);
         logger.logData("Recorded Time", recordedTime, Logger.LogLevels.developer);
+        logger.logData("Passthrough Eject", passthroughEject, Logger.LogLevels.developer);
+
 
         bucket.log();
         detector.log();
@@ -135,6 +137,14 @@ public class Intake {
 
     public void setPassingThrough(boolean passing) {
         passingThrough = passing;
+    }
+
+    public void setPassthroughEject(boolean eject) {
+        passthroughEject = eject;
+    }
+
+    public void setHasSample(boolean passing) {
+        hasSample = false;
     }
 
     private void feed(double feedOut, double feedIn) {

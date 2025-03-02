@@ -45,7 +45,7 @@ public class Robot {
     private boolean clawSetForTransfer;
 
     private Timing.Timer passthroughTimer = new Timing.Timer(100000000, TimeUnit.MILLISECONDS);
-    private boolean passthroughTimerBoolean = true;
+    private boolean passthroughReady = false;
 
     public Robot(Hardware hardware, GamepadEx controller, Logger logger, boolean intakeZeroing, boolean odometryEnabled) {
 
@@ -77,7 +77,8 @@ public class Robot {
                 cycleIntakeLogic();
                 cycleDepositLogic();
 
-                passthroughTimerBoolean = true;
+                passthroughReady = false;
+
 
                 break;
 
@@ -109,6 +110,10 @@ public class Robot {
         logger.logData("Intake Desired State", intakeDesiredState, Logger.LogLevels.production);
 
         logger.logData("Interference", interference, Logger.LogLevels.debug);
+
+        logger.logData("Passthough Timer", passthroughTimer.elapsedTime(), Logger.LogLevels.developer);
+        logger.logData("Passthough Ready", passthroughReady, Logger.LogLevels.developer);
+
 
         drivetrain.log();
         deposit.log();
@@ -235,16 +240,21 @@ public class Robot {
 
     //TODO: this just like, doesnt work lmao
     private void passthroughLogic() {
-        if (passthroughTimerBoolean) {
-            passthroughTimer.start();
-            passthroughTimerBoolean = false;
-        }
 
         intake.setPassingThrough(true);
-        if (intake.currentState == Intake.State.Stowed && intake.bucket.gateCurrentState == Bucket.GateState.Compressed) {
-            if (passthroughTimer.elapsedTime() > 1000) {
+        if (intake.currentState == Intake.State.Stowed && intake.bucket.gateCurrentState == Bucket.GateState.Compressed & !passthroughReady) {
+            passthroughReady = true;
+            passthroughTimer.start();
+        }
+
+        if (passthroughReady) {
+            intake.setPassthroughEject(true);
+            if (passthroughTimer.elapsedTime() >= 1000) {
+                intake.setPassthroughEject(false);
+                passthroughTimer.pause();
+                passthroughReady = false;
                 intake.hasSample = false;
-                passthroughTimerBoolean = true;
+
             }
         }
 
