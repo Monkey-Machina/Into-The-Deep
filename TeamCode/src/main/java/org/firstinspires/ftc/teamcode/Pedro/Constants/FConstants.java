@@ -8,17 +8,17 @@ public class FConstants {
     static {
         FollowerConstants.localizers = Localizers.PINPOINT;
 
-        FollowerConstants.leftFrontMotorName = "EH-Motor-1";
-        FollowerConstants.leftRearMotorName = "EH-Motor-2";
-        FollowerConstants.rightFrontMotorName = "EH-Motor-0";
-        FollowerConstants.rightRearMotorName = "EH-Motor-3";
+        FollowerConstants.leftFrontMotorName = "EH-Motor-2";
+        FollowerConstants.leftRearMotorName = "EH-Motor-1";
+        FollowerConstants.rightFrontMotorName = "EH-Motor-3";
+        FollowerConstants.rightRearMotorName = "EH-Motor-0";
 
-        FollowerConstants.leftFrontMotorDirection = DcMotorSimple.Direction.FORWARD;
-        FollowerConstants.leftRearMotorDirection = DcMotorSimple.Direction.FORWARD;
-        FollowerConstants.rightFrontMotorDirection = DcMotorSimple.Direction.REVERSE;
-        FollowerConstants.rightRearMotorDirection = DcMotorSimple.Direction.REVERSE;
+        FollowerConstants.leftFrontMotorDirection = DcMotorSimple.Direction.REVERSE;
+        FollowerConstants.leftRearMotorDirection = DcMotorSimple.Direction.REVERSE;
+        FollowerConstants.rightFrontMotorDirection = DcMotorSimple.Direction.FORWARD;
+        FollowerConstants.rightRearMotorDirection = DcMotorSimple.Direction.FORWARD;
 
-        FollowerConstants.mass = 10;
+        FollowerConstants.mass = 9.75;
 
         FollowerConstants.xMovement = 81.00;
         FollowerConstants.yMovement = 64.00;
