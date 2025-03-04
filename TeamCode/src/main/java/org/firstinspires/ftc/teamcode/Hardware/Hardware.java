@@ -67,36 +67,40 @@ public class Hardware   {
         return instance;
     }
 
-    public void init(final HardwareMap map, boolean reset) {
+    public void init(final HardwareMap map, boolean reset, boolean auto) {
         hardwareMap = map;
 
         // Drivetrain
-        RF = hardwareMap.get(DcMotorEx.class, "EH-Motor-3");
-        RF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        if (!auto) {
+            RF = hardwareMap.get(DcMotorEx.class, "EH-Motor-3");
+            RF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
-        LF = hardwareMap.get(DcMotorEx.class, "EH-Motor-2");
-        LF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        LF.setDirection(DcMotorSimple.Direction.REVERSE);
+            LF = hardwareMap.get(DcMotorEx.class, "EH-Motor-2");
+            LF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            LF.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        LB = hardwareMap.get(DcMotorEx.class, "EH-Motor-1");
-        LB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
-        LB.setDirection(DcMotorSimple.Direction.REVERSE);
+            LB = hardwareMap.get(DcMotorEx.class, "EH-Motor-1");
+            LB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            LB.setDirection(DcMotorSimple.Direction.REVERSE);
 
-        RB = hardwareMap.get(DcMotorEx.class, "EH-Motor-0");
-        RB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+            RB = hardwareMap.get(DcMotorEx.class, "EH-Motor-0");
+            RB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
 
 
-        pinPoint = hardwareMap.get(GoBildaPinpointDriver.class, "CH-I2C-0-1");
-        pinPoint.setOffsets(71,-135.325);
-        pinPoint.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
-        pinPoint.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.FORWARD);
-        if (reset) { pinPoint.resetPosAndIMU(); }
+            pinPoint = hardwareMap.get(GoBildaPinpointDriver.class, "CH-I2C-0-1");
+            pinPoint.setOffsets(71, -135.325);
+            pinPoint.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
+            pinPoint.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.FORWARD);
+            if (reset) {
+                pinPoint.resetPosAndIMU();
+            }
 
-        hubs = hardwareMap.getAll(LynxModule.class);
-        for (LynxModule hub: hubs) {
-            hub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
         }
 
+        hubs = hardwareMap.getAll(LynxModule.class);
+        for (LynxModule hub : hubs) {
+            hub.setBulkCachingMode(LynxModule.BulkCachingMode.MANUAL);
+        }
 
         // Deposit
         depositSlideRight = hardwareMap.get(DcMotorEx.class, "CH-Motor-0");
@@ -145,8 +149,8 @@ public class Hardware   {
         intakeLS = hardwareMap.get(DigitalChannel.class, "CH-Digital-0");
     }
 
-    public void init(final HardwareMap map) {
-        init(map, true);
+    public void init(final HardwareMap map, boolean auto) {
+        init(map, true, auto);
     }
 
     public void clearCache() {

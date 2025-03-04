@@ -5,26 +5,29 @@ package org.firstinspires.ftc.teamcode;
 
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
+import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.pedropathing.follower.Follower;
-import com.pedropathing.localization.Pose;
-import com.pedropathing.pathgen.BezierCurve;
-import com.pedropathing.pathgen.BezierLine;
-import com.pedropathing.pathgen.Path;
 import com.pedropathing.pathgen.PathChain;
-import com.pedropathing.pathgen.Point;
 import com.pedropathing.util.Constants;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.robotcore.external.Telemetry;
 import org.firstinspires.ftc.teamcode.AutoPaths.Auto_2_0_Paths;
+import org.firstinspires.ftc.teamcode.Hardware.Hardware;
+import org.firstinspires.ftc.teamcode.Hardware.Util.Logger;
 import org.firstinspires.ftc.teamcode.Pedro.Constants.FConstants;
 import org.firstinspires.ftc.teamcode.Pedro.Constants.LConstants;
+import org.firstinspires.ftc.teamcode.SystemsFSMs.Deposit;
+import org.firstinspires.ftc.teamcode.SystemsFSMs.DepositLowLevel.Claw;
 
 @Autonomous(name = "Auto V0.1.0", group = "Competition")
 public class Auto_2_0 extends OpMode {
 
-    private Telemetry telemetryA;
+    private Logger logger;
+    private Hardware hardware;
+    private Deposit deposit;
+    private GamepadEx controller;
 
     private Follower follower;
 
@@ -44,8 +47,18 @@ public class Auto_2_0 extends OpMode {
 
     @Override
     public void init() {
-        // Deposit Setup
+        // Robot Setup
+        hardware = new Hardware();
+        hardware.init(hardwareMap, true, true);
 
+        controller = new GamepadEx(gamepad1);
+
+        logger = new Logger(telemetry, controller);
+
+        deposit = new Deposit(hardware, logger);
+
+        deposit.setTargetState(Deposit.State.specIntake);
+        deposit.setClaw(Claw.State.Open);
 
         // Pedro & Path Setup
         Auto_2_0_Paths.build();
@@ -56,22 +69,36 @@ public class Auto_2_0 extends OpMode {
         follower.setStartingPose(Auto_2_0_Paths.startPose);
 
         buildPaths();
+    }
 
-        // Telemetry
-        telemetryA = new MultipleTelemetry(this.telemetry, FtcDashboard.getInstance().getTelemetry());
-        telemetryA.addLine("Auto Ready");
-        telemetryA.update();
+    @Override
+    public void init_loop() {
+        hardware.clearCache();
+        controller.readButtons();
+
+        deposit.update();
+        deposit.command();
+
+        logger.logHeader("Auto Ready -- Init Loop");
+        deposit.log();
+
+        logger.print();
     }
 
     @Override
     public void loop() {
-
+        hardware.clearCache();
         autoStateUpdate();
+        deposit.update();
 
         follower.update();
+        deposit.command();
 
-        telemetryA.addData("Auto State", autoState);
-        telemetryA.update();
+        logger.logHeader("Auto");
+        logger.logData("Auto State", autoState, Logger.LogLevels.production);
+        deposit.log();
+
+        logger.print();
     }
 
     public void autoStateUpdate(){
