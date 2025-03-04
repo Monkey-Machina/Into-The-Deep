@@ -120,7 +120,7 @@ public class Auto_2_0 extends OpMode {
                     if (deposit.claw.currentState == Claw.State.Open) {
                         deposit.setTargetState(Deposit.State.specIntake);
                         follower.followPath(specIntakeOnePC, true);
-                        autoState = AutoState.specIntakeOne;
+                        autoState = AutoState.intakingSpecOne;
                     }
                 }
                 break;
@@ -173,7 +173,7 @@ public class Auto_2_0 extends OpMode {
                 follower
                         .pathBuilder().addPath(Auto_2_0_Paths.specIntakeOne)
                         .setConstantHeadingInterpolation(Auto_2_0_Paths.specIntakeOnePose.getHeading())
-                        .setPathEndTimeoutConstraint(250.0)
+                        .setPathEndTimeoutConstraint(1000.0)
                         .build();
 
         specDepoTwoPC =
