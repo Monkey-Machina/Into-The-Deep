@@ -26,7 +26,7 @@ public class DepositConstants {
     public static final double
             wristTransferPos = 117.00,
             wristSpecIntakePos = 152.00,
-            wristSpecDepositPos = 282.00,
+            wristSpecDepositPos = 275.00,
             wristSampleDepositPos = 202.00,
             wristSamplePreDeposit = 120.0,
             wristEncLowerBound = 21.2727,

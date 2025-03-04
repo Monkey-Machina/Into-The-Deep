@@ -34,6 +34,7 @@ import org.firstinspires.ftc.teamcode.Pedro.Constants.LConstants;
 public class StraightBackAndForth extends OpMode {
     private Telemetry telemetryA;
 
+    private double DISTANCE = 50;
 
     private boolean forward = true;
 
