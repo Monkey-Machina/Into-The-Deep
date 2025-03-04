@@ -11,7 +11,7 @@ public class Auto_2_0_Paths {
 
     public static Pose
         specDepoOnePose = new Pose(42.000, 74.000, Math.toRadians(180)),
-        specDepoTwoPose = new Pose(42.000, 72.000, Math.toRadians(180)),
+        specDepoTwoPose = new Pose(42.000, 70.000, Math.toRadians(180)),
 
         specIntakeOnePose = new Pose(6.5,34.000, Math.toRadians(180)),
 
