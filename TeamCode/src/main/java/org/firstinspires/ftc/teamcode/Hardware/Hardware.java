@@ -153,6 +153,10 @@ public class Hardware   {
         init(map, true, auto);
     }
 
+    public void init(final HardwareMap map) {
+        init(map, true, false);
+    }
+
     public void clearCache() {
         for (LynxModule hub : hubs) {
             hub.clearBulkCache();
