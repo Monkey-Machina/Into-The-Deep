@@ -96,6 +96,7 @@ public class Auto_2_0 extends OpMode {
 
         logger.logHeader("Auto");
         logger.logData("Auto State", autoState, Logger.LogLevels.production);
+        logger.logData("Robot Pose", follower.getPose(), Logger.LogLevels.production);
         logger.logData("Follower Is Busy", follower.isBusy(), Logger.LogLevels.production);
         logger.logData("T-Value", follower.getCurrentTValue(), Logger.LogLevels.production);
         deposit.log();
@@ -108,14 +109,14 @@ public class Auto_2_0 extends OpMode {
             case start:
                 deposit.setClaw(Claw.State.Closed);
                 if (deposit.claw.currentState == Claw.State.Closed) {
-                    deposit.setTargetState(Deposit.State.specDeposit);
+                    //deposit.setTargetState(Deposit.State.specDeposit);
                     follower.followPath(specDepoOnePC, true);
                     autoState = AutoState.specDepoOne;
                 }
                 break;
 
             case specDepoOne:
-                if (!follower.isBusy()) {
+                if (!follower.isBusy() || (follower.getVelocity().getXComponent() <= 0.25 && follower.getCurrentTValue() >= 0.1)) {
                     deposit.setClaw(Claw.State.Open);
                     if (deposit.claw.currentState == Claw.State.Open) {
                         deposit.setTargetState(Deposit.State.specIntake);
@@ -129,22 +130,22 @@ public class Auto_2_0 extends OpMode {
                 if (!follower.isBusy() && deposit.currentState == Deposit.State.specIntake) {
                     deposit.setClaw(Claw.State.Closed);
                     if (deposit.claw.currentState == Claw.State.Closed) {
-                        deposit.setTargetState(Deposit.State.specDeposit);
+                        //deposit.setTargetState(Deposit.State.specDeposit);
                         follower.followPath(specDepoTwoPC);
                         autoState = AutoState.specDepoTwo;
                     }
                 }
 
                 // TODO: Caps power to max as the robot gets close to grabbing the spec, highly untested
-                if (follower.getCurrentTValue() >= 0.9) {
-                    follower.setMaxPower(0.5);
+                if (follower.getCurrentTValue() >= 0.75) {
+                    follower.setMaxPower(0.4);
                 }
 
                 break;
 
             case specDepoTwo:
                 follower.setMaxPower(1.0);
-                if (!follower.isBusy()) {
+                if (!follower.isBusy() || (follower.getVelocity().getXComponent() <= 0.25 && follower.getCurrentTValue() >= 0.1)) {
                     deposit.setClaw(Claw.State.Open);
                     if (deposit.claw.currentState == Claw.State.Open) {
                         deposit.setTargetState(Deposit.State.specIntake);
