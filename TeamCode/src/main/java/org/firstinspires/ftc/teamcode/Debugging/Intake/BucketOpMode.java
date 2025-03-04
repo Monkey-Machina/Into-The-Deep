@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.Hardware.Hardware;
 import org.firstinspires.ftc.teamcode.Hardware.Util.Logger;
 import org.firstinspires.ftc.teamcode.SystemsFSMs.Mechaisms.Bucket;
 
-@TeleOp
+@TeleOp(group = "Debug Intake")
 public class BucketOpMode extends OpMode {
 
     private final Hardware hardware =  new Hardware();

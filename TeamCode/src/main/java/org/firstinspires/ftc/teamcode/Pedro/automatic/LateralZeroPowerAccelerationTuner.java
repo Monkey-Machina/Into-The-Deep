@@ -48,7 +48,7 @@ import java.util.List;
  * @version 1.0, 3/13/2024
  */
 @Config
-@Autonomous(name = "Lateral Zero Power Acceleration Tuner", group = "Automatic Tuners")
+@Autonomous(name = "Lateral Zero Power Acceleration Tuner", group = "Pedro Automatic Tuners")
 public class LateralZeroPowerAccelerationTuner extends OpMode {
     private ArrayList<Double> accelerations = new ArrayList<>();
 

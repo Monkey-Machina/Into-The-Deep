@@ -30,7 +30,7 @@ import org.firstinspires.ftc.teamcode.Pedro.Constants.LConstants;
  * @version 1.0, 3/12/2024
  */
 @Config
-@Autonomous (name = "Straight Back And Forth", group = "PIDF Tuning")
+@Autonomous (name = "Straight Back And Forth", group = "Pedro Tests")
 public class StraightBackAndForth extends OpMode {
     private Telemetry telemetryA;
 

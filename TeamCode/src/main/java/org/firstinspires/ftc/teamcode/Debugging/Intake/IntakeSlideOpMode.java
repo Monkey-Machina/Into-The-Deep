@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.Hardware.Util.Logger;
 import org.firstinspires.ftc.teamcode.SystemsFSMs.Mechaisms.IntakeSlides;
 
 @Config
-@TeleOp
+@TeleOp(group = "Debug Intake")
 public class IntakeSlideOpMode extends OpMode {
     private Hardware hardware = new Hardware();
     private IntakeSlides slides;

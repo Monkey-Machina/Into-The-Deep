@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.Hardware.Util.Logger;
 import org.firstinspires.ftc.teamcode.SystemsFSMs.DepositLowLevel.DepositSlides;
 
 @Config
-@TeleOp
+@TeleOp(group = "Debug Deposit")
 public class DepositSlideOpMode extends OpMode {
     private Hardware hardware = new Hardware();
     private DepositSlides slides;

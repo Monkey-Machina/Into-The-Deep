@@ -39,7 +39,7 @@ import org.firstinspires.ftc.teamcode.Pedro.Constants.LConstants;
  * @version 1.0, 5/6/2024
  */
 @Config
-@TeleOp(group = "Teleop Test", name = "Localization Test")
+@TeleOp(group = "Pedro Tele-Op", name = "Localization Test")
 public class LocalizationTest extends OpMode {
     private PoseUpdater poseUpdater;
     private DashboardPoseTracker dashboardPoseTracker;

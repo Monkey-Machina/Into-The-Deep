@@ -29,7 +29,7 @@ import org.firstinspires.ftc.teamcode.Pedro.Constants.LConstants;
  * @version 1.0, 5/6/2024
  */
 @Config
-@Autonomous(name = "Turn Localizer Tuner", group = ".Localization")
+@Autonomous(name = "Turn Localizer Tuner", group = "Pedro Localization")
 public class TurnTuner extends OpMode {
     private PoseUpdater poseUpdater;
     private DashboardPoseTracker dashboardPoseTracker;

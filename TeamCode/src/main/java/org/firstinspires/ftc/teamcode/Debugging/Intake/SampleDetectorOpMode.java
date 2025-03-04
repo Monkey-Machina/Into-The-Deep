@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.Hardware.Util.Logger;
 import org.firstinspires.ftc.teamcode.SystemsFSMs.Mechaisms.SampleDetector;
 
 @Config
-@TeleOp
+@TeleOp(group = "Debug Intake")
 public class SampleDetectorOpMode extends OpMode {
 
     private final Hardware hardware = new Hardware();

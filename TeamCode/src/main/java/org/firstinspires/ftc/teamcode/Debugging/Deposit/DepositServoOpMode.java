@@ -11,7 +11,7 @@ import org.firstinspires.ftc.teamcode.SystemsFSMs.DepositLowLevel.Arm;
 import org.firstinspires.ftc.teamcode.SystemsFSMs.DepositLowLevel.Claw;
 import org.firstinspires.ftc.teamcode.SystemsFSMs.DepositLowLevel.Wrist;
 
-@TeleOp
+@TeleOp(group = "Debug Deposit")
 public class DepositServoOpMode extends OpMode {
 
     private Hardware hardware = new Hardware();

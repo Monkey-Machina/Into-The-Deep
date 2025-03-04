@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Debugging;
+package org.firstinspires.ftc.teamcode.Debugging.Intake;
 
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
@@ -13,7 +13,7 @@ import org.firstinspires.ftc.teamcode.SystemsFSMs.Mechaisms.SampleDetector;
 
 import java.util.ArrayList;
 
-@TeleOp
+@TeleOp(group = "Debug Intake")
 public class IntakeOpMode extends OpMode {
     private final Hardware hardware = new Hardware();
     private Logger logger;

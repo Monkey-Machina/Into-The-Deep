@@ -12,7 +12,7 @@ import org.firstinspires.ftc.teamcode.SystemsFSMs.Deposit;
 import org.firstinspires.ftc.teamcode.SystemsFSMs.DepositLowLevel.Claw;
 import org.firstinspires.ftc.teamcode.SystemsFSMs.Drivetrain;
 @Config
-@TeleOp
+@TeleOp(group = "Debug Deposit")
 public class DepositOpMode extends OpMode {
     private Hardware hardware = new Hardware();
     private Logger logger;
