@@ -103,6 +103,7 @@ public class DepositSlides {
         logger.logData("Depo Target CM", targetState.slidePos, Logger.LogLevels.debug);
 
         logger.logData("LeftCurrentCM", leftTicks * ticksToCm, Logger.LogLevels.debug);
+        logger.logData("Right Ticks", rightMotor.getCurrentPosition(), Logger.LogLevels.debug);
 
         logger.logData("Depo Ranged Target CM", rangedTarget, Logger.LogLevels.developer);
         logger.logData("Depo Power", power, Logger.LogLevels.developer);

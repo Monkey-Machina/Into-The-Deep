@@ -4,19 +4,19 @@ public class DepositConstants {
 
     // Claw Positions (degrees)
     public static final double
-            clawClosedPos = 165.0,
-            clawOpenPos = 275.0,
+            clawClosedPos = 135.0,
+            clawOpenPos = 245.0,
             clawEncLowerBound = 42.544,
             clawEncUpperBound = 319.2,
             clawEncPosTolerance = 10.00;
 
     // Arm Positions (degrees)
     public static final double
-            armTransferPos = 280.0,
-            armSpecIntakePos = 224.0,
-            armSpecDepositPos = 122.0,
-            armSampleDepositPos = 187.0,
-            armSamplePreDeposit = 250.0,
+            armTransferPos = 295.0,
+            armSpecIntakePos = 235.0,
+            armSpecDepositPos = 137.0,
+            armSampleDepositPos = 202.0,
+            armSamplePreDeposit = 265.0,
             armEncLowerBound = 20.4 ,
             armEncUpperBound = 342.4364,
             armPositionTolerance = 10.00;
@@ -24,11 +24,11 @@ public class DepositConstants {
 
     // Wrist Positions (degrees)
     public static final double
-            wristTransferPos = 107.00,
-            wristSpecIntakePos = 142.00,
-            wristSpecDepositPos = 272.00,
-            wristSampleDepositPos = 192.00,
-            wristSamplePreDeposit = 110.0,
+            wristTransferPos = 117.00,
+            wristSpecIntakePos = 152.00,
+            wristSpecDepositPos = 282.00,
+            wristSampleDepositPos = 202.00,
+            wristSamplePreDeposit = 120.0,
             wristEncLowerBound = 21.2727,
             wristEncUpperBound = 344.0727,
             wristPositionTolerance = 9.00;
