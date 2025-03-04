@@ -30,11 +30,7 @@ public class Auto  extends OpMode {
     private Pose startPose = new Pose(6.299, 66.114, Math.toRadians(180));
     private Pose specDepositPose = new Pose(41.000, 74.000);
 
-    public Path pushOne, pushTwo, pushThree, specIntakeOne, specDepoTwo;
-
     private Follower follower;
-
-    private Path toSpec;
 
     private enum AutoState{
         start,
@@ -45,7 +41,11 @@ public class Auto  extends OpMode {
         specIntakeOne,
         specDepoTwo,
         done
+
+
     }
+
+    public Path toSpec, pushOne, pushTwo, pushThree, specIntakeOne, specDepoTwo;
 
     private AutoState autoState = AutoState.start;
 
