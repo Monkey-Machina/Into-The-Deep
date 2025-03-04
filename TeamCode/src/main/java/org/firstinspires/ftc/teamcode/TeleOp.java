@@ -34,7 +34,7 @@ public class TeleOp extends OpMode {
 
     @Override
     public void init() {
-        hardware.init(hardwareMap);
+        hardware.init(hardwareMap, false);
         controller = new GamepadEx(gamepad1);
         logger = new Logger(telemetry, controller);
 

@@ -96,6 +96,8 @@ public class Auto_2_0 extends OpMode {
 
         logger.logHeader("Auto");
         logger.logData("Auto State", autoState, Logger.LogLevels.production);
+        logger.logData("Follower Is Busy", follower.isBusy(), Logger.LogLevels.production);
+        logger.logData("T-Value", follower.getCurrentTValue(), Logger.LogLevels.production);
         deposit.log();
 
         logger.print();
@@ -104,38 +106,51 @@ public class Auto_2_0 extends OpMode {
     public void autoStateUpdate(){
         switch (autoState) {
             case start:
-                //TODO: Add check on if claw is closed here
-                if (true) {
-                    follower.followPath(specDepoOnePC);
+                deposit.setClaw(Claw.State.Closed);
+                if (deposit.claw.currentState == Claw.State.Closed) {
+                    deposit.setTargetState(Deposit.State.specDeposit);
+                    follower.followPath(specDepoOnePC, true);
                     autoState = AutoState.specDepoOne;
                 }
                 break;
 
             case specDepoOne:
                 if (!follower.isBusy()) {
-                    //TODO: Add logic to release claw
-                    follower.followPath(specIntakeOnePC, true);
-                    autoState = AutoState.specIntakeOne;
-                }
-                break;
-
-            case intakingSpecOne:
-                //TODO: Add logic & check that moves deposit to intaking position
-                if (!follower.isBusy()) {
-                    //TODO: ^Check if the robot is at a position to intake the spec, & Add logic that closes the claw
-                    if (true) {
-                        //TODO: ^Check if claw is closed
-                        follower.followPath(specDepoTwoPC);
-                        autoState = AutoState.specDepoTwo;
+                    deposit.setClaw(Claw.State.Open);
+                    if (deposit.claw.currentState == Claw.State.Open) {
+                        deposit.setTargetState(Deposit.State.specIntake);
+                        follower.followPath(specIntakeOnePC, true);
+                        autoState = AutoState.specIntakeOne;
                     }
                 }
                 break;
 
+            case intakingSpecOne:
+                if (!follower.isBusy() && deposit.currentState == Deposit.State.specIntake) {
+                    deposit.setClaw(Claw.State.Closed);
+                    if (deposit.claw.currentState == Claw.State.Closed) {
+                        deposit.setTargetState(Deposit.State.specDeposit);
+                        follower.followPath(specDepoTwoPC);
+                        autoState = AutoState.specDepoTwo;
+                    }
+                }
+
+                // TODO: Caps power to max as the robot gets close to grabbing the spec, highly untested
+                if (follower.getCurrentTValue() >= 0.9) {
+                    follower.setMaxPower(0.5);
+                }
+
+                break;
+
             case specDepoTwo:
+                follower.setMaxPower(1.0);
                 if (!follower.isBusy()) {
-                    //TODO: Add logic to release claw here
-                    follower.followPath(parkPC);
-                    autoState = AutoState.park;
+                    deposit.setClaw(Claw.State.Open);
+                    if (deposit.claw.currentState == Claw.State.Open) {
+                        deposit.setTargetState(Deposit.State.specIntake);
+                        follower.followPath(parkPC);
+                        autoState = AutoState.park;
+                    }
                 }
                 break;
 
