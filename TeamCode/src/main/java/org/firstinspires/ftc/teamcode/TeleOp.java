@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "Tele-Op V1.0.0", group = "Competition")
 public class TeleOp extends OpMode {
-    private final Hardware hardware = new Hardware();
+    private Hardware hardware;
     private Logger logger;
     private GamepadEx controller;
 
@@ -34,13 +34,15 @@ public class TeleOp extends OpMode {
 
     @Override
     public void init() {
-        hardware.init(hardwareMap, false);
+        hardware = Hardware.getInstance();
+        hardware.init(hardwareMap, false, false);
+
         controller = new GamepadEx(gamepad1);
         logger = new Logger(telemetry, controller);
 
         hardware.Zero();
 
-        robot = new Robot(hardware, controller, logger, true, true);
+        robot = new Robot(hardware, controller, logger, true, true, false);
 
         robot.setDepositDesiredState(Deposit.State.transfer);
         robot.setIntakeDesiredState(Intake.State.Stowed);
@@ -96,7 +98,7 @@ public class TeleOp extends OpMode {
         }
 
 
-            robot.command();
+            robot.command(controller.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER), controller.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER));
             robot.log();
 
             logger.print();

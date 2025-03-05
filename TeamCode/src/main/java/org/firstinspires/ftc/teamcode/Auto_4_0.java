@@ -17,14 +17,17 @@ import org.firstinspires.ftc.teamcode.Pedro.Constants.FConstants;
 import org.firstinspires.ftc.teamcode.Pedro.Constants.LConstants;
 import org.firstinspires.ftc.teamcode.SystemsFSMs.Deposit;
 import org.firstinspires.ftc.teamcode.SystemsFSMs.DepositLowLevel.Claw;
+import org.firstinspires.ftc.teamcode.SystemsFSMs.Intake;
+import org.firstinspires.ftc.teamcode.SystemsFSMs.Robot;
 
 @Autonomous(name = "Auto V0.1.1", group = "Competition")
 public class Auto_4_0 extends OpMode {
 
     private Logger logger;
     private Hardware hardware;
-    private Deposit deposit;
+    private Robot robot;
     private GamepadEx controller;
+    private GamepadEx ghostController;
 
     private Follower follower;
 
@@ -61,17 +64,20 @@ public class Auto_4_0 extends OpMode {
     @Override
     public void init() {
         // Robot Setup
-        hardware = new Hardware();
+        hardware = Hardware.getInstance();
         hardware.init(hardwareMap, true, true);
 
         controller = new GamepadEx(gamepad1);
+        ghostController = new GamepadEx(gamepad2);
+
 
         logger = new Logger(telemetry, controller);
 
-        deposit = new Deposit(hardware, logger);
+        robot = new Robot(hardware, ghostController,logger, true, false, true);
 
-        deposit.setTargetState(Deposit.State.specIntake);
-        deposit.setClaw(Claw.State.Open);
+        robot.setDepositDesiredState(Deposit.State.specIntake);
+        robot.setIntakeDesiredState(Intake.State.Stowed);
+        robot.deposit.setClaw(Claw.State.Open);
 
         // Pedro & Path Setup
         Auto_4_0_Paths.build();
@@ -89,12 +95,10 @@ public class Auto_4_0 extends OpMode {
         hardware.clearCache();
         controller.readButtons();
 
-        deposit.update();
-        deposit.command();
-
+        robot.update();
+        robot.command(0, 0);
         logger.logHeader("Auto Ready -- Init Loop");
-        deposit.log();
-
+        robot.log();
         logger.print();
     }
 
@@ -102,11 +106,11 @@ public class Auto_4_0 extends OpMode {
     public void loop() {
         hardware.clearCache();
         autoStateUpdate();
-        deposit.update();
+        robot.update();
         controller.readButtons();
 
         follower.update();
-        deposit.command();
+        robot.command(0, 0);
 
         logger.logHeader("Auto");
         logger.logData("Auto State", autoState, Logger.LogLevels.production);
@@ -116,7 +120,7 @@ public class Auto_4_0 extends OpMode {
         logger.logData("Vx", follower.getVelocity().getXComponent(), Logger.LogLevels.production);
         logger.logData("ω", follower.getVelocity().getTheta(), Logger.LogLevels.production);
 
-        deposit.log();
+        robot.log();
 
         logger.print();
     }
@@ -124,9 +128,9 @@ public class Auto_4_0 extends OpMode {
     public void autoStateUpdate(){
         switch (autoState) {
             case start:
-                deposit.setClaw(Claw.State.Closed);
-                if (deposit.claw.currentState == Claw.State.Closed) {
-                    deposit.setTargetState(Deposit.State.specDeposit);
+                robot.deposit.setClaw(Claw.State.Closed);
+                if (robot.deposit.claw.currentState == Claw.State.Closed) {
+                    robot.setDepositDesiredState(Deposit.State.specDeposit);
                     follower.followPath(specDepoOnePC, true);
                     autoState = AutoState.specDepoOne;
                 }
@@ -137,7 +141,7 @@ public class Auto_4_0 extends OpMode {
                 break;
 
             case intakingSpecOne:
-                intakeSpec(specDepoTwoPC, AutoState.specDepoTwo, 0.7, 0.4);
+                intakeSpec(specDepoTwoPC, AutoState.specDepoTwo, 0.7, 0.3);
                 break;
 
             case specDepoTwo:
@@ -162,7 +166,7 @@ public class Auto_4_0 extends OpMode {
                 break;
 
             case intakingSpecTwo:
-                intakeSpec(specDepoThreePC, AutoState.depositingSpecThree , 0.7, 0.4);
+                intakeSpec(specDepoThreePC, AutoState.depositingSpecThree , 0.7, 0.3);
                 break;
 
             case depositingSpecThree:
@@ -170,7 +174,7 @@ public class Auto_4_0 extends OpMode {
                 break;
 
             case intakingSpecThree:
-                intakeSpec(specDepoFourPC, AutoState.depositingSpecFour , 0.7, 0.4);
+                intakeSpec(specDepoFourPC, AutoState.depositingSpecFour , 0.7, 0.3);
                 break;
 
             case depositingSpecFour:
@@ -269,16 +273,16 @@ public class Auto_4_0 extends OpMode {
 
         // TODO: Tune the ω and vx thresholds for intaking specs
         // Deposit must always be at spec intake position, and robot velocity (both, vx and ω) must be below the threshold for intaking specs, and specIntakingStatus must be aligning
-        if (deposit.currentState == Deposit.State.specIntake && Math.abs(follower.getVelocity().getXComponent()) <= Auto_4_0_Paths.intakeVxThreshold && Math.abs(follower.getVelocity().getTheta()) <= Auto_4_0_Paths.intakeVthetaThreshold && specIntakingStatus == SpecIntakingStatus.aligning) {
+        if (robot.deposit.currentState == Deposit.State.specIntake && Math.abs(follower.getVelocity().getXComponent()) <= Auto_4_0_Paths.intakeVxThreshold && Math.abs(follower.getVelocity().getTheta()) <= Auto_4_0_Paths.intakeVthetaThreshold && specIntakingStatus == SpecIntakingStatus.aligning) {
             follower.holdPoint(follower.getPose());
-            deposit.setClaw(Claw.State.Closed);
+            robot.deposit.setClaw(Claw.State.Closed);
             specIntakingStatus = SpecIntakingStatus.intaking;
             follower.setMaxPower(1.0);
         }
 
         // If we are in the intaking phase, and the claw is closed, continue to next Path
-        if (deposit.claw.currentState == Claw.State.Closed && specIntakingStatus == SpecIntakingStatus.intaking) {
-            deposit.setTargetState(Deposit.State.specDeposit);
+        if (robot.deposit.claw.currentState == Claw.State.Closed && specIntakingStatus == SpecIntakingStatus.intaking) {
+            robot.setDepositDesiredState(Deposit.State.specDeposit);
             follower.followPath(nextPath);
             autoState = nextAutoState;
             specIntakingStatus = SpecIntakingStatus.aligning;
@@ -290,14 +294,14 @@ public class Auto_4_0 extends OpMode {
 
         // If Vx meets velocity constraint and the path did not just start (t>=0.1) and specDepoStatus is driving, move to releasing status
         if (Math.abs(follower.getVelocity().getXComponent()) == 0.05 && follower.getCurrentTValue() >= 0.1 && specDepoStatus == SpecDepoStatus.driving) {
-            deposit.setClaw(Claw.State.Open);
+            robot.deposit.setClaw(Claw.State.Open);
             specDepoStatus = SpecDepoStatus.releasing;
             follower.holdPoint(follower.getPose());
         }
 
         // If the claw is open and specDepoStatus is releasing, move to next path.
-        if (deposit.claw.currentState == Claw.State.Open && specDepoStatus == SpecDepoStatus.releasing) {
-            deposit.setTargetState(Deposit.State.specIntake);
+        if (robot.deposit.claw.currentState == Claw.State.Open && specDepoStatus == SpecDepoStatus.releasing) {
+            robot.setDepositDesiredState(Deposit.State.specIntake);
             follower.followPath(nextPath);
             autoState = nextAutoState;
             specDepoStatus = SpecDepoStatus.driving;

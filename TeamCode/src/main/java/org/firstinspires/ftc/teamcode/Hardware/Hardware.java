@@ -57,8 +57,6 @@ public class Hardware   {
 
     public DigitalChannel intakeLS;
 
-
-
     public static Hardware getInstance() {
         if (instance == null) {
             instance = new Hardware();
@@ -88,10 +86,12 @@ public class Hardware   {
 
 
             pinPoint = hardwareMap.get(GoBildaPinpointDriver.class, "CH-I2C-0-1");
-            pinPoint.setOffsets(71, -135.325);
-            pinPoint.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
-            pinPoint.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.FORWARD);
+
             if (reset) {
+                pinPoint.setOffsets(71, -135.325);
+                pinPoint.setEncoderResolution(GoBildaPinpointDriver.GoBildaOdometryPods.goBILDA_4_BAR_POD);
+                pinPoint.setEncoderDirections(GoBildaPinpointDriver.EncoderDirection.FORWARD, GoBildaPinpointDriver.EncoderDirection.FORWARD);
+
                 pinPoint.resetPosAndIMU();
             }
 

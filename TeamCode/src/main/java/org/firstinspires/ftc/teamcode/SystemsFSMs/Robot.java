@@ -25,6 +25,8 @@ public class Robot {
     private GamepadEx controller;
     private Logger logger;
 
+    private boolean auto;
+
     public enum States {
         cycling,
         handoff;
@@ -46,29 +48,36 @@ public class Robot {
 
     private boolean passthroughReady = false;
 
-    public Robot(Hardware hardware, GamepadEx controller, Logger logger, boolean intakeZeroing, boolean odometryEnabled) {
+    public Robot(Hardware hardware, GamepadEx controller, Logger logger, boolean intakeZeroing, boolean odometryEnabled, boolean auto) {
+
+        this.auto = auto;
 
         this.controller = controller;
         this.logger = logger;
 
-        drivetrain = new Drivetrain(hardware, controller, logger, odometryEnabled);
+        if (!this.auto) {
+            drivetrain = new Drivetrain(hardware, controller, logger, odometryEnabled);
+        }
         deposit = new Deposit(hardware, logger);
         intake = new Intake(hardware, logger, controller, intakeZeroing);
 
         deposit.setTargetState(Deposit.State.transfer);
         intake.setTargetState(Intake.State.Stowed);
 
+
         findState();
     }
 
     public void update() {
-        drivetrain.update();
+        if (!auto) {
+            drivetrain.update();
+        }
         deposit.update();
         intake.update();
         findState();
     }
 
-    public void command() {
+    public void command(double feedIn, double feedOut) {
         interferenceCheck();
         switch (currentState) {
             case cycling:
@@ -93,9 +102,11 @@ public class Robot {
 
         }
 
-        drivetrain.command();
+        if (!auto) {
+            drivetrain.command();
+        }
         deposit.command();
-        intake.command(controller.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER), controller.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER));
+        intake.command(feedIn, feedOut);
 
     }
 
