@@ -42,8 +42,13 @@ public class Auto_4_0 extends OpMode {
         park,
         done;
     }
-
     private AutoState autoState = AutoState.start;
+
+    private enum SpecIntakingStatus {
+        aligning,
+        intaking
+    }
+    private SpecIntakingStatus specIntakingStatus = SpecIntakingStatus.aligning;
 
     private PathChain specDepoOnePC, specIntakeOnePC, specDepoTwoPC, samplePushOnePC, samplePushTwoPC, specIntakeTwoPC, specDepoThreePC, specIntakeThreePC, specDepoFourPC, parkPC;
 
@@ -289,29 +294,43 @@ public class Auto_4_0 extends OpMode {
         return !follower.isBusy() || (follower.getVelocity().getXComponent() == 0.05 && follower.getCurrentTValue() >= 0.1);
     }
 
-    private boolean specIntakeCheck() {
-        return !follower.isBusy() && deposit.currentState == Deposit.State.specIntake;
-    }
-
     private void intakeSpec(PathChain nextPath, AutoState nextAutoState, double slowTValue, double slowPower) {
 
-        if (specIntakeCheck()) {
+        // While this function is running, it expects to start with maxPower at 1.0, and specIntaking status at aligning, and will end on these same conditions
 
+        // If we are close to the end of the path, slow down to grab spec, only if in aligning state
+        if (follower.getCurrentTValue() >= slowTValue && specIntakingStatus == SpecIntakingStatus.aligning) {
+            follower.setMaxPower(slowPower);
+        }
+
+        // TODO: Tune the ω and vx thresholds for intaking specs
+        // Deposit must always be at spec intake position, and robot velocity (both, vx and ω) must be below the threshold for intaking specs, and specIntakingStatus must be aligning
+        if (deposit.currentState == Deposit.State.specIntake && Math.abs(follower.getVelocity().getXComponent()) <= Auto_4_0_Paths.intakeVxThreshold && Math.abs(follower.getVelocity().getTheta()) <= Auto_4_0_Paths.intakeVthetaThreshold && specIntakingStatus == SpecIntakingStatus.aligning) {
+            follower.holdPoint(follower.getPose());
             deposit.setClaw(Claw.State.Closed);
+            specIntakingStatus = SpecIntakingStatus.intaking;
+            follower.setMaxPower(1.0);
+        }
 
-            if (deposit.claw.currentState == Claw.State.Closed) {
+        // If we are in the intaking phase, and the claw is closed, continue to next Path
+        if (deposit.claw.currentState == Claw.State.Closed && specIntakingStatus == SpecIntakingStatus.intaking) {
+            deposit.setTargetState(Deposit.State.specDeposit);
+            follower.followPath(nextPath);
+            autoState = nextAutoState;
+            specIntakingStatus = SpecIntakingStatus.aligning;
+        }
 
-                deposit.setTargetState(Deposit.State.specDeposit);
+    }
+
+    private void depositSpec(PathChain nextPath, AutoState nextAutoState) {
+        if (Math.abs(follower.getVelocity().getXComponent()) == 0.05 && follower.getCurrentTValue() >= 0.1) {
+            deposit.setClaw(Claw.State.Open);
+            if (deposit.claw.currentState == Claw.State.Open) {
+                deposit.setTargetState(Deposit.State.specIntake);
                 follower.followPath(nextPath);
                 autoState = nextAutoState;
 
             }
-
-        }
-
-        // If we are close to the end of the path, slow down to grab spec
-        if (follower.getCurrentTValue() >= slowTValue) {
-            follower.setMaxPower(slowPower);
         }
 
     }
