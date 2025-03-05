@@ -113,6 +113,9 @@ public class Auto_4_0 extends OpMode {
         logger.logData("Robot Pose", follower.getPose(), Logger.LogLevels.production);
         logger.logData("Follower Is Busy", follower.isBusy(), Logger.LogLevels.production);
         logger.logData("T-Value", follower.getCurrentTValue(), Logger.LogLevels.production);
+        logger.logData("Vx", follower.getVelocity().getXComponent(), Logger.LogLevels.production);
+        logger.logData("ω", follower.getVelocity().getTheta(), Logger.LogLevels.production);
+
         deposit.log();
 
         logger.print();
