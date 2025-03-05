@@ -130,19 +130,8 @@ public class Auto_4_0 extends OpMode {
                 break;
 
             case intakingSpecOne:
-                if (specIntakeCheck()) {
-                    deposit.setClaw(Claw.State.Closed);
-                    if (deposit.claw.currentState == Claw.State.Closed) {
-                        deposit.setTargetState(Deposit.State.specDeposit);
-                        follower.followPath(specDepoTwoPC);
-                        autoState = AutoState.specDepoTwo;
-                    }
-                }
 
-                // TODO: Caps power to max as the robot gets close to grabbing the spec, highly untested
-                if (follower.getCurrentTValue() >= 0.70) {
-                    follower.setMaxPower(0.4);
-                }
+                intakeSpec(specDepoTwoPC, AutoState.specDepoTwo, 0.7, 0.4);
 
                 break;
 
@@ -178,19 +167,7 @@ public class Auto_4_0 extends OpMode {
 
             case intakingSpecTwo:
 
-                if (specIntakeCheck()) {
-                    deposit.setClaw(Claw.State.Closed);
-                    if (deposit.claw.currentState == Claw.State.Closed) {
-                        deposit.setTargetState(Deposit.State.specDeposit);
-                        autoState = AutoState.depositingSpecThree;
-                        follower.followPath(specDepoThreePC);
-                    }
-                }
-
-                // TODO: Caps power to max as the robot gets close to grabbing the spec, highly untested
-                if (follower.getCurrentTValue() >= 0.70) {
-                    follower.setMaxPower(0.4);
-                }
+                intakeSpec(specDepoThreePC, AutoState.depositingSpecThree , 0.7, 0.4);
 
                 break;
 
@@ -209,19 +186,8 @@ public class Auto_4_0 extends OpMode {
 
             case intakingSpecThree:
 
-                if (specIntakeCheck()) {
-                    deposit.setClaw(Claw.State.Closed);
-                    if (deposit.claw.currentState == Claw.State.Closed) {
-                        deposit.setTargetState(Deposit.State.specDeposit);
-                        follower.followPath(specDepoFourPC);
-                        autoState = AutoState.depositingSpecFour;
-                    }
-                }
+                intakeSpec(specDepoFourPC, AutoState.depositingSpecFour , 0.7, 0.4);
 
-                // TODO: Caps power to max as the robot gets close to grabbing the spec, highly untested
-                if (follower.getCurrentTValue() >= 0.70) {
-                    follower.setMaxPower(0.4);
-                }
                 break;
 
             case depositingSpecFour:
@@ -325,6 +291,29 @@ public class Auto_4_0 extends OpMode {
 
     private boolean specIntakeCheck() {
         return !follower.isBusy() && deposit.currentState == Deposit.State.specIntake;
+    }
+
+    private void intakeSpec(PathChain nextPath, AutoState nextAutoState, double slowTValue, double slowPower) {
+
+        if (specIntakeCheck()) {
+
+            deposit.setClaw(Claw.State.Closed);
+
+            if (deposit.claw.currentState == Claw.State.Closed) {
+
+                deposit.setTargetState(Deposit.State.specDeposit);
+                follower.followPath(nextPath);
+                autoState = nextAutoState;
+
+            }
+
+        }
+
+        // If we are close to the end of the path, slow down to grab spec
+        if (follower.getCurrentTValue() >= slowTValue) {
+            follower.setMaxPower(slowPower);
+        }
+
     }
 
 }
