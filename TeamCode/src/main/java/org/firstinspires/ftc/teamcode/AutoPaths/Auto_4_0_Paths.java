@@ -5,7 +5,7 @@ import com.pedropathing.pathgen.BezierCurve;
 import com.pedropathing.pathgen.BezierLine;
 import com.pedropathing.pathgen.Point;
 
-public class Auto_2_0_Paths {
+public class Auto_4_0_Paths {
 
     public static Pose startPose = new Pose(6.299, 66.114, Math.toRadians(180));
 

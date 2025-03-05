@@ -10,7 +10,7 @@ import com.pedropathing.util.Constants;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
-import org.firstinspires.ftc.teamcode.AutoPaths.Auto_2_0_Paths;
+import org.firstinspires.ftc.teamcode.AutoPaths.Auto_4_0_Paths;
 import org.firstinspires.ftc.teamcode.Hardware.Hardware;
 import org.firstinspires.ftc.teamcode.Hardware.Util.Logger;
 import org.firstinspires.ftc.teamcode.Pedro.Constants.FConstants;
@@ -18,8 +18,8 @@ import org.firstinspires.ftc.teamcode.Pedro.Constants.LConstants;
 import org.firstinspires.ftc.teamcode.SystemsFSMs.Deposit;
 import org.firstinspires.ftc.teamcode.SystemsFSMs.DepositLowLevel.Claw;
 
-@Autonomous(name = "Auto V0.1.0", group = "Competition")
-public class Auto_2_0 extends OpMode {
+@Autonomous(name = "Auto V0.1.1", group = "Competition")
+public class Auto_4_0 extends OpMode {
 
     private Logger logger;
     private Hardware hardware;
@@ -63,12 +63,12 @@ public class Auto_2_0 extends OpMode {
         deposit.setClaw(Claw.State.Open);
 
         // Pedro & Path Setup
-        Auto_2_0_Paths.build();
+        Auto_4_0_Paths.build();
 
         Constants.setConstants(FConstants.class, LConstants.class);
         follower = new Follower(hardwareMap);
 
-        follower.setStartingPose(Auto_2_0_Paths.startPose);
+        follower.setStartingPose(Auto_4_0_Paths.startPose);
 
         buildPaths();
     }
@@ -92,6 +92,7 @@ public class Auto_2_0 extends OpMode {
         hardware.clearCache();
         autoStateUpdate();
         deposit.update();
+        controller.readButtons();
 
         follower.update();
         deposit.command();
@@ -247,73 +248,73 @@ public class Auto_2_0 extends OpMode {
 
     private void buildPaths() {
         specDepoOnePC = follower
-                .pathBuilder().addPath(Auto_2_0_Paths.specDepoOne)
-                .setConstantHeadingInterpolation(Auto_2_0_Paths.specDepoOnePose.getHeading())
+                .pathBuilder().addPath(Auto_4_0_Paths.specDepoOne)
+                .setConstantHeadingInterpolation(Auto_4_0_Paths.specDepoOnePose.getHeading())
                 .setPathEndTimeoutConstraint(250.0)
                 .build();
 
         specIntakeOnePC =
                 follower
-                        .pathBuilder().addPath(Auto_2_0_Paths.specIntakeOne)
-                        .setConstantHeadingInterpolation(Auto_2_0_Paths.specIntakeOnePose.getHeading())
+                        .pathBuilder().addPath(Auto_4_0_Paths.specIntakeOne)
+                        .setConstantHeadingInterpolation(Auto_4_0_Paths.specIntakeOnePose.getHeading())
                         .setPathEndTimeoutConstraint(250.0)
                         .build();
 
         specDepoTwoPC =
                 follower
-                        .pathBuilder().addPath(Auto_2_0_Paths.specDepoTwo)
-                        .setConstantHeadingInterpolation(Auto_2_0_Paths.specDepoTwoPose.getHeading())
+                        .pathBuilder().addPath(Auto_4_0_Paths.specDepoTwo)
+                        .setConstantHeadingInterpolation(Auto_4_0_Paths.specDepoTwoPose.getHeading())
                         .setPathEndTimeoutConstraint(250.0)
                         .build();
 
         samplePushOnePC =
                 follower
-                        .pathBuilder().addPath(Auto_2_0_Paths.samplePushOne)
-                        .setConstantHeadingInterpolation(Auto_2_0_Paths.pushPoseOne.getHeading())
+                        .pathBuilder().addPath(Auto_4_0_Paths.samplePushOne)
+                        .setConstantHeadingInterpolation(Auto_4_0_Paths.pushPoseOne.getHeading())
                         .setPathEndTimeoutConstraint(250.0)
                         .setZeroPowerAccelerationMultiplier(10)
                         .build();
 
         samplePushTwoPC =
                 follower
-                        .pathBuilder().addPath(Auto_2_0_Paths.samplePushTwo)
-                        .setConstantHeadingInterpolation(Auto_2_0_Paths.pushPoseTwo.getHeading())
+                        .pathBuilder().addPath(Auto_4_0_Paths.samplePushTwo)
+                        .setConstantHeadingInterpolation(Auto_4_0_Paths.pushPoseTwo.getHeading())
                         .setPathEndTimeoutConstraint(250.0)
                         .setZeroPowerAccelerationMultiplier(10)
                         .build();
 
         specIntakeTwoPC =
                 follower
-                        .pathBuilder().addPath(Auto_2_0_Paths.specIntakeTwo)
-                        .setConstantHeadingInterpolation(Auto_2_0_Paths.specIntakeTwoPose.getHeading())
+                        .pathBuilder().addPath(Auto_4_0_Paths.specIntakeTwo)
+                        .setConstantHeadingInterpolation(Auto_4_0_Paths.specIntakeTwoPose.getHeading())
                         .setPathEndTimeoutConstraint(250.0)
                         .build();
 
         specDepoThreePC =
                 follower
-                        .pathBuilder().addPath(Auto_2_0_Paths.specDepoThree)
-                        .setConstantHeadingInterpolation(Auto_2_0_Paths.specDepoThreePose.getHeading())
+                        .pathBuilder().addPath(Auto_4_0_Paths.specDepoThree)
+                        .setConstantHeadingInterpolation(Auto_4_0_Paths.specDepoThreePose.getHeading())
                         .setPathEndTimeoutConstraint(250.0)
                         .build();
 
         specIntakeTwoPC =
                 follower
-                        .pathBuilder().addPath(Auto_2_0_Paths.specIntakeThree)
-                        .setConstantHeadingInterpolation(Auto_2_0_Paths.specIntakeThreePose.getHeading())
+                        .pathBuilder().addPath(Auto_4_0_Paths.specIntakeThree)
+                        .setConstantHeadingInterpolation(Auto_4_0_Paths.specIntakeThreePose.getHeading())
                         .setPathEndTimeoutConstraint(250.0)
                         .build();
 
         specDepoFourPC =
                 follower
-                        .pathBuilder().addPath(Auto_2_0_Paths.specDepoFour)
-                        .setConstantHeadingInterpolation(Auto_2_0_Paths.specDepoFourPose.getHeading())
+                        .pathBuilder().addPath(Auto_4_0_Paths.specDepoFour)
+                        .setConstantHeadingInterpolation(Auto_4_0_Paths.specDepoFourPose.getHeading())
                         .setPathEndTimeoutConstraint(250.0)
                         .build();
 
         parkPC =
                 follower
-                        .pathBuilder().addPath(Auto_2_0_Paths.park)
-                        .setConstantHeadingInterpolation(Auto_2_0_Paths.parkPose.getHeading())
+                        .pathBuilder().addPath(Auto_4_0_Paths.park)
+                        .setConstantHeadingInterpolation(Auto_4_0_Paths.parkPose.getHeading())
                         .setPathEndTimeoutConstraint(250.0)
                         .build();
     }

@@ -22,7 +22,7 @@ public class IntakeConstants {
 
     public static final double
             intakeSlideZeroPower = -1.0,
-            intakeSlideZeroStallPower = -0.1;
+            intakeSlideZeroStallPower = -0.15;
 
 
     // Bucket Servo Positions
