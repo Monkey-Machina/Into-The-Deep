@@ -10,11 +10,14 @@ public class Auto_2_0_Paths {
     public static Pose startPose = new Pose(6.299, 66.114, Math.toRadians(180));
 
     public static Pose
-        specDepoOnePose = new Pose(42.000, 74.000, Math.toRadians(180)),
-        specDepoTwoPose = new Pose(42.000, 70.000, Math.toRadians(180)),
+        specDepoOnePose = new Pose(42.000, 78.000, Math.toRadians(180)),
+        specDepoTwoPose = new Pose(42.000, 76.000, Math.toRadians(180)),
+        specDepoThreePose = new Pose(42.000, 74.000, Math.toRadians(180)),
+        specDepoFourPose = new Pose(42.000, 72.000, Math.toRadians(180)),
 
         specIntakeOnePose = new Pose(6.5,34.000, Math.toRadians(180)),
         specIntakeTwoPose = new Pose(6.5,34.000, Math.toRadians(180)),
+        specIntakeThreePose = new Pose(6.5,34.000, Math.toRadians(180)),
 
         pushPoseOne = new Pose(0,23, Math.toRadians(180)),
         pushPoseTwo = new Pose(6.5,12, Math.toRadians(180)),
@@ -24,13 +27,16 @@ public class Auto_2_0_Paths {
     public static BezierLine
         specDepoOne,
         specDepoTwo,
+        specDepoThree,
+        specDepoFour,
         park;
 
     public static BezierCurve
         specIntakeOne,
         samplePushOne,
         samplePushTwo,
-        specIntakeTwo;
+        specIntakeTwo,
+        specIntakeThree;
 
     public  static void build() {
         specDepoOne = new BezierLine(startPose, specDepoOnePose);
@@ -47,10 +53,15 @@ public class Auto_2_0_Paths {
 
         samplePushOne = new BezierCurve(
                 specDepoTwoPose,
-                new Pose(18.000, 3.300, Point.CARTESIAN),
-                new Pose(8.000, 56.000, Point.CARTESIAN),
-                new Pose(123.000, 34.000, Point.CARTESIAN),
-                new Pose(82.000, 18.500, Point.CARTESIAN),
+                new Pose(17.000, 80.000, Point.CARTESIAN),
+                new Pose(46.300, 64.300, Point.CARTESIAN),
+                new Pose(12.500, 23.000, Point.CARTESIAN),
+                new Pose(20.500, 12.000, Point.CARTESIAN),
+                new Pose(62.300, 53.600, Point.CARTESIAN),
+                new Pose(62.500, 53.800, Point.CARTESIAN),
+                new Pose(73.000, 20.000, Point.CARTESIAN),
+                new Pose(56.000, 21.000, Point.CARTESIAN),
+                new Pose(68.300, 24.600, Point.CARTESIAN),
                 pushPoseOne
         );
 
@@ -68,7 +79,25 @@ public class Auto_2_0_Paths {
                 new Pose(20.000, 17.700, Point.CARTESIAN),
                 new Pose(19.300, 35.500, Point.CARTESIAN),
                 new Pose(15.600, 34.000, Point.CARTESIAN),
-                specIntakeOnePose
+                specIntakeTwoPose
+        );
+
+        specDepoThree = new BezierLine(
+                specIntakeTwoPose,
+                specDepoThreePose
+        );
+
+        specIntakeOne = new BezierCurve(
+                specDepoThreePose,
+                new Pose(22.000, 67.000, Point.CARTESIAN),
+                new Pose(28.000, 34.000, Point.CARTESIAN),
+                new Pose(20.000, 34.000, Point.CARTESIAN),
+                specIntakeThreePose
+        );
+
+        specDepoFour = new BezierLine(
+                specIntakeThreePose,
+                specDepoFourPose
         );
 
 
