@@ -50,6 +50,12 @@ public class Auto_4_0 extends OpMode {
     }
     private SpecIntakingStatus specIntakingStatus = SpecIntakingStatus.aligning;
 
+    private enum SpecDepoStatus {
+        driving,
+        releasing;
+    }
+    private SpecDepoStatus specDepoStatus = SpecDepoStatus.driving;
+
     private PathChain specDepoOnePC, specIntakeOnePC, specDepoTwoPC, samplePushOnePC, samplePushTwoPC, specIntakeTwoPC, specDepoThreePC, specIntakeThreePC, specDepoFourPC, parkPC;
 
     @Override
@@ -124,33 +130,15 @@ public class Auto_4_0 extends OpMode {
                 break;
 
             case specDepoOne:
-                if (specDepositCheck()) {
-                    deposit.setClaw(Claw.State.Open);
-                    if (deposit.claw.currentState == Claw.State.Open) {
-                        deposit.setTargetState(Deposit.State.specIntake);
-                        follower.followPath(specIntakeOnePC, true);
-                        autoState = AutoState.intakingSpecOne;
-                    }
-                }
+                depositSpec(specIntakeOnePC, AutoState.intakingSpecOne);
                 break;
 
             case intakingSpecOne:
-
                 intakeSpec(specDepoTwoPC, AutoState.specDepoTwo, 0.7, 0.4);
-
                 break;
 
             case specDepoTwo:
-                follower.setMaxPower(1.0);
-                if (specDepositCheck()) {
-                    deposit.setClaw(Claw.State.Open);
-                    if (deposit.claw.currentState == Claw.State.Open) {
-                        deposit.setTargetState(Deposit.State.specIntake);
-                        follower.followPath(samplePushOnePC);
-                        autoState = AutoState.samplePushOne;
-                        follower.setCentripetalScaling(0.0008);
-                    }
-                }
+                depositSpec(samplePushOnePC, AutoState.samplePushOne);
                 break;
 
             case samplePushOne:
@@ -171,43 +159,20 @@ public class Auto_4_0 extends OpMode {
                 break;
 
             case intakingSpecTwo:
-
                 intakeSpec(specDepoThreePC, AutoState.depositingSpecThree , 0.7, 0.4);
-
                 break;
 
             case depositingSpecThree:
-                follower.setMaxPower(1.0);
-                if (specDepositCheck()) {
-                    deposit.setClaw(Claw.State.Open);
-                    if (deposit.claw.currentState == Claw.State.Open) {
-                        deposit.setTargetState(Deposit.State.specIntake);
-                        follower.followPath(specIntakeThreePC);
-                        autoState = AutoState.intakingSpecThree;
-                        follower.setCentripetalScaling(0.0008);
-                    }
-                }
+                depositSpec(specIntakeThreePC, AutoState.intakingSpecThree);
                 break;
 
             case intakingSpecThree:
-
                 intakeSpec(specDepoFourPC, AutoState.depositingSpecFour , 0.7, 0.4);
-
                 break;
 
             case depositingSpecFour:
-                follower.setMaxPower(1.0);
-                if (specDepositCheck()) {
-                    deposit.setClaw(Claw.State.Open);
-                    if (deposit.claw.currentState == Claw.State.Open) {
-                        deposit.setTargetState(Deposit.State.specIntake);
-                        follower.followPath(parkPC);
-                        autoState = AutoState.park;
-                        follower.setCentripetalScaling(0.0008);
-                    }
-                }
+                depositSpec(parkPC, AutoState.park);
                 break;
-
 
             case park:
                 if (!follower.isBusy()) {
@@ -290,10 +255,6 @@ public class Auto_4_0 extends OpMode {
                         .build();
     }
 
-    private boolean specDepositCheck() {
-        return !follower.isBusy() || (follower.getVelocity().getXComponent() == 0.05 && follower.getCurrentTValue() >= 0.1);
-    }
-
     private void intakeSpec(PathChain nextPath, AutoState nextAutoState, double slowTValue, double slowPower) {
 
         // While this function is running, it expects to start with maxPower at 1.0, and specIntaking status at aligning, and will end on these same conditions
@@ -323,14 +284,20 @@ public class Auto_4_0 extends OpMode {
     }
 
     private void depositSpec(PathChain nextPath, AutoState nextAutoState) {
-        if (Math.abs(follower.getVelocity().getXComponent()) == 0.05 && follower.getCurrentTValue() >= 0.1) {
-            deposit.setClaw(Claw.State.Open);
-            if (deposit.claw.currentState == Claw.State.Open) {
-                deposit.setTargetState(Deposit.State.specIntake);
-                follower.followPath(nextPath);
-                autoState = nextAutoState;
 
-            }
+        // If Vx meets velocity constraint and the path did not just start (t>=0.1) and specDepoStatus is driving, move to releasing status
+        if (Math.abs(follower.getVelocity().getXComponent()) == 0.05 && follower.getCurrentTValue() >= 0.1 && specDepoStatus == SpecDepoStatus.driving) {
+            deposit.setClaw(Claw.State.Open);
+            specDepoStatus = SpecDepoStatus.releasing;
+            follower.holdPoint(follower.getPose());
+        }
+
+        // If the claw is open and specDepoStatus is releasing, move to next path.
+        if (deposit.claw.currentState == Claw.State.Open && specDepoStatus == SpecDepoStatus.releasing) {
+            deposit.setTargetState(Deposit.State.specIntake);
+            follower.followPath(nextPath);
+            autoState = nextAutoState;
+            specDepoStatus = SpecDepoStatus.driving;
         }
 
     }
