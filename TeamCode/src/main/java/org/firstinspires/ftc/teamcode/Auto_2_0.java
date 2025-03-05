@@ -34,16 +34,21 @@ public class Auto_2_0 extends OpMode {
     private enum AutoState{
         start,
         specDepoOne,
-        specIntakeOne,
         intakingSpecOne,
         specDepoTwo,
+        samplePushOne,
+        samplePushTwo,
+        intakingSpecTwo,
+        depositingSpecThree,
+        intakingSpecThree,
+        depositingSpecFour,
         park,
         done;
     }
 
     private AutoState autoState = AutoState.start;
 
-    private PathChain specDepoOnePC, specIntakeOnePC, specDepoTwoPC, parkPC;
+    private PathChain specDepoOnePC, specIntakeOnePC, specDepoTwoPC, samplePushOne, samplePushTwo, specIntakeTwoPC, parkPC;
 
     @Override
     public void init() {
@@ -149,11 +154,93 @@ public class Auto_2_0 extends OpMode {
                     deposit.setClaw(Claw.State.Open);
                     if (deposit.claw.currentState == Claw.State.Open) {
                         deposit.setTargetState(Deposit.State.specIntake);
-                        follower.followPath(parkPC);
-                        autoState = AutoState.park;
+                        follower.followPath(samplePushOne);
+                        autoState = AutoState.samplePushOne;
+                        follower.setCentripetalScaling(0.0008);
                     }
                 }
                 break;
+
+            case samplePushOne:
+                if (!follower.isBusy() || follower.getPose().getX() <=13) {
+                    follower.followPath(samplePushTwo);
+                    autoState = AutoState.samplePushTwo;
+                    follower.setCentripetalScaling(0.0008);
+                }
+
+                break;
+
+            case samplePushTwo:
+                if (follower.getPose().getX() <=13 && follower.getCurrentTValue() >= 0.5) {
+                    follower.followPath(specIntakeTwoPC, true);
+                    autoState = AutoState.intakingSpecTwo;
+                    follower.setCentripetalScaling(0.0008);
+                }
+                break;
+
+            case intakingSpecTwo:
+
+                if (!follower.isBusy() && deposit.currentState == Deposit.State.specIntake) {
+                    deposit.setClaw(Claw.State.Closed);
+                    if (deposit.claw.currentState == Claw.State.Closed) {
+                        deposit.setTargetState(Deposit.State.specDeposit);
+                        autoState = AutoState.depositingSpecThree;
+                        follower.followPath(specDepoTwoPC);
+                    }
+                }
+
+                // TODO: Caps power to max as the robot gets close to grabbing the spec, highly untested
+                if (follower.getCurrentTValue() >= 0.70) {
+                    follower.setMaxPower(0.4);
+                }
+
+                break;
+
+            case depositingSpecThree:
+
+                follower.setMaxPower(1.0);
+                if (!follower.isBusy() || (follower.getVelocity().getXComponent() == 0.0 && follower.getCurrentTValue() >= 0.1)) {
+                    deposit.setClaw(Claw.State.Open);
+                    if (deposit.claw.currentState == Claw.State.Open) {
+                        deposit.setTargetState(Deposit.State.specIntake);
+                        follower.followPath(specIntakeTwoPC);
+                        autoState = AutoState.intakingSpecThree;
+                        follower.setCentripetalScaling(0.0008);
+                    }
+                }
+                break;
+
+            case intakingSpecThree:
+
+                if (!follower.isBusy() && deposit.currentState == Deposit.State.specIntake) {
+                    deposit.setClaw(Claw.State.Closed);
+                    if (deposit.claw.currentState == Claw.State.Closed) {
+                        deposit.setTargetState(Deposit.State.specDeposit);
+                        follower.followPath(specDepoTwoPC);
+                        autoState = AutoState.depositingSpecFour;
+                    }
+                }
+
+                // TODO: Caps power to max as the robot gets close to grabbing the spec, highly untested
+                if (follower.getCurrentTValue() >= 0.70) {
+                    follower.setMaxPower(0.4);
+                }
+                break;
+
+            case depositingSpecFour:
+
+                follower.setMaxPower(1.0);
+                if (!follower.isBusy() || (follower.getVelocity().getXComponent() == 0.0 && follower.getCurrentTValue() >= 0.1)) {
+                    deposit.setClaw(Claw.State.Open);
+                    if (deposit.claw.currentState == Claw.State.Open) {
+                        deposit.setTargetState(Deposit.State.specIntake);
+                        follower.followPath(parkPC);
+                        autoState = AutoState.park;
+                        follower.setCentripetalScaling(0.0008);
+                    }
+                }
+                break;
+
 
             case park:
                 if (!follower.isBusy()) {
@@ -182,6 +269,30 @@ public class Auto_2_0 extends OpMode {
                         .pathBuilder().addPath(Auto_2_0_Paths.specDepoTwo)
                         .setConstantHeadingInterpolation(Auto_2_0_Paths.specDepoTwoPose.getHeading())
                         .setPathEndTimeoutConstraint(250.0)
+                        .build();
+
+        samplePushOne =
+                follower
+                        .pathBuilder().addPath(Auto_2_0_Paths.samplePushOne)
+                        .setConstantHeadingInterpolation(Auto_2_0_Paths.pushPoseOne.getHeading())
+                        .setPathEndTimeoutConstraint(250.0)
+                        .setZeroPowerAccelerationMultiplier(10)
+                        .build();
+
+        samplePushTwo =
+                follower
+                        .pathBuilder().addPath(Auto_2_0_Paths.samplePushTwo)
+                        .setConstantHeadingInterpolation(Auto_2_0_Paths.pushPoseTwo.getHeading())
+                        .setPathEndTimeoutConstraint(250.0)
+                        .setZeroPowerAccelerationMultiplier(10)
+                        .build();
+
+        specIntakeTwoPC =
+                follower
+                        .pathBuilder().addPath(Auto_2_0_Paths.specIntakeTwo)
+                        .setConstantHeadingInterpolation(Auto_2_0_Paths.specIntakeTwoPose.getHeading())
+                        .setPathEndTimeoutConstraint(250.0)
+                        .setZeroPowerAccelerationMultiplier(7)
                         .build();
 
         parkPC =
