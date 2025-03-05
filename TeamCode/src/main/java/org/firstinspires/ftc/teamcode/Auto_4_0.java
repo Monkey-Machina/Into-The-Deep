@@ -233,7 +233,7 @@ public class Auto_4_0 extends OpMode {
                         .setPathEndTimeoutConstraint(250.0)
                         .build();
 
-        specIntakeTwoPC =
+        specIntakeThreePC =
                 follower
                         .pathBuilder().addPath(Auto_4_0_Paths.specIntakeThree)
                         .setConstantHeadingInterpolation(Auto_4_0_Paths.specIntakeThreePose.getHeading())
