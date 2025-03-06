@@ -89,7 +89,7 @@ public class Auto_4_0_Paths {
                 specDepoThreePose
         );
 
-        specIntakeOne = new BezierCurve(
+        specIntakeThree = new BezierCurve(
                 specDepoThreePose,
                 new Pose(22.000, 67.000, Point.CARTESIAN),
                 new Pose(28.000, 34.000, Point.CARTESIAN),

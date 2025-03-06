@@ -65,6 +65,7 @@ public class Drivetrain {
     }
 
     public void command() {
+
         double rotX = sticks[2] * Math.cos(heading) - sticks[3] * Math.sin(heading);
         double rotY = sticks[2] * Math.sin(heading) + sticks[3] * Math.cos(heading);
 

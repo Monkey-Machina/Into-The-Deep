@@ -66,6 +66,7 @@ public class Auto_4_0 extends OpMode {
         // Robot Setup
         hardware = Hardware.getInstance();
         hardware.init(hardwareMap, true, true);
+        Hardware.setInstance(hardware);
 
         controller = new GamepadEx(gamepad1);
         ghostController = new GamepadEx(gamepad2);
@@ -118,7 +119,7 @@ public class Auto_4_0 extends OpMode {
         logger.logData("Follower Is Busy", follower.isBusy(), Logger.LogLevels.production);
         logger.logData("T-Value", follower.getCurrentTValue(), Logger.LogLevels.production);
         logger.logData("Vx", follower.getVelocity().getXComponent(), Logger.LogLevels.production);
-        logger.logData("ω", follower.getVelocity().getTheta(), Logger.LogLevels.production);
+        logger.logData("ω", follower.poseUpdater.getAngularVelocity(), Logger.LogLevels.production);
 
         robot.log();
 
@@ -273,7 +274,7 @@ public class Auto_4_0 extends OpMode {
 
         // TODO: Tune the ω and vx thresholds for intaking specs
         // Deposit must always be at spec intake position, and robot velocity (both, vx and ω) must be below the threshold for intaking specs, and specIntakingStatus must be aligning
-        if (robot.deposit.currentState == Deposit.State.specIntake && Math.abs(follower.getVelocity().getXComponent()) <= Auto_4_0_Paths.intakeVxThreshold && Math.abs(follower.getVelocity().getTheta()) <= Auto_4_0_Paths.intakeVthetaThreshold && specIntakingStatus == SpecIntakingStatus.aligning) {
+        if (robot.deposit.currentState == Deposit.State.specIntake && !follower.isBusy() && specIntakingStatus == SpecIntakingStatus.aligning) {
             follower.holdPoint(follower.getPose());
             robot.deposit.setClaw(Claw.State.Closed);
             specIntakingStatus = SpecIntakingStatus.intaking;
@@ -293,7 +294,7 @@ public class Auto_4_0 extends OpMode {
     private void depositSpec(PathChain nextPath, AutoState nextAutoState) {
 
         // If Vx meets velocity constraint and the path did not just start (t>=0.1) and specDepoStatus is driving, move to releasing status
-        if (Math.abs(follower.getVelocity().getXComponent()) == 0.05 && follower.getCurrentTValue() >= 0.1 && specDepoStatus == SpecDepoStatus.driving) {
+        if (!follower.isBusy() && specDepoStatus == SpecDepoStatus.driving) {
             robot.deposit.setClaw(Claw.State.Open);
             specDepoStatus = SpecDepoStatus.releasing;
             follower.holdPoint(follower.getPose());

@@ -18,7 +18,7 @@ import java.util.ArrayList;
 
 @com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "Tele-Op V1.0.0", group = "Competition")
 public class TeleOp extends OpMode {
-    private Hardware hardware;
+    private Hardware hardware =  new Hardware();
     private Logger logger;
     private GamepadEx controller;
 
@@ -34,8 +34,7 @@ public class TeleOp extends OpMode {
 
     @Override
     public void init() {
-        hardware = Hardware.getInstance();
-        hardware.init(hardwareMap, false, false);
+        hardware.init(hardwareMap, true, false);
 
         controller = new GamepadEx(gamepad1);
         logger = new Logger(telemetry, controller);

@@ -17,7 +17,7 @@ import java.util.List;
 public class Hardware   {
 
     private static Hardware instance = null;
-    private boolean enabled;
+    public static boolean enabled = false;
 
     private HardwareMap hardwareMap;
 
@@ -61,7 +61,7 @@ public class Hardware   {
         if (instance == null) {
             instance = new Hardware();
         }
-        instance.enabled = true;
+        enabled = true;
         return instance;
     }
 
@@ -178,6 +178,29 @@ public class Hardware   {
 
     public void zeroPinpoint() {
         pinPoint.resetPosAndIMU();
+    }
+
+    public void initDrivetrain() {
+        RF = hardwareMap.get(DcMotorEx.class, "EH-Motor-3");
+        RF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+        LF = hardwareMap.get(DcMotorEx.class, "EH-Motor-2");
+        LF.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        LF.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        LB = hardwareMap.get(DcMotorEx.class, "EH-Motor-1");
+        LB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+        LB.setDirection(DcMotorSimple.Direction.REVERSE);
+
+        RB = hardwareMap.get(DcMotorEx.class, "EH-Motor-0");
+        RB.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.BRAKE);
+
+
+        pinPoint = hardwareMap.get(GoBildaPinpointDriver.class, "CH-I2C-0-1");
+    }
+
+    public static void setInstance(Hardware hardware) {
+        instance = hardware;
     }
 
 }

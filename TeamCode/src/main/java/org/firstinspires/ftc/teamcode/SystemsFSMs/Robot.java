@@ -124,7 +124,9 @@ public class Robot {
         logger.logData("Passthough Ready", passthroughReady, Logger.LogLevels.developer);
 
 
-        drivetrain.log();
+        if (!auto) {
+            drivetrain.log();
+        }
         deposit.log();
         intake.log();
     }
@@ -247,7 +249,6 @@ public class Robot {
         }
     }
 
-    //TODO: this just like, doesnt work lmao
     private void passthroughLogic() {
 
         if (!passthroughReady) {
