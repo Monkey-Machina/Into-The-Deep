@@ -106,6 +106,7 @@ public class Hardware   {
         depositSlideRight = hardwareMap.get(DcMotorEx.class, "CH-Motor-0");
         depositSlideRight.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         depositSlideRight.setDirection(DcMotorSimple.Direction.REVERSE);
+
         if (reset) {
             depositSlideRight.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             depositSlideRight.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
@@ -114,6 +115,7 @@ public class Hardware   {
         depositSlideLeft = hardwareMap.get(DcMotorEx.class, "CH-Motor-1");
         depositSlideLeft.setZeroPowerBehavior(DcMotor.ZeroPowerBehavior.FLOAT);
         depositSlideLeft.setDirection(DcMotorSimple.Direction.FORWARD);
+
         if (reset) {
             depositSlideLeft.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
             depositSlideLeft.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);

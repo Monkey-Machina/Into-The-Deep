@@ -238,7 +238,7 @@ public class Intake {
 
                 // If the sample color is unknown, keep gate closed. This essentially waits for a color to be determined
             } else if (detector.color != SampleDetector.SampleColor.unknown) {
-                bucket.setGateTargetState(Bucket.GateState.Open);
+                bucket.setGateTargetState(Bucket.GateState.Poop);
             } else {
                 bucket.setGateTargetState(Bucket.GateState.Closed);
             }

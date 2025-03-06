@@ -7,7 +7,7 @@ import com.pedropathing.pathgen.Point;
 
 public class Auto_4_0_Paths {
 
-    public static double intakeVxThreshold = 0.05, intakeVthetaThreshold = 0.05, depositVxThreshold = 0.05;
+    public static double intakeVxThreshold = 0.05, intakeVthetaThreshold = 0.05, depositVxThreshold = 0.00;
 
     public static Pose startPose = new Pose(6.299, 66.114, Math.toRadians(180));
 

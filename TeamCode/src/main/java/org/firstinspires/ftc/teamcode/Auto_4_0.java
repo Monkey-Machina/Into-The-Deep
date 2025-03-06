@@ -142,7 +142,7 @@ public class Auto_4_0 extends OpMode {
                 break;
 
             case intakingSpecOne:
-                intakeSpec(specDepoTwoPC, AutoState.specDepoTwo, 0.7, 0.3);
+                intakeSpec(specDepoTwoPC, AutoState.specDepoTwo, 0.5, 0.3);
                 break;
 
             case specDepoTwo:
@@ -150,7 +150,7 @@ public class Auto_4_0 extends OpMode {
                 break;
 
             case samplePushOne:
-                if (!follower.isBusy() || follower.getPose().getX() <=13) {
+                if (!follower.isBusy() || follower.getPose().getX() <=17) {
                     follower.followPath(samplePushTwoPC);
                     autoState = AutoState.samplePushTwo;
                     follower.setCentripetalScaling(0.0008);
@@ -159,7 +159,7 @@ public class Auto_4_0 extends OpMode {
                 break;
 
             case samplePushTwo:
-                if (follower.getPose().getX() <=13 && follower.getCurrentTValue() >= 0.5) {
+                if (follower.getPose().getX() <=17 && follower.getCurrentTValue() >= 0.5) {
                     follower.followPath(specIntakeTwoPC, true);
                     autoState = AutoState.intakingSpecTwo;
                     follower.setCentripetalScaling(0.0008);
@@ -175,7 +175,7 @@ public class Auto_4_0 extends OpMode {
                 break;
 
             case intakingSpecThree:
-                intakeSpec(specDepoFourPC, AutoState.depositingSpecFour , 0.7, 0.3);
+                intakeSpec(specDepoFourPC, AutoState.depositingSpecFour , 0.5, 0.3);
                 break;
 
             case depositingSpecFour:

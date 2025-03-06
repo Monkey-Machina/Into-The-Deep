@@ -171,7 +171,7 @@ public class Robot {
 
     private void findState() {
 
-        if (intake.currentState == Intake.State.Stowed && (deposit.currentState == Deposit.State.transfer || deposit.targetState == Deposit.State.specIntake) && intake.hasSample) {
+        if (intake.currentState == Intake.State.Stowed && (deposit.currentState == Deposit.State.transfer || (deposit.targetState == Deposit.State.specIntake && passthroughReady)) && intake.hasSample) {
             currentState = States.handoff;
 
         } else {
@@ -186,7 +186,7 @@ public class Robot {
         // If the intake is stowed or trying to stow, apply stow interference, then apply interference
         if (intake.currentState == Intake.State.Stowed || intake.targetState == Intake.State.Stowed) {
             // If the arm is below the pre transfer spot and the slides are around the transfer height, and the arm wants to go to sample deposit pos, there is interference
-            if (deposit.slides.currentCM <= DepositConstants.slideTransferPos + DepositConstants.slidePositionTolerance && deposit.arm.encPos > DepositConstants.armSamplePreDeposit - DepositConstants.armPositionTolerance && depositDesiredState == Deposit.State.sampleDeposit) {
+            if (deposit.slides.currentCM <= DepositConstants.slideTransferPos + DepositConstants.slidePositionTolerance && deposit.arm.encPos > DepositConstants.armSamplePreDeposit + DepositConstants.armPositionTolerance && depositDesiredState == Deposit.State.sampleDeposit) {
                 interference = true;
             }
 
@@ -271,7 +271,6 @@ public class Robot {
         } else {
             deposit.setTargetState(Deposit.State.specIntake);
             if (deposit.currentState == Deposit.State.specIntake) {
-                deposit.setClaw(Claw.State.Open);
                 intake.hasSample = false;
                 clawSetForTransfer = false;
                 intake.passingThrough = false;

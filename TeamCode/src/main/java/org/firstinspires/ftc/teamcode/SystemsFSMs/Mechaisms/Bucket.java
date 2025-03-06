@@ -3,7 +3,6 @@ package org.firstinspires.ftc.teamcode.SystemsFSMs.Mechaisms;
 import com.qualcomm.robotcore.hardware.DcMotorEx;
 
 import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
-import org.firstinspires.ftc.teamcode.Hardware.Constants.DepositConstants;
 import org.firstinspires.ftc.teamcode.Hardware.Constants.IntakeConstants;
 import org.firstinspires.ftc.teamcode.Hardware.Hardware;
 
@@ -11,7 +10,6 @@ import org.firstinspires.ftc.teamcode.Hardware.Hardware;
 import org.firstinspires.ftc.teamcode.Hardware.Util.AnalogServo;
 import org.firstinspires.ftc.teamcode.Hardware.Util.Logger;
 import org.firstinspires.ftc.teamcode.Hardware.Util.PosChecker;
-import org.firstinspires.ftc.teamcode.SystemsFSMs.DepositLowLevel.Arm;
 
 public class Bucket {
 
@@ -42,7 +40,7 @@ public class Bucket {
     public enum GateState {
         Open(IntakeConstants.gateOpenPosition),
         Closed(IntakeConstants.gateClosedPosition),
-        Compressed(IntakeConstants.gateCompressedPosition),
+        Poop(IntakeConstants.gatePoopPosition),
         Intermediate(0.0);
 
         public final double position;

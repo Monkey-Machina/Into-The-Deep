@@ -37,7 +37,7 @@ public class IntakeConstants {
     public static final double
             gateOpenPosition = 147.0,
             gateClosedPosition = 265.5,
-            gateCompressedPosition = 265.5,
+            gatePoopPosition = 60.5,
             gateEncLowerBound = 40.6909,
             gateEncUpperBound = 317.0812,
             gateEncPositionTolerance = 5.00;

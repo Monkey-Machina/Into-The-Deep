@@ -84,10 +84,22 @@ public class DepositSlides {
     }
 
     public void command() {
-        controller.setPID(p, i, d);
+
 
         rangedTarget = Math.min(Math.max(0, targetState.slidePos), extensionLimit);
+
+//        if (Math.abs(rangedTarget - currentCM) <= 3) {
+//            controller.setPID(DepositConstants.sp2, DepositConstants.si2, DepositConstants.sd2);
+//        } else {
+//            controller.setPID(p, i, d);
+//        }
+
+
         power = controller.calculate(currentCM * cmToTicks, rangedTarget * cmToTicks) + f;
+
+        if (Math.abs(rangedTarget - currentCM) <= 3 && Math.abs(rangedTarget - currentCM) >= 0.5) {
+            power = 0.4 * Math.signum(power);
+        }
 
         rightMotor.setPower(power);
         leftMotor.setPower(power);
