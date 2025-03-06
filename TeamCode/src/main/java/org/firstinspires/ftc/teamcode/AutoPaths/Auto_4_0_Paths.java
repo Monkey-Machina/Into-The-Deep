@@ -16,13 +16,16 @@ public class Auto_4_0_Paths {
         specDepoTwoPose = new Pose(42.000, 76.000, Math.toRadians(180)),
         specDepoThreePose = new Pose(42.000, 74.000, Math.toRadians(180)),
         specDepoFourPose = new Pose(42.000, 72.000, Math.toRadians(180)),
+        //specDepoFivePose = new Pose(42.000, 72.000, Math.toRadians(180)),
 
         specIntakeOnePose = new Pose(6.5,34.000, Math.toRadians(180)),
         specIntakeTwoPose = new Pose(6.5,34.000, Math.toRadians(180)),
         specIntakeThreePose = new Pose(6.5,34.000, Math.toRadians(180)),
+        //specIntakeFourPose = new Pose(6.5,34.000, Math.toRadians(180)),
 
         pushPoseOne = new Pose(0,23, Math.toRadians(180)),
         pushPoseTwo = new Pose(6.5,12, Math.toRadians(180)),
+        //pushPoseThree = new Pose(6.5,12, Math.toRadians(180)),
 
         parkPose =  new Pose(6.299,34.000, Math.toRadians(180));
 
@@ -31,14 +34,17 @@ public class Auto_4_0_Paths {
         specDepoTwo,
         specDepoThree,
         specDepoFour,
+        //specDepoFive,
         park;
 
     public static BezierCurve
         specIntakeOne,
         samplePushOne,
         samplePushTwo,
+        samplePushThree,
         specIntakeTwo,
-        specIntakeThree;
+        specIntakeThree,
+        specIntakeFour;
 
     public  static void build() {
         specDepoOne = new BezierLine(startPose, specDepoOnePose);
@@ -75,6 +81,15 @@ public class Auto_4_0_Paths {
                 new Pose(84.000, 12.300, Point.CARTESIAN),
                 pushPoseTwo
         );
+
+//        samplePushThree = new BezierCurve(
+//                pushPoseOne,
+//                new Pose(72.000, 26.000, Point.CARTESIAN),
+//                new Pose(68.000, 24.000, Point.CARTESIAN),
+//                new Pose(45.200, 11.500, Point.CARTESIAN),
+//                new Pose(84.000, 12.300, Point.CARTESIAN),
+//                pushPoseTwo
+//        );
 
         specIntakeTwo = new BezierCurve(
                 pushPoseTwo,
