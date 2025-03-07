@@ -23,9 +23,10 @@ public class Auto_5_0_Paths {
         specIntakeThreePose = new Pose(6.5,34.000, Math.toRadians(180)),
         specIntakeFourPose = new Pose(6.5,34.000, Math.toRadians(180)),
 
-        pushPoseOne = new Pose(0,23, Math.toRadians(180)),
-        pushPoseTwo = new Pose(0,12, Math.toRadians(180)),
-        pushPoseThree = new Pose(6.5,9, Math.toRadians(180)),
+        pushPoseOne = new Pose(16,23, Math.toRadians(180)),
+        pushPoseTwo = new Pose(16,12, Math.toRadians(180)),
+        pushPoseThree1 = new Pose(60,8.5, Math.toRadians(180)),
+        pushPoseThree2 = new Pose(16,pushPoseThree1.getY(), Math.toRadians(180)),
 
         parkPose =  new Pose(6.299,34.000, Math.toRadians(180));
 
@@ -35,13 +36,14 @@ public class Auto_5_0_Paths {
         specDepoThree,
         specDepoFour,
         specDepoFive,
+        samplePushThreeLine,
         park;
 
     public static BezierCurve
         specIntakeOne,
         samplePushOne,
         samplePushTwo,
-        samplePushThree,
+        samplePushThreeCurve,
         specIntakeTwo,
         specIntakeThree,
         specIntakeFour;
@@ -82,17 +84,20 @@ public class Auto_5_0_Paths {
                 pushPoseTwo
         );
 
-        samplePushThree = new BezierCurve(
+        samplePushThreeCurve = new BezierCurve(
                 pushPoseTwo,
-                new Pose(50.000, 11.000, Point.CARTESIAN),
-                new Pose(58.000, 18.000, Point.CARTESIAN),
-                new Pose(70.00, pushPoseThree.getY(), Point.CARTESIAN),
-                new Pose(62.500, pushPoseThree.getY(), Point.CARTESIAN),
-                pushPoseThree
+                new Pose(50.00, 12, Point.CARTESIAN),
+                new Pose(61.500, 15, Point.CARTESIAN),
+                pushPoseThree1
+        );
+
+        samplePushThreeLine = new BezierLine(
+                pushPoseThree1,
+                pushPoseThree2
         );
 
         specIntakeTwo = new BezierCurve(
-                pushPoseThree,
+                pushPoseThree2,
                 new Pose(15.000, 15.000, Point.CARTESIAN),
                 new Pose(19.300, 35.500, Point.CARTESIAN),
                 new Pose(15.600, 34.000, Point.CARTESIAN),

@@ -16,7 +16,7 @@ import org.firstinspires.ftc.teamcode.SystemsFSMs.Robot;
 
 import java.util.ArrayList;
 
-@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "Tele-Op V1.0.0", group = "Competition")
+@com.qualcomm.robotcore.eventloop.opmode.TeleOp(name = "Tele-Op V2.0.1", group = "Competition")
 public class TeleOp extends OpMode {
     private Hardware hardware =  new Hardware();
     private Logger logger;

@@ -23,7 +23,7 @@ import org.firstinspires.ftc.teamcode.SystemsFSMs.DepositLowLevel.Claw;
 import org.firstinspires.ftc.teamcode.SystemsFSMs.Intake;
 import org.firstinspires.ftc.teamcode.SystemsFSMs.Robot;
 
-@Autonomous(name = "Auto V0.1.2", group = "Competition")
+@Autonomous(name = "Auto V0.1.2 | 5 + 0", group = "Competition")
 public class Auto_5_0 extends OpMode {
 
     private Logger logger;
@@ -253,7 +253,7 @@ public class Auto_5_0 extends OpMode {
                         .pathBuilder().addPath(Auto_5_0_Paths.samplePushOne)
                         .setConstantHeadingInterpolation(Auto_5_0_Paths.pushPoseOne.getHeading())
                         .setPathEndTimeoutConstraint(250.0)
-                        .setZeroPowerAccelerationMultiplier(10)
+                        .setZeroPowerAccelerationMultiplier(6)
                         .build();
 
         samplePushTwoPC =
@@ -261,15 +261,17 @@ public class Auto_5_0 extends OpMode {
                         .pathBuilder().addPath(Auto_5_0_Paths.samplePushTwo)
                         .setConstantHeadingInterpolation(Auto_5_0_Paths.pushPoseTwo.getHeading())
                         .setPathEndTimeoutConstraint(250.0)
-                        .setZeroPowerAccelerationMultiplier(10)
+                        .setZeroPowerAccelerationMultiplier(6)
                         .build();
 
         samplePushThreePC =
                 follower
-                        .pathBuilder().addPath(Auto_5_0_Paths.samplePushThree)
-                        .setConstantHeadingInterpolation(Auto_5_0_Paths.pushPoseThree.getHeading())
+                        .pathBuilder().addPath(Auto_5_0_Paths.samplePushThreeCurve)
+                        .setConstantHeadingInterpolation(Auto_5_0_Paths.pushPoseThree1.getHeading())
                         .setPathEndTimeoutConstraint(250.0)
-                        .setZeroPowerAccelerationMultiplier(8)
+                        .setZeroPowerAccelerationMultiplier(6)
+                        .addPath(Auto_5_0_Paths.samplePushThreeLine)
+                        .setConstantHeadingInterpolation(Auto_5_0_Paths.pushPoseThree2.getHeading())
                         .build();
 
         specIntakeTwoPC =
