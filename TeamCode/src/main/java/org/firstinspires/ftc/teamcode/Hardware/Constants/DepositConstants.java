@@ -43,9 +43,9 @@ public class DepositConstants {
             sp2 = 0.03,
             si2 = 0.3,
             sd2 = 0.00055,
-            spa = 0.007,
-            sia = 0.0,
-            sda = 0.0004;
+            spa = 0.006,
+            sia = 0.05,
+            sda = 0.0005;
 //            sp = 0.02,
 //            si = 0.05,
 //            sd = 0.00035,
@@ -55,7 +55,7 @@ public class DepositConstants {
     public static final double
             slideTransferPos = 8.75,
             slideSpecIntakePos = 11.525,
-            slideSpecDepositPos = 42.58,
+            slideSpecDepositPos = 40.08,
             slideSampleDepositPos = 81,
             slideMaxExtension = 82,
             slidePositionTolerance = 1.00;

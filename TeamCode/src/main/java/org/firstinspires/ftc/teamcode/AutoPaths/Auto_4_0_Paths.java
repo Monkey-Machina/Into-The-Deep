@@ -9,7 +9,7 @@ public class Auto_4_0_Paths {
 
     public static double intakeVxThreshold = 0.05, intakeVthetaThreshold = 0.05, depositVxThreshold = 0.00;
 
-    public static Pose startPose = new Pose(6.299, 66.114, Math.toRadians(180));
+    public static Pose startPose = new Pose(6.299, 64.11415, Math.toRadians(180));
 
     public static Pose
         specDepoOnePose = new Pose(42.000, 78.000, Math.toRadians(180)),
@@ -86,8 +86,8 @@ public class Auto_4_0_Paths {
                 pushPoseTwo,
                 new Pose(50.000, 11.000, Point.CARTESIAN),
                 new Pose(58.000, 18.000, Point.CARTESIAN),
-                new Pose(72.00, 4.600, Point.CARTESIAN),
-                new Pose(62.500, 6.5, Point.CARTESIAN),
+                new Pose(70.00, pushPoseThree.getY(), Point.CARTESIAN),
+                new Pose(62.500, pushPoseThree.getY(), Point.CARTESIAN),
                 pushPoseThree
         );
 

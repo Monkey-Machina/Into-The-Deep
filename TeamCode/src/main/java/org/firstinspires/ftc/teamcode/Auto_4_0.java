@@ -253,6 +253,7 @@ public class Auto_4_0 extends OpMode {
                         .pathBuilder().addPath(Auto_4_0_Paths.samplePushOne)
                         .setConstantHeadingInterpolation(Auto_4_0_Paths.pushPoseOne.getHeading())
                         .setPathEndTimeoutConstraint(250.0)
+                        .setZeroPowerAccelerationMultiplier(10)
                         .build();
 
         samplePushTwoPC =
@@ -260,6 +261,7 @@ public class Auto_4_0 extends OpMode {
                         .pathBuilder().addPath(Auto_4_0_Paths.samplePushTwo)
                         .setConstantHeadingInterpolation(Auto_4_0_Paths.pushPoseTwo.getHeading())
                         .setPathEndTimeoutConstraint(250.0)
+                        .setZeroPowerAccelerationMultiplier(10)
                         .build();
 
         samplePushThreePC =
@@ -267,6 +269,7 @@ public class Auto_4_0 extends OpMode {
                         .pathBuilder().addPath(Auto_4_0_Paths.samplePushThree)
                         .setConstantHeadingInterpolation(Auto_4_0_Paths.pushPoseThree.getHeading())
                         .setPathEndTimeoutConstraint(250.0)
+                        .setZeroPowerAccelerationMultiplier(8)
                         .build();
 
         specIntakeTwoPC =
@@ -348,8 +351,9 @@ public class Auto_4_0 extends OpMode {
 
     private void depositSpec(PathChain nextPath, AutoState nextAutoState) {
 
+        follower.setCentripetalScaling(0.002);
         // If Vx meets velocity constraint and the path did not just start (t>=0.1) and specDepoStatus is driving, move to releasing status
-        if (!follower.isBusy() && specDepoStatus == SpecDepoStatus.driving) {
+        if ((!follower.isBusy() || (Math.abs(follower.getVelocity().getXComponent()) <= 1 && follower.getCurrentTValue() >= 0.8)) && specDepoStatus == SpecDepoStatus.driving) {
             robot.deposit.setClaw(Claw.State.Open);
             specDepoStatus = SpecDepoStatus.releasing;
         }
@@ -360,6 +364,7 @@ public class Auto_4_0 extends OpMode {
             follower.followPath(nextPath);
             autoState = nextAutoState;
             specDepoStatus = SpecDepoStatus.driving;
+            follower.setCentripetalScaling(0.0012);
         }
 
     }
