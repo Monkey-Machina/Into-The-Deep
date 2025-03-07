@@ -28,6 +28,7 @@ public class Bucket {
     public enum BucketState {
         Up(IntakeConstants.bucketUpPosition),
         Down(IntakeConstants.bucketDownPosition),
+        Pooping(IntakeConstants.bucketPoopPosition),
         Intermediate(0.0);
 
         public final double position;
@@ -41,6 +42,7 @@ public class Bucket {
         Open(IntakeConstants.gateOpenPosition),
         Closed(IntakeConstants.gateClosedPosition),
         Poop(IntakeConstants.gatePoopPosition),
+        Compressed(IntakeConstants.gateCompressedPosition),
         Intermediate(0.0);
 
         public final double position;

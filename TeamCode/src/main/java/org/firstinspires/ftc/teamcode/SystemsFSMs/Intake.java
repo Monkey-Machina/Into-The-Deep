@@ -1,7 +1,6 @@
 package org.firstinspires.ftc.teamcode.SystemsFSMs;
 
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
-import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.arcrobotics.ftclib.util.Timing;
 
 import org.firstinspires.ftc.teamcode.Hardware.Constants.IntakeConstants;
@@ -48,6 +47,11 @@ public class Intake {
     private Timing.Timer timer = new Timing.Timer(999999, TimeUnit.MILLISECONDS);
     private double recordedTime = 0.00;
 
+    private Timing.Timer reverseTimer = new Timing.Timer(999999, TimeUnit.MILLISECONDS);
+    private boolean intakeTimerBoolean = false;
+
+    private Timing.Timer poopTimer = new Timing.Timer(999999, TimeUnit.MILLISECONDS);
+    private boolean pooping = false;
 
     public Intake(Hardware hardware, Logger logger, GamepadEx controller, boolean enableIntakeEncoderReset) {
 
@@ -160,7 +164,7 @@ public class Intake {
     // Following xxxCommand methods contain functionality only for respective intake states. Do not contain certain cleanup tasks like buffer clearing
     private void stowedCommand() {
         bucket.setBucketTargetState(Bucket.BucketState.Up);
-        if (bucket.bucketCurrentState == Bucket.BucketState.Up) {
+        if (bucket.bucketCurrentState == Bucket.BucketState.Up && (bucket.gateCurrentState == Bucket.GateState.Open || bucket.gateCurrentState == Bucket.GateState.Closed)) {
             slides.setTargetCM(IntakeConstants.stowedPosition);
         }
 
@@ -216,7 +220,7 @@ public class Intake {
 
         slides.setTargetCM(IntakeConstants.readyPosition + fedPosition);
 
-        if (detector.state == SampleDetector.State.sampleDetected) {
+        if (detector.state == SampleDetector.State.sampleDetected || pooping) {
 
             boolean acceptedSample = false;
 
@@ -229,16 +233,48 @@ public class Intake {
             }
 
             // If the sample was accepted, stow the intake and mark hasSample as true
-            if (acceptedSample) {
+            if (acceptedSample && !pooping) {
 
-                targetState = State.Stowed;
-                lastSeenColor = detector.color;
-                hasSample = true;
-                controller.gamepad.rumble(1.00, 1.00, 200);
+                if (!intakeTimerBoolean) {
+                    intakeTimerBoolean = true;
+                    reverseTimer.start();
+                    controller.gamepad.rumble(1.00, 1.00, 200);
+                }
+
+                if (reverseTimer.elapsedTime() >= 350) {
+
+                    targetState = State.Stowed;
+                    lastSeenColor = detector.color;
+                    hasSample = true;
+                    intakeTimerBoolean = false;
+                    reverseTimer.pause();
+
+                } else {
+                    bucket.setRollerPower(IntakeConstants.reversePower);
+                }
 
                 // If the sample color is unknown, keep gate closed. This essentially waits for a color to be determined
-            } else if (detector.color != SampleDetector.SampleColor.unknown) {
-                bucket.setGateTargetState(Bucket.GateState.Poop);
+            } else if (detector.color != SampleDetector.SampleColor.unknown || pooping) {
+
+                if (!pooping) {
+                    pooping = true;
+                    poopTimer.start();
+                }
+
+
+                bucket.setBucketTargetState(Bucket.BucketState.Pooping);
+                if (bucket.bucketCurrentState == Bucket.BucketState.Pooping) {
+                    bucket.setGateTargetState(Bucket.GateState.Poop);
+                } else {
+                    bucket.setGateTargetState(Bucket.GateState.Compressed);
+                }
+                bucket.setRollerPower(IntakeConstants.poopPower);
+
+                if (poopTimer.elapsedTime() >= 750) {
+                    pooping = false;
+                    poopTimer.pause();
+                }
+
             } else {
                 bucket.setGateTargetState(Bucket.GateState.Closed);
             }

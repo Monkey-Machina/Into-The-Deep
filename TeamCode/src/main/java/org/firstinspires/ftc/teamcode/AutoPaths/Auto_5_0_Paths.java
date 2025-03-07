@@ -5,7 +5,7 @@ import com.pedropathing.pathgen.BezierCurve;
 import com.pedropathing.pathgen.BezierLine;
 import com.pedropathing.pathgen.Point;
 
-public class Auto_4_0_Paths {
+public class Auto_5_0_Paths {
 
     public static double intakeVxThreshold = 0.05, intakeVthetaThreshold = 0.05, depositVxThreshold = 0.00;
 

@@ -35,12 +35,10 @@ public class TeleOp extends OpMode {
     @Override
     public void init() {
 
-        hardware.init(hardwareMap, false, false);
+        hardware.init(hardwareMap, !Hardware.enabled, false);
 
         controller = new GamepadEx(gamepad1);
         logger = new Logger(telemetry, controller);
-
-        hardware.Zero();
 
         robot = new Robot(hardware, controller, logger, true, true, false);
 

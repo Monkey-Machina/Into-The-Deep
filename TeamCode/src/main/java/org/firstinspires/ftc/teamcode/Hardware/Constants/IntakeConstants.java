@@ -12,7 +12,7 @@ public class IntakeConstants {
     public static final double
             stowedPosition = 0.00,
             readyPosition = 30.00,
-            minIntakePosition = 18.00,
+            minIntakePosition = 25.00,
             maxExtensionPosition = 72.0,
             intakeSlidePositionTolerance = 1.8;
 
@@ -29,15 +29,17 @@ public class IntakeConstants {
     public static final double
             bucketUpPosition = 185.0,
             bucketDownPosition = 234.0,
+            bucketPoopPosition = ((bucketDownPosition + bucketUpPosition) / 3),
             bucketEncLowerBound = 17.7818,
             bucketEncUpperBound = 339.4949,
             bucketEncPositionTolerance = 10.00;
 
     // Gate Positions
     public static final double
-            gateOpenPosition = 147.0,
-            gateClosedPosition = 265.5,
-            gatePoopPosition = 60.5,
+            gateOpenPosition = 180.0,
+            gateClosedPosition = 300.5,
+            gateCompressedPosition = 315.5,
+            gatePoopPosition = 65.0,
             gateEncLowerBound = 40.6909,
             gateEncUpperBound = 317.0812,
             gateEncPositionTolerance = 5.00;
@@ -46,7 +48,8 @@ public class IntakeConstants {
     public static final double
             intakingPower = 1.00,
             stallingPower = 0.450,
-            passthroughPower = 1.0;
+            poopPower = 1.0,
+            reversePower = -0.35;
 
     // Detection Distance in mm
     public static final double
