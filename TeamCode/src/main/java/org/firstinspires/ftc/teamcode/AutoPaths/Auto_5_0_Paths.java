@@ -23,10 +23,10 @@ public class Auto_5_0_Paths {
         specIntakeThreePose = new Pose(6.5,34.000, Math.toRadians(180)),
         specIntakeFourPose = new Pose(6.5,34.000, Math.toRadians(180)),
 
-        pushPoseOne = new Pose(16,23, Math.toRadians(180)),
-        pushPoseTwo = new Pose(16,12, Math.toRadians(180)),
+        pushPoseOne = new Pose(6.5,23, Math.toRadians(180)),
+        pushPoseTwo = new Pose(6.5,12, Math.toRadians(180)),
         pushPoseThree1 = new Pose(60,8.5, Math.toRadians(180)),
-        pushPoseThree2 = new Pose(16,pushPoseThree1.getY(), Math.toRadians(180)),
+        pushPoseThree2 = new Pose(6.5,pushPoseThree1.getY(), Math.toRadians(180)),
 
         parkPose =  new Pose(6.299,34.000, Math.toRadians(180));
 
@@ -97,7 +97,7 @@ public class Auto_5_0_Paths {
         );
 
         specIntakeTwo = new BezierCurve(
-                pushPoseThree2,
+                new Pose(15, pushPoseTwo.getY(), Point.CARTESIAN),
                 new Pose(15.000, 15.000, Point.CARTESIAN),
                 new Pose(19.300, 35.500, Point.CARTESIAN),
                 new Pose(15.600, 34.000, Point.CARTESIAN),

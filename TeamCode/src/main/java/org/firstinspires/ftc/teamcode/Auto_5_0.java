@@ -174,7 +174,9 @@ public class Auto_5_0 extends OpMode {
                 break;
 
             case samplePushOne:
-                if (!follower.isBusy() || follower.getPose().getX() <=18) {
+                follower.setCentripetalScaling(0.0014);
+                follower.setMaxPower(0.9);
+                if (!follower.isBusy() || follower.getPose().getX() <= 15) {
                     follower.followPath(samplePushTwoPC);
                     autoState = AutoState.samplePushTwo;
                 }
@@ -182,16 +184,22 @@ public class Auto_5_0 extends OpMode {
                 break;
 
             case samplePushTwo:
-                if (follower.getPose().getX() <=18 && follower.getCurrentTValue() >= 0.5) {
+                follower.setCentripetalScaling(0.0014);
+                follower.setMaxPower(0.9);
+                if (follower.getPose().getX() <= 15 && follower.getCurrentTValue() >= 0.5) {
                     follower.followPath(samplePushThreePC, true);
                     autoState = AutoState.samplePushThree;
                 }
                 break;
 
             case samplePushThree:
-                if (follower.getPose().getX() <=18 && follower.getCurrentTValue() >= 0.5) {
+                follower.setCentripetalScaling(0.0014);
+                follower.setMaxPower(0.9);
+                    if (follower.getPose().getX() <= 15 && follower.getCurrentTValue() >= 0.5) {
                     follower.followPath(specIntakeTwoPC, true);
                     autoState = AutoState.intakingSpecTwo;
+                    follower.setCentripetalScaling(0.0012);
+                    follower.setMaxPower(1.0);
                 }
                 break;
 
