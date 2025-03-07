@@ -84,7 +84,7 @@ public class DepositSlides {
     }
 
     public void command() {
-
+        controller.setPID(p, i, d);
 
         rangedTarget = Math.min(Math.max(0, targetState.slidePos), extensionLimit);
 

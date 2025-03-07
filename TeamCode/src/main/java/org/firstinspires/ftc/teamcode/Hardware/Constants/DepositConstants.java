@@ -42,7 +42,10 @@ public class DepositConstants {
             sf = 0.12,
             sp2 = 0.03,
             si2 = 0.3,
-            sd2 = 0.00055;
+            sd2 = 0.00055,
+            spa = 0.007,
+            sia = 0.0,
+            sda = 0.0004;
 //            sp = 0.02,
 //            si = 0.05,
 //            sd = 0.00035,

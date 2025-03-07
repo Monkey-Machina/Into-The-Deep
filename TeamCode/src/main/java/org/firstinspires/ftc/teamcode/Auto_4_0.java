@@ -7,10 +7,13 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.pedropathing.follower.Follower;
 import com.pedropathing.pathgen.PathChain;
 import com.pedropathing.util.Constants;
+import com.pedropathing.util.DashboardPoseTracker;
+import com.pedropathing.util.Drawing;
 import com.qualcomm.robotcore.eventloop.opmode.Autonomous;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
 import org.firstinspires.ftc.teamcode.AutoPaths.Auto_4_0_Paths;
+import org.firstinspires.ftc.teamcode.Hardware.Constants.DepositConstants;
 import org.firstinspires.ftc.teamcode.Hardware.Hardware;
 import org.firstinspires.ftc.teamcode.Hardware.Util.Logger;
 import org.firstinspires.ftc.teamcode.Pedro.Constants.FConstants;
@@ -28,7 +31,7 @@ public class Auto_4_0 extends OpMode {
     private Robot robot;
     private GamepadEx controller;
     private GamepadEx ghostController;
-
+    private DashboardPoseTracker dashboardPoseTracker;
     private Follower follower;
 
     private enum AutoState{
@@ -38,10 +41,13 @@ public class Auto_4_0 extends OpMode {
         specDepoTwo,
         samplePushOne,
         samplePushTwo,
+        samplePushThree,
         intakingSpecTwo,
         depositingSpecThree,
         intakingSpecThree,
         depositingSpecFour,
+        intakingSpecFour,
+        depositingSpecFive,
         park,
         done;
     }
@@ -59,10 +65,28 @@ public class Auto_4_0 extends OpMode {
     }
     private SpecDepoStatus specDepoStatus = SpecDepoStatus.driving;
 
-    private PathChain specDepoOnePC, specIntakeOnePC, specDepoTwoPC, samplePushOnePC, samplePushTwoPC, specIntakeTwoPC, specDepoThreePC, specIntakeThreePC, specDepoFourPC, parkPC;
+    private PathChain specDepoOnePC, specIntakeOnePC, specDepoTwoPC, samplePushOnePC, samplePushTwoPC, samplePushThreePC, specIntakeTwoPC, specDepoThreePC, specIntakeThreePC, specDepoFourPC,  specIntakeFourPC, specDepoFivePC, parkPC;
 
     @Override
     public void init() {
+        // Pedro & Path Setup
+        Auto_4_0_Paths.build();
+
+        Constants.setConstants(FConstants.class, LConstants.class);
+        follower = new Follower(hardwareMap);
+
+        follower.setStartingPose(Auto_4_0_Paths.startPose);
+        dashboardPoseTracker = new DashboardPoseTracker(follower.poseUpdater);
+        Drawing.drawRobot(follower.poseUpdater.getPose(), "#4CAF50");
+        Drawing.sendPacket();
+        buildPaths();
+
+        try {
+            Thread.sleep(350);
+        } catch (InterruptedException e) {
+            throw new RuntimeException(e);
+        }
+
         // Robot Setup
         hardware = Hardware.getInstance();
         hardware.init(hardwareMap, true, true);
@@ -79,16 +103,8 @@ public class Auto_4_0 extends OpMode {
         robot.setDepositDesiredState(Deposit.State.specIntake);
         robot.setIntakeDesiredState(Intake.State.Stowed);
         robot.deposit.setClaw(Claw.State.Open);
+        robot.deposit.slides.setPID(DepositConstants.spa, DepositConstants.sia, DepositConstants.sda, DepositConstants.sf);
 
-        // Pedro & Path Setup
-        Auto_4_0_Paths.build();
-
-        Constants.setConstants(FConstants.class, LConstants.class);
-        follower = new Follower(hardwareMap);
-
-        follower.setStartingPose(Auto_4_0_Paths.startPose);
-
-        buildPaths();
     }
 
     @Override
@@ -109,6 +125,7 @@ public class Auto_4_0 extends OpMode {
         autoStateUpdate();
         robot.update();
         controller.readButtons();
+        dashboardPoseTracker.update();
 
         follower.update();
         robot.command(0, 0);
@@ -124,6 +141,13 @@ public class Auto_4_0 extends OpMode {
         robot.log();
 
         logger.print();
+        if (follower.getCurrentPath() != null) {
+            Drawing.drawPath(follower.getCurrentPath(), "#808080");
+        }
+
+        Drawing.drawPoseHistory(dashboardPoseTracker, "#4CAF50");
+        Drawing.drawRobot(follower.poseUpdater.getPose(), "#4CAF50");
+
     }
 
     public void autoStateUpdate(){
@@ -150,19 +174,24 @@ public class Auto_4_0 extends OpMode {
                 break;
 
             case samplePushOne:
-                if (!follower.isBusy() || follower.getPose().getX() <=17) {
+                if (!follower.isBusy() || follower.getPose().getX() <=18) {
                     follower.followPath(samplePushTwoPC);
                     autoState = AutoState.samplePushTwo;
-                    follower.setCentripetalScaling(0.0008);
                 }
 
                 break;
 
             case samplePushTwo:
-                if (follower.getPose().getX() <=17 && follower.getCurrentTValue() >= 0.5) {
+                if (follower.getPose().getX() <=18 && follower.getCurrentTValue() >= 0.5) {
+                    follower.followPath(samplePushThreePC, true);
+                    autoState = AutoState.samplePushThree;
+                }
+                break;
+
+            case samplePushThree:
+                if (follower.getPose().getX() <=18 && follower.getCurrentTValue() >= 0.5) {
                     follower.followPath(specIntakeTwoPC, true);
                     autoState = AutoState.intakingSpecTwo;
-                    follower.setCentripetalScaling(0.0008);
                 }
                 break;
 
@@ -179,6 +208,14 @@ public class Auto_4_0 extends OpMode {
                 break;
 
             case depositingSpecFour:
+                depositSpec(specIntakeFourPC, AutoState.intakingSpecFour);
+                break;
+
+            case intakingSpecFour:
+                intakeSpec(specDepoFivePC, AutoState.depositingSpecFive , 0.5, 0.3);
+                break;
+
+            case depositingSpecFive:
                 depositSpec(parkPC, AutoState.park);
                 break;
 
@@ -216,7 +253,6 @@ public class Auto_4_0 extends OpMode {
                         .pathBuilder().addPath(Auto_4_0_Paths.samplePushOne)
                         .setConstantHeadingInterpolation(Auto_4_0_Paths.pushPoseOne.getHeading())
                         .setPathEndTimeoutConstraint(250.0)
-                        .setZeroPowerAccelerationMultiplier(10)
                         .build();
 
         samplePushTwoPC =
@@ -224,7 +260,13 @@ public class Auto_4_0 extends OpMode {
                         .pathBuilder().addPath(Auto_4_0_Paths.samplePushTwo)
                         .setConstantHeadingInterpolation(Auto_4_0_Paths.pushPoseTwo.getHeading())
                         .setPathEndTimeoutConstraint(250.0)
-                        .setZeroPowerAccelerationMultiplier(10)
+                        .build();
+
+        samplePushThreePC =
+                follower
+                        .pathBuilder().addPath(Auto_4_0_Paths.samplePushThree)
+                        .setConstantHeadingInterpolation(Auto_4_0_Paths.pushPoseThree.getHeading())
+                        .setPathEndTimeoutConstraint(250.0)
                         .build();
 
         specIntakeTwoPC =
@@ -255,6 +297,20 @@ public class Auto_4_0 extends OpMode {
                         .setPathEndTimeoutConstraint(250.0)
                         .build();
 
+        specIntakeFourPC =
+                follower
+                        .pathBuilder().addPath(Auto_4_0_Paths.specIntakeFour)
+                        .setConstantHeadingInterpolation(Auto_4_0_Paths.specIntakeFourPose.getHeading())
+                        .setPathEndTimeoutConstraint(250.0)
+                        .build();
+
+        specDepoFivePC =
+                follower
+                        .pathBuilder().addPath(Auto_4_0_Paths.specDepoFive)
+                        .setConstantHeadingInterpolation(Auto_4_0_Paths.specDepoFivePose.getHeading())
+                        .setPathEndTimeoutConstraint(250.0)
+                        .build();
+
         parkPC =
                 follower
                         .pathBuilder().addPath(Auto_4_0_Paths.park)
@@ -275,7 +331,6 @@ public class Auto_4_0 extends OpMode {
         // TODO: Tune the ω and vx thresholds for intaking specs
         // Deposit must always be at spec intake position, and robot velocity (both, vx and ω) must be below the threshold for intaking specs, and specIntakingStatus must be aligning
         if (robot.deposit.currentState == Deposit.State.specIntake && !follower.isBusy() && specIntakingStatus == SpecIntakingStatus.aligning) {
-            follower.holdPoint(follower.getPose());
             robot.deposit.setClaw(Claw.State.Closed);
             specIntakingStatus = SpecIntakingStatus.intaking;
             follower.setMaxPower(1.0);
@@ -297,7 +352,6 @@ public class Auto_4_0 extends OpMode {
         if (!follower.isBusy() && specDepoStatus == SpecDepoStatus.driving) {
             robot.deposit.setClaw(Claw.State.Open);
             specDepoStatus = SpecDepoStatus.releasing;
-            follower.holdPoint(follower.getPose());
         }
 
         // If the claw is open and specDepoStatus is releasing, move to next path.
