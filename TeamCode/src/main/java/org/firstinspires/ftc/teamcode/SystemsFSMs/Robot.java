@@ -251,34 +251,26 @@ public class Robot {
 
     private void passthroughLogic() {
 
-        if (!passthroughReady) {
-            deposit.setTargetState(Deposit.State.transfer);
-            intake.setTargetState(Intake.State.Stowed);
+        intake.setPassingThrough(false);
 
-            if (clawSetForTransfer) {
-                deposit.setClaw(Claw.State.Closed);
-                if (deposit.claw.currentState == Claw.State.Closed) {
-                    intake.passingThrough = true;
-                    passthroughReady = true;
-                }
-            } else {
-                deposit.setClaw(Claw.State.Open);
-                if (deposit.claw.currentState == Claw.State.Open) {
-                    clawSetForTransfer = true;
-                }
+        // TODO: This logic sets the transfer behind by a loop if the claw is already open before transfer begins
+        deposit.setTargetState(Deposit.State.transfer);
+        intake.setTargetState(Intake.State.Stowed);
 
-            }
-        } else {
-            deposit.setTargetState(Deposit.State.specIntake);
-            if (deposit.currentState == Deposit.State.specIntake) {
+        if (clawSetForTransfer) {
+            deposit.setClaw(Claw.State.Closed);
+            if (deposit.claw.currentState == Claw.State.Closed) {
                 intake.hasSample = false;
                 clawSetForTransfer = false;
-                intake.passingThrough = false;
-                passthroughReady = false;
                 depositDesiredState = Deposit.State.specIntake;
                 controller.gamepad.rumble(1.0, 1.0, 200);
-
             }
+        } else {
+            deposit.setClaw(Claw.State.Open);
+            if (deposit.claw.currentState == Claw.State.Open) {
+                clawSetForTransfer = true;
+            }
+
         }
 
     }

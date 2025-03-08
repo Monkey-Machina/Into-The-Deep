@@ -241,7 +241,7 @@ public class Intake {
                     controller.gamepad.rumble(1.00, 1.00, 200);
                 }
 
-                if (reverseTimer.elapsedTime() >= 350) {
+                if (reverseTimer.elapsedTime() >= 200) {
 
                     targetState = State.Stowed;
                     lastSeenColor = detector.color;

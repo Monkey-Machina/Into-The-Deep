@@ -49,7 +49,7 @@ public class IntakeConstants {
             intakingPower = 1.00,
             stallingPower = 0.450,
             poopPower = 1.0,
-            reversePower = -0.35;
+            reversePower = -0.5;
 
     // Detection Distance in mm
     public static final double
@@ -57,9 +57,9 @@ public class IntakeConstants {
 
     // SampleDetector max values
     public static final double
-            maxR = 3000.0,
-            maxG = 6000.00,
-            maxB = 4500.00,
-            maxA = 4500.00;
+            maxR = 2600.0,
+            maxG = 4750.00,
+            maxB = 4000.00,
+            maxA = 4000.00;
 
 }

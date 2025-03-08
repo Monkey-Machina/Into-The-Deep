@@ -97,9 +97,9 @@ public class DepositSlides {
 
         power = controller.calculate(currentCM * cmToTicks, rangedTarget * cmToTicks) + f;
 
-        if (Math.abs(rangedTarget - currentCM) <= 3 && Math.abs(rangedTarget - currentCM) >= 0.5) {
-            power = 0.4 * Math.signum(power);
-        }
+//        if (Math.abs(rangedTarget - currentCM) <= 3 && Math.abs(rangedTarget - currentCM) >= 0.5) {
+//            power = 0.4 * Math.signum(power);
+//        }
 
         rightMotor.setPower(power);
         leftMotor.setPower(power);
