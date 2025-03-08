@@ -18,14 +18,14 @@ public class Auto_5_0_Paths {
         specDepoFourPose = new Pose(42.000, 72.000, Math.toRadians(180)),
         specDepoFivePose = new Pose(42.000, 70.000, Math.toRadians(180)),
 
-        specIntakeOnePose = new Pose(6.5,34.000, Math.toRadians(180)),
-        specIntakeTwoPose = new Pose(6.5,34.000, Math.toRadians(180)),
-        specIntakeThreePose = new Pose(6.5,34.000, Math.toRadians(180)),
-        specIntakeFourPose = new Pose(6.5,34.000, Math.toRadians(180)),
+        specIntakeOnePose = new Pose(6.2,34.000, Math.toRadians(180)),
+        specIntakeTwoPose = new Pose(6.1,34.000, Math.toRadians(180)),
+        specIntakeThreePose = new Pose(6.0,34.000, Math.toRadians(180)),
+        specIntakeFourPose = new Pose(5.9,34.000, Math.toRadians(180)),
 
-        pushPoseOne = new Pose(6.5,23, Math.toRadians(180)),
-        pushPoseTwo = new Pose(6.5,12, Math.toRadians(180)),
-        pushPoseThree1 = new Pose(60,8.5, Math.toRadians(180)),
+        pushPoseOne = new Pose(6.5,22, Math.toRadians(180)),
+        pushPoseTwo = new Pose(6.5,11, Math.toRadians(180)),
+        pushPoseThree1 = new Pose(60,7.5, Math.toRadians(180)),
         pushPoseThree2 = new Pose(6.5,pushPoseThree1.getY(), Math.toRadians(180)),
 
         parkPose =  new Pose(6.299,34.000, Math.toRadians(180));
@@ -69,9 +69,9 @@ public class Auto_5_0_Paths {
                 new Pose(20.500, 12.000, Point.CARTESIAN),
                 new Pose(62.300, 53.600, Point.CARTESIAN),
                 new Pose(62.500, 53.800, Point.CARTESIAN),
-                new Pose(73.000, 20.000, Point.CARTESIAN),
-                new Pose(56.000, 21.000, Point.CARTESIAN),
-                new Pose(68.300, 24.600, Point.CARTESIAN),
+                new Pose(73.000, pushPoseOne.getY() - 8, Point.CARTESIAN),
+                new Pose(56.000, pushPoseOne.getY() - 2, Point.CARTESIAN),
+                new Pose(68.300, pushPoseOne.getY() + 1.6, Point.CARTESIAN),
                 pushPoseOne
         );
 
@@ -79,8 +79,8 @@ public class Auto_5_0_Paths {
                 pushPoseOne,
                 new Pose(72.000, 26.000, Point.CARTESIAN),
                 new Pose(68.000, 24.000, Point.CARTESIAN),
-                new Pose(45.200, 11.500, Point.CARTESIAN),
-                new Pose(84.000, 12.300, Point.CARTESIAN),
+                new Pose(45.200, pushPoseTwo.getY() - 0.5, Point.CARTESIAN),
+                new Pose(84.000, pushPoseTwo.getY() + 0.3, Point.CARTESIAN),
                 pushPoseTwo
         );
 

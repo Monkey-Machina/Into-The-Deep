@@ -24,7 +24,7 @@ public class DepositConstants {
 
     // Wrist Positions (degrees)
     public static final double
-            wristTransferPos = 72.00,
+            wristTransferPos = 74.50,
             wristSpecIntakePos = 114.00,
             wristSpecDepositPos = 245.00,
             wristSampleDepositPos = 180.00,
@@ -36,16 +36,16 @@ public class DepositConstants {
 
     // Deposit Slide PID Constants
     public static final double
-            sp = 0.009,
+            sp = 0.011,
             si = 0.3,
             sd = 0.0006,
             sf = 0.05,
             sp2 = 0.03,
             si2 = 0.3,
             sd2 = 0.00055,
-            spa = 0.006,
-            sia = 0.05,
-            sda = 0.0005;
+            spa = 0.007,
+            sia = 0.3,
+            sda = 0.0006;
 //            sp = 0.02,
 //            si = 0.05,
 //            sd = 0.00035,
@@ -53,11 +53,11 @@ public class DepositConstants {
 
     // Deposit Slides Positions (CM)
     public static final double
-            slideTransferPos = 8.25,
+            slideTransferPos = 8.00,
             slideSpecIntakePos = 11.525,
             slideSpecDepositPos = 40.08,
             slideSampleDepositPos = 81,
             slideMaxExtension = 82,
-            slidePositionTolerance = 1.00;
+            slidePositionTolerance = 1.25;
 
 }
