@@ -363,8 +363,8 @@ public class Auto_5_0 extends OpMode {
 
         follower.setCentripetalScaling(0.002);
         // If Vx meets velocity constraint and the path did not just start (t>=0.1) and specDepoStatus is driving, move to releasing status
-        //if ((!follower.isBusy() || (Math.abs(follower.getVelocity().getXComponent()) <= 1 && follower.getCurrentTValue() >= 0.8)) && specDepoStatus == SpecDepoStatus.driving) {
-        if ((!follower.isBusy()) && specDepoStatus == SpecDepoStatus.driving) {
+        if ((!follower.isBusy() || (Math.abs(follower.getVelocity().getXComponent()) <= 1 && follower.getCurrentTValue() >= 0.8)) && specDepoStatus == SpecDepoStatus.driving) {
+        // if ((!follower.isBusy()) && specDepoStatus == SpecDepoStatus.driving) {
             robot.deposit.setClaw(Claw.State.Open);
             specDepoStatus = SpecDepoStatus.releasing;
         }
