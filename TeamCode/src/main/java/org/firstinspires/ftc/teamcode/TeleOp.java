@@ -6,6 +6,7 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 
+import org.firstinspires.ftc.teamcode.Hardware.Constants.DepositConstants;
 import org.firstinspires.ftc.teamcode.Hardware.Hardware;
 import org.firstinspires.ftc.teamcode.Hardware.Util.Logger;
 import org.firstinspires.ftc.teamcode.SystemsFSMs.Deposit;
@@ -44,6 +45,8 @@ public class TeleOp extends OpMode {
 
         robot.setDepositDesiredState(Deposit.State.transfer);
         robot.setIntakeDesiredState(Intake.State.Stowed);
+
+        robot.deposit.slides.setPID(DepositConstants.sp, DepositConstants.si, DepositConstants.sd, DepositConstants.sf);
     }
 
     @Override
