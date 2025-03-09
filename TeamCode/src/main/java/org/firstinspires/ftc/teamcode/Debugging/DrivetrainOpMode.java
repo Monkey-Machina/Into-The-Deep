@@ -10,7 +10,7 @@ import org.firstinspires.ftc.teamcode.Hardware.Util.Logger;
 import org.firstinspires.ftc.teamcode.SystemsFSMs.Drivetrain;
 
 
-@TeleOp
+@TeleOp(group = "Debug Drivetrain")
 public class DrivetrainOpMode extends OpMode {
     private Hardware hardware = new Hardware();
     private Drivetrain drivetrain;

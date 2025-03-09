@@ -9,25 +9,28 @@ import org.firstinspires.ftc.robotcore.external.navigation.CurrentUnit;
 import org.firstinspires.ftc.teamcode.Hardware.Constants.IntakeConstants;
 import org.firstinspires.ftc.teamcode.Hardware.Hardware;
 import org.firstinspires.ftc.teamcode.Hardware.Util.Logger;
+import org.firstinspires.ftc.teamcode.Hardware.Util.PosChecker;
 
 public class IntakeSlides {
+
     private DcMotorEx motor;
     private Logger logger;
 
-    private double spoolDiam = 3.0; // Spool Diameter in cm
+    private double spoolDiam = 4.0; // Spool Diameter in cm
     private double extensionLimit = IntakeConstants.maxExtensionPosition; // Extension Limit in cm
 
-    private final double ticksToCm = ( ( 24.0 / 17.0 ) * Math.PI * spoolDiam) / (145.1); // Multiply ticks by this number to get distance in cm
+    private final double ticksToCm = (( 9 / 60.0 ) * Math.PI * spoolDiam) / (28); // Multiply ticks by this number to get distance in cm
     private final double cmToTicks = 1 / ticksToCm; // Multiply cm by this number to get distance in encoder ticks
 
     private double currentTicks = 0;
     private double currentCM = 0;
-    private double targetCM = 0;
+    private double targetCM = 0.01;
     private double rangedTarget = 0;
     private double power = 0;
     private double current = 0;
     private double velocity = 0;
 
+    private boolean encoderResetEnabled;
     private boolean encoderReset = false;
 
     private double
@@ -37,9 +40,11 @@ public class IntakeSlides {
 
     private PIDController controller = new PIDController(p, i, d);
 
-    public IntakeSlides(Hardware hardware, Logger logger) {
+    public IntakeSlides(Hardware hardware, Logger logger, boolean encoderResetEnabled) {
         motor = hardware.intakeSlideMotor;
         this.logger = logger;
+
+        this.encoderResetEnabled = encoderResetEnabled;
     }
 
     public void update() {
@@ -58,13 +63,12 @@ public class IntakeSlides {
         power = controller.calculate(currentCM * cmToTicks, rangedTarget * cmToTicks);
 
         // Re-Zero slides whenever target pos is zero
-        if (targetCM == 0) {
-
+        if (targetCM == 0 && encoderResetEnabled) {
             if (!encoderReset) {
                 power = IntakeConstants.intakeSlideZeroPower;
 
-                // Once the motor stalls, reset the encoder and set encoderReset to true
-                if (current >= 5500 && velocity == 0) {
+                // Once the motor stalls (based on current and velocity check), and position is near zero, reset the encoder and set encoderReset to true
+                if (current >= 5500 && velocity == 0 && currentCM <= IntakeConstants.intakeSlidePositionTolerance) {
                     motor.setMode(DcMotor.RunMode.STOP_AND_RESET_ENCODER);
                     motor.setMode(DcMotor.RunMode.RUN_WITHOUT_ENCODER);
 
@@ -72,40 +76,28 @@ public class IntakeSlides {
                 }
 
             } else {
-                power = Math.min(power, IntakeConstants.intakeSlideZeroStallPower);
+                power = Math.max(power, IntakeConstants.intakeSlideZeroStallPower);
             }
 
-        }
+        } else { encoderReset = false; }
 
-//        // If not at zero and target is zero, apply at least the slide zeroing power
-//        if (targetCM == 0 && currentCM >= 0.00) {
-//            power = Math.min(IntakeConstants.intakeSlideZeroPower, power);
-//        } else if (targetCM == 0) {
-//            power = IntakeConstants.intakeSlideZeroStallPower;
-//        }
-
-
-        if (targetCM != 0) {
-            encoderReset = false;
-        }
-
-
-        motor.setPower(power);
+        motor.setPower(-power);
     }
 
     public void log() {
-        logger.log("<b>" + "Intake Slides" + "</b>", "", Logger.LogLevels.production);
+        logger.logHeader("Intake Slides");
 
-        logger.log("Current CM", currentCM, Logger.LogLevels.debug);
-        logger.log("Target CM", targetCM, Logger.LogLevels.debug);
+        logger.logData("Current CM", currentCM, Logger.LogLevels.debug);
+        logger.logData("Target CM", targetCM, Logger.LogLevels.debug);
 
-        logger.log("Ranged Target CM", rangedTarget, Logger.LogLevels.developer);
-        logger.log("Power", power, Logger.LogLevels.developer);
-        logger.log("Intake Slide Velocity", velocity, Logger.LogLevels.developer);
-        logger.log("Current", current, Logger.LogLevels.developer);
-        logger.log("p", p, Logger.LogLevels.developer);
-        logger.log("i", i, Logger.LogLevels.developer);
-        logger.log("d", d, Logger.LogLevels.developer);
+        logger.logData("Ranged Target CM", rangedTarget, Logger.LogLevels.developer);
+        logger.logData("Power", power, Logger.LogLevels.developer);
+        logger.logData("Intake Slide Velocity", velocity, Logger.LogLevels.developer);
+        logger.logData("Current", current, Logger.LogLevels.developer);
+        logger.logData("Encoder Reset", encoderReset, Logger.LogLevels.developer);
+        logger.logData("p", p, Logger.LogLevels.developer);
+        logger.logData("i", i, Logger.LogLevels.developer);
+        logger.logData("d", d, Logger.LogLevels.developer);
     }
 
     public void setTargetCM(double target) {

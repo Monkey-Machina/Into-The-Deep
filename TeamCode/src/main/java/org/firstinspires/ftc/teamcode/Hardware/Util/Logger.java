@@ -1,7 +1,5 @@
 package org.firstinspires.ftc.teamcode.Hardware.Util;
 
-import androidx.lifecycle.MutableLiveData;
-
 import com.acmerobotics.dashboard.FtcDashboard;
 import com.acmerobotics.dashboard.telemetry.MultipleTelemetry;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
@@ -28,7 +26,11 @@ public class Logger {
         telemetry.setDisplayFormat(Telemetry.DisplayFormat.HTML);
     }
 
-    public void log(String label, Object data, LogLevels level) {
+    public void logHeader(String header) {
+        telemetry.addLine("<b>" + header + "</b>");
+    }
+
+    public void logData(String label, Object data, LogLevels level) {
         switch (state) {
             case production:
 

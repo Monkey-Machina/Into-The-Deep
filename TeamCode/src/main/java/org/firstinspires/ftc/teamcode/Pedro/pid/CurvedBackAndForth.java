@@ -30,7 +30,7 @@ import org.firstinspires.ftc.teamcode.Pedro.Constants.LConstants;
  * @version 1.0, 3/13/2024
  */
 @Config
-@Autonomous (name = "Curved Back And Forth", group = "PIDF Testing")
+@Autonomous (name = "Curved Back And Forth", group = "Pedro Tests")
 public class CurvedBackAndForth extends OpMode {
     private Telemetry telemetryA;
 

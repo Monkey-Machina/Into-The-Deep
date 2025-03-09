@@ -30,7 +30,7 @@ import com.pedropathing.util.Drawing;
  * @version 1.0, 5/6/2024
  */
 @Config
-@Autonomous(name = "Lateral Localizer Tuner", group = ".Localization")
+@Autonomous(name = "Lateral Localizer Tuner", group = "Pedro Localization")
 public class LateralTuner extends OpMode {
     private PoseUpdater poseUpdater;
     private DashboardPoseTracker dashboardPoseTracker;

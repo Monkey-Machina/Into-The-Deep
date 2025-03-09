@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Debugging.LowLevel.Intake;
+package org.firstinspires.ftc.teamcode.Debugging.Intake;
 
 import com.acmerobotics.dashboard.config.Config;
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
@@ -10,10 +10,10 @@ import org.firstinspires.ftc.teamcode.Hardware.Util.Logger;
 import org.firstinspires.ftc.teamcode.SystemsFSMs.Mechaisms.SampleDetector;
 
 @Config
-@TeleOp
+@TeleOp(group = "Debug Intake")
 public class SampleDetectorOpMode extends OpMode {
 
-    private Hardware hardware = new Hardware();
+    private final Hardware hardware = new Hardware();
     private GamepadEx controller;
     private Logger logger;
 

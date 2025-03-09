@@ -1,200 +1,168 @@
+//TODO: Refactor
+
 package org.firstinspires.ftc.teamcode.SystemsFSMs;
 
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
+import com.arcrobotics.ftclib.util.Timing;
 
 import org.firstinspires.ftc.teamcode.Hardware.Constants.DepositConstants;
 import org.firstinspires.ftc.teamcode.Hardware.Hardware;
 import org.firstinspires.ftc.teamcode.Hardware.Util.Logger;
-import org.firstinspires.ftc.teamcode.SystemsFSMs.Mechaisms.Arm;
-import org.firstinspires.ftc.teamcode.SystemsFSMs.Mechaisms.Claw;
+import org.firstinspires.ftc.teamcode.SystemsFSMs.DepositLowLevel.Claw;
+import org.firstinspires.ftc.teamcode.SystemsFSMs.Mechaisms.Bucket;
 import org.firstinspires.ftc.teamcode.SystemsFSMs.Mechaisms.SampleDetector;
 
 import java.util.ArrayList;
+import java.util.concurrent.TimeUnit;
 
 public class Robot {
 
     private Drivetrain drivetrain;
-    private Deposit deposit;
+    public Deposit deposit;
     private Intake intake;
 
     private GamepadEx controller;
     private Logger logger;
 
+    private boolean auto;
+
     public enum States {
         cycling,
-        transferReady;
+        handoff;
     }
 
+    public enum Strategy {
+        split,
+        basket;
+    }
+
+    private Strategy strategy = Strategy.split;
+
     private States currentState;
-    private Deposit.TargetState depositDesiredState;
-    private Intake.SystemState intakeDesiredState;
+    public Deposit.State depositDesiredState;
+    public Intake.State intakeDesiredState;
 
     private boolean interference;
+    private boolean clawSetForTransfer;
 
-    private boolean clawSetForTransfer = false;
+    private boolean passthroughReady = false;
 
+    public Robot(Hardware hardware, GamepadEx controller, Logger logger, boolean intakeZeroing, boolean odometryEnabled, boolean auto) {
 
-    public Robot(Hardware hardware, GamepadEx controller, Logger logger) {
+        this.auto = auto;
 
         this.controller = controller;
         this.logger = logger;
 
-        drivetrain = new Drivetrain(hardware, controller, logger, false);
-        deposit = new Deposit(hardware, controller, logger);
-        intake = new Intake(hardware, controller, logger);
+        if (!this.auto) {
+            drivetrain = new Drivetrain(hardware, controller, logger, odometryEnabled);
+        }
+        deposit = new Deposit(hardware, logger);
+        intake = new Intake(hardware, logger, controller, intakeZeroing);
 
-        deposit.setTargetState(Deposit.TargetState.transfer);
-        intake.setTargetState(Intake.SystemState.Stowed);
+        deposit.setTargetState(Deposit.State.transfer);
+        intake.setTargetState(Intake.State.Stowed);
+
 
         findState();
     }
 
     public void update() {
-        drivetrain.update();
+        if (!auto) {
+            drivetrain.update();
+        }
         deposit.update();
         intake.update();
         findState();
     }
 
-    public void command() {
-
+    public void command(double feedIn, double feedOut) {
         interferenceCheck();
-
         switch (currentState) {
             case cycling:
 
-                // Need to prevent intake extension if the deposit is still at transfer position with sample
-                if (controller.wasJustPressed(GamepadKeys.Button.B)) {
+                cycleIntakeLogic();
+                cycleDepositLogic();
 
-                    if (intake.getTargetSystemState() == Intake.SystemState.Deployed) {
-                        intake.setTargetState(Intake.SystemState.Intaking);
-                    } else {
-                        intake.setTargetState(Intake.SystemState.Deployed);
-                    }
+                passthroughReady = false;
 
-                }
-
-                if (controller.wasJustPressed(GamepadKeys.Button.X)) {
-                    intake.setTargetState(Intake.SystemState.Stowed);
-                }
-
-                // If there is no interference potential, then all actions can be performed optimally for deposit
-                if (!interference) {
-                    deposit.setTargetState(depositDesiredState);
-                } else {
-
-                    if (depositDesiredState == Deposit.TargetState.specIntake) {
-                        deposit.setTargetState(Deposit.TargetState.preSpecIntake);
-                    } else if (depositDesiredState == Deposit.TargetState.sampleDeposit) {
-                        deposit.setTargetState(Deposit.TargetState.samplePreDeposit);
-                    } else {
-                        deposit.setTargetState(Deposit.TargetState.preTransfer);
-                    }
-
-
-                }
-
-                clawSetForTransfer = false;
 
                 break;
 
-            case transferReady:
-                deposit.setTargetState(Deposit.TargetState.transfer);
-                intake.setTargetState(Intake.SystemState.Stowed);
+            case handoff:
 
-
-                // TODO: This logic sets the transfer behind by a loop if the claw is already open before transfer begins
-                if (clawSetForTransfer) {
-                    deposit.gripClaw();
-
-                    if (deposit.getClawStatus() == Claw.Status.gripped) {
-                        intake.hasSample = false;
-                    }
+                if (strategy == Strategy.basket || intake.lastSeenColor == SampleDetector.SampleColor.yellow) {
+                    transferLogic();
                 } else {
-                    deposit.releaseClaw();
-                    if (deposit.getClawStatus() == Claw.Status.released) {
-                        clawSetForTransfer = true;
-                    }
-
+                    passthroughLogic();
                 }
 
-
+                break;
 
         }
 
-        drivetrain.command();
+        if (!auto) {
+            drivetrain.command();
+        }
         deposit.command();
-        intake.command();
+        intake.command(feedIn, feedOut);
 
     }
 
     public void log() {
-        logger.log("<b>" + "--Robot--" + "</b>", "", Logger.LogLevels.production);
+        logger.logHeader("--Robot--");
 
-        logger.log("Current State", currentState, Logger.LogLevels.production);
-        logger.log("Deposit Desired State", depositDesiredState, Logger.LogLevels.production);
-        logger.log("Intake Desired State", intakeDesiredState, Logger.LogLevels.production);
+        logger.logData("Strategy", strategy, Logger.LogLevels.production);
 
-        logger.log("Interference", interference, Logger.LogLevels.debug);
+        logger.logData("Current State", currentState, Logger.LogLevels.production);
+        logger.logData("Deposit Desired State", depositDesiredState, Logger.LogLevels.production);
+        logger.logData("Intake Desired State", intakeDesiredState, Logger.LogLevels.production);
 
-        drivetrain.log();
+        logger.logData("Interference", interference, Logger.LogLevels.debug);
+
+        logger.logData("Passthough Ready", passthroughReady, Logger.LogLevels.developer);
+
+
+        if (!auto) {
+            drivetrain.log();
+        }
         deposit.log();
         intake.log();
     }
 
-    public void setDepositDesiredState(Deposit.TargetState state) {
+    public void setDepositDesiredState(Deposit.State state) {
         depositDesiredState = state;
     }
 
-    public void setIntakeDesiredState(Intake.SystemState state) {
+    public void setIntakeDesiredState(Intake.State state) {
         intakeDesiredState = state;
-    }
-
-    public Intake.SystemState getIntakeDesiredState() {
-        return intakeDesiredState;
     }
 
     public void goToDeposit() {
 
-        // If sample is yellow
-        if (intake.getLastSeenColor() == SampleDetector.SampleColor.yellow) {
-            setDepositDesiredState(Deposit.TargetState.sampleDeposit);
-        }
-
-        // If sample is alliance colored
-        if ((intake.getLastSeenColor() == SampleDetector.SampleColor.blue) || (intake.getLastSeenColor() == SampleDetector.SampleColor.red)) {
-
-            if (deposit.getTargetState() != Deposit.TargetState.specIntake) {
-                setDepositDesiredState(Deposit.TargetState.specIntake);
+        if(strategy == Strategy.basket || intake.lastSeenColor == SampleDetector.SampleColor.yellow) {
+            setDepositDesiredState(Deposit.State.sampleDeposit);
+        // If the sample is known or red or blue, and the strategy is split, do specimens
+        } else {
+            if (deposit.targetState != Deposit.State.specIntake) {
+                setDepositDesiredState(Deposit.State.specIntake);
             } else {
-                setDepositDesiredState(Deposit.TargetState.specDepositReady);
+                setDepositDesiredState(Deposit.State.specDeposit);
             }
-
         }
-
-    }
-
-    public void clipSpec() {
-
-        if (deposit.getTargetState() == Deposit.TargetState.specDepositReady) {
-            setDepositDesiredState(Deposit.TargetState.specDepositClipped);
-        } else if (deposit.getTargetState() == Deposit.TargetState.specDepositClipped) {
-            setDepositDesiredState(Deposit.TargetState.specDepositReady);
-        }
-
-    }
-
-    public void releaseClaw() {
-        deposit.releaseClaw();
     }
 
     public void setAcceptedSamples(ArrayList<SampleDetector.SampleColor> colors) {
         intake.setAcceptableColors(colors);
     }
 
+    public void setStrategy(Robot.Strategy strategy) {
+        this.strategy = strategy;
+    }
+
     public void switchColor() {
-        if (intake.getLastSeenColor() == SampleDetector.SampleColor.yellow) {
+        if (intake.lastSeenColor == SampleDetector.SampleColor.yellow) {
             intake.setLastSeenColor(SampleDetector.SampleColor.blue);
         } else {
             intake.setLastSeenColor(SampleDetector.SampleColor.yellow);
@@ -203,46 +171,108 @@ public class Robot {
 
     private void findState() {
 
-        // If either the Intake or Deposit isnt at their transfer ready positions then the state is cycling
-        if (intake.getCurrentSystemState() != Intake.SystemState.Stowed || deposit.getCurrentState() != Deposit.TargetState.transfer || !intake.hasSample) {
-            currentState = States.cycling;
+        if (intake.currentState == Intake.State.Stowed && (deposit.currentState == Deposit.State.transfer || (deposit.targetState == Deposit.State.specIntake && passthroughReady)) && intake.hasSample) {
+            currentState = States.handoff;
 
-        } else { // If all of previous conditions are met, then we can assume we are ready to transfer
-            currentState = States.transferReady;
+        } else {
+            currentState = States.cycling;
         }
 
     }
 
     private void interferenceCheck() {
+        interference = false;
 
-        boolean stowInterference = false;
+        // If the intake is stowed or trying to stow, apply stow interference, then apply interference
+        if (intake.currentState == Intake.State.Stowed || intake.targetState == Intake.State.Stowed) {
+            // If the arm is below the pre transfer spot and the slides are around the transfer height, and the arm wants to go to sample deposit pos, there is interference
+            if (deposit.slides.currentCM <= DepositConstants.slideTransferPos + DepositConstants.slidePositionTolerance && deposit.arm.encPos > DepositConstants.armSamplePreDeposit + DepositConstants.armPositionTolerance && depositDesiredState == Deposit.State.sampleDeposit) {
+                interference = true;
+            }
 
-        // If the intake is stowed, or is trying to stow, there is stow interference
-        if (intake.getCurrentSystemState() == Intake.SystemState.Stowed || intake.getTargetSystemState() == Intake.SystemState.Stowed) {
-            stowInterference = true;
         }
 
-        // If there is stow interference, then check if the deposit is going to or from transfer
-        // **Ignores potential for interference when going from spec intake, where you might be flipping the arm over too fast
-        // For now, if there is stow interference and the slides are either below safe height, or trying to go below the safe height, we assume there is interference, but this is obviously not true, could be fixed by interference zones**
-        if (stowInterference) {
+    }
 
-            deposit.updateSlidesafe();
+    private void cycleIntakeLogic () {
 
-            if ((deposit.getSlideTargetCM() <= DepositConstants.slidePreTransferPos || deposit.getSlideCurrentCM() < DepositConstants.slidePreTransferPos - DepositConstants.slidePositionTolerance) && !(deposit.getSlidesDownSafe())) {
-
-                interference = true;
-
+        // If the intake was deployed, start intaking, if it was intaking, go back to deployed
+        if (controller.wasJustPressed(GamepadKeys.Button.B)) {
+            if (intake.targetState == Intake.State.Deployed) {
+                intake.setTargetState(Intake.State.Intaking);
             } else {
-                interference = false;
+                intake.setTargetState(Intake.State.Deployed);
             }
+        }
 
-            if (depositDesiredState  == Deposit.TargetState.specIntake && deposit.getSlideCurrentCM() <= DepositConstants.slidePreTransferPos - DepositConstants.slidePositionTolerance && (deposit.arm.getRightServoEncPos() <= DepositConstants.armRightEncSlideDownSafePos - DepositConstants.armRightPositionTolerance) && deposit.arm.getRightSetPosition() > DepositConstants.armRightSampleDepositPos) {
-                interference  = true;
-            }
+        // If x pressed, stow intake
+        if (controller.wasJustPressed(GamepadKeys.Button.X)) {
+            intake.setTargetState(Intake.State.Stowed);
+        }
 
+    }
 
+    private void cycleDepositLogic() {
+        // If there is no interference potential, then all actions can be performed optimally for deposit
+        if (!interference) {
+            deposit.setTargetState(depositDesiredState);
+        } else {
+
+                    if (depositDesiredState == Deposit.State.sampleDeposit) {
+                        deposit.setTargetState(Deposit.State.samplePreDeposit);
+                    }
 
         }
     }
+
+    private void transferLogic() {
+
+        intake.setPassingThrough(false);
+
+        // TODO: This logic sets the transfer behind by a loop if the claw is already open before transfer begins
+        deposit.setTargetState(Deposit.State.transfer);
+        intake.setTargetState(Intake.State.Stowed);
+
+        if (clawSetForTransfer) {
+            deposit.setClaw(Claw.State.Closed);
+            if (deposit.claw.currentState == Claw.State.Closed) {
+                intake.hasSample = false;
+                clawSetForTransfer = false;
+                controller.gamepad.rumble(1.0, 1.0, 200);
+            }
+        } else {
+            deposit.setClaw(Claw.State.Open);
+            if (deposit.claw.currentState == Claw.State.Open) {
+                clawSetForTransfer = true;
+            }
+
+        }
+    }
+
+    private void passthroughLogic() {
+
+        intake.setPassingThrough(false);
+
+        // TODO: This logic sets the transfer behind by a loop if the claw is already open before transfer begins
+        deposit.setTargetState(Deposit.State.transfer);
+        intake.setTargetState(Intake.State.Stowed);
+
+        if (clawSetForTransfer) {
+            deposit.setClaw(Claw.State.Closed);
+            if (deposit.claw.currentState == Claw.State.Closed) {
+                intake.hasSample = false;
+                clawSetForTransfer = false;
+                depositDesiredState = Deposit.State.specIntake;
+                controller.gamepad.rumble(1.0, 1.0, 200);
+            }
+        } else {
+            deposit.setClaw(Claw.State.Open);
+            if (deposit.claw.currentState == Claw.State.Open) {
+                clawSetForTransfer = true;
+            }
+
+        }
+
+    }
+
 }

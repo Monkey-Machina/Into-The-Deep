@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Debugging.LowLevel.Intake;
+package org.firstinspires.ftc.teamcode.Debugging.Intake;
 
 import com.acmerobotics.dashboard.config.Config;
 
@@ -6,13 +6,14 @@ import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.qualcomm.robotcore.eventloop.opmode.OpMode;
 import com.qualcomm.robotcore.eventloop.opmode.TeleOp;
 
+import org.firstinspires.ftc.robotcore.external.navigation.DistanceUnit;
 import org.firstinspires.ftc.teamcode.Hardware.Constants.IntakeConstants;
 import org.firstinspires.ftc.teamcode.Hardware.Hardware;
 import org.firstinspires.ftc.teamcode.Hardware.Util.Logger;
 import org.firstinspires.ftc.teamcode.SystemsFSMs.Mechaisms.IntakeSlides;
 
 @Config
-@TeleOp
+@TeleOp(group = "Debug Intake")
 public class IntakeSlideOpMode extends OpMode {
     private Hardware hardware = new Hardware();
     private IntakeSlides slides;
@@ -31,7 +32,7 @@ public class IntakeSlideOpMode extends OpMode {
         hardware.init(hardwareMap);
         controller = new GamepadEx(gamepad1);
         logger = new Logger(telemetry, controller);
-        slides = new IntakeSlides(hardware, logger);
+        slides = new IntakeSlides(hardware, logger, false);
     }
 
     @Override
@@ -40,6 +41,7 @@ public class IntakeSlideOpMode extends OpMode {
         controller.readButtons();
 
         slides.update();
+        callI2C();
 
         slides.setPID(p,i, d);
         slides.setTargetCM(targetCM);
@@ -49,6 +51,13 @@ public class IntakeSlideOpMode extends OpMode {
         slides.log();
         logger.print();
 
+    }
+
+    private void callI2C() {
+        hardware.pinPoint.update();
+        hardware.intakeCS.getDistance(DistanceUnit.MM);
+        hardware.pinPoint.update();
+        hardware.pinPoint.update();
     }
 
 }

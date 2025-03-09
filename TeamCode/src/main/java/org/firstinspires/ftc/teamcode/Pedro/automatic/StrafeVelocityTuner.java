@@ -48,7 +48,7 @@ import java.util.List;
  * @version 1.0, 3/13/2024
  */
 @Config
-@Autonomous(name = "Strafe Velocity Tuner", group = "Automatic Tuners")
+@Autonomous(name = "Strafe Velocity Tuner", group = "Pedro Automatic Tuners")
 public class StrafeVelocityTuner extends OpMode {
     private ArrayList<Double> velocities = new ArrayList<>();
 
@@ -60,7 +60,7 @@ public class StrafeVelocityTuner extends OpMode {
 
     private PoseUpdater poseUpdater;
 
-    public static double DISTANCE = 90;
+    public static double DISTANCE = 60;
     public static double RECORD_NUMBER = 10;
 
     private Telemetry telemetryA;

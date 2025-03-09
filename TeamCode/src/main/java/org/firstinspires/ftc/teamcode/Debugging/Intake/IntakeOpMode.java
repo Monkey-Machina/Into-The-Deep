@@ -1,4 +1,4 @@
-package org.firstinspires.ftc.teamcode.Debugging;
+package org.firstinspires.ftc.teamcode.Debugging.Intake;
 
 import com.arcrobotics.ftclib.gamepad.GamepadEx;
 import com.arcrobotics.ftclib.gamepad.GamepadKeys;
@@ -13,9 +13,9 @@ import org.firstinspires.ftc.teamcode.SystemsFSMs.Mechaisms.SampleDetector;
 
 import java.util.ArrayList;
 
-@TeleOp
+@TeleOp(group = "Debug Intake")
 public class IntakeOpMode extends OpMode {
-    private Hardware hardware = new Hardware();
+    private final Hardware hardware = new Hardware();
     private Logger logger;
     private GamepadEx controller;
 
@@ -32,8 +32,8 @@ public class IntakeOpMode extends OpMode {
         logger = new Logger(telemetry, controller);
 
 
-        intake = new Intake(hardware, controller, logger);
-        intake.setTargetState(Intake.SystemState.Stowed);
+        intake = new Intake(hardware, logger, controller,true);
+        intake.setTargetState(Intake.State.Stowed);
 
         colors.add(SampleDetector.SampleColor.blue);
         colors.add(SampleDetector.SampleColor.yellow);
@@ -51,23 +51,22 @@ public class IntakeOpMode extends OpMode {
 
         intake.update();
 
-        if (controller.wasJustPressed(GamepadKeys.Button.A)) {
-            intake.setTargetState(Intake.SystemState.Stowed);
+        if (controller.wasJustPressed(GamepadKeys.Button.X)) {
+            intake.setTargetState(Intake.State.Stowed);
         } else if (controller.wasJustPressed(GamepadKeys.Button.B)) {
 
-            if (intake.getTargetSystemState() == Intake.SystemState.Deployed) {
-                intake.setTargetState(Intake.SystemState.Intaking);
+            if (intake.targetState == Intake.State.Deployed) {
+                intake.setTargetState(Intake.State.Intaking);
             } else {
-                intake.setTargetState(Intake.SystemState.Deployed);
+                intake.setTargetState(Intake.State.Deployed);
             }
 
         }
 
         drivetrain.command();
-        intake.command();
+        intake.command(controller.getTrigger(GamepadKeys.Trigger.RIGHT_TRIGGER), controller.getTrigger(GamepadKeys.Trigger.LEFT_TRIGGER));
 
         intake.log();
         logger.print();
     }
 }
-

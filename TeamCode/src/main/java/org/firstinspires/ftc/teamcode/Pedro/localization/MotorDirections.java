@@ -26,7 +26,7 @@ import java.util.List;
 import org.firstinspires.ftc.teamcode.Pedro.Constants.FConstants;
 import org.firstinspires.ftc.teamcode.Pedro.Constants.LConstants;
 
-@TeleOp(name = "Motor Directions", group = "Teleop Test")
+@TeleOp(name = "Motor Directions", group = "Pedro Tele-Op")
 public class MotorDirections extends OpMode {
     private Telemetry telemetryA;
 
